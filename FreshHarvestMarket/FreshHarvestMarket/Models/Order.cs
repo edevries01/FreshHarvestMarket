@@ -1,5 +1,5 @@
 ﻿using System;
-using Stystem.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FreshHarvestMarket.Models
@@ -11,7 +11,7 @@ namespace FreshHarvestMarket.Models
         public int? UserId {  get; set; } //Link to registered User. Null for non-memeber
 
         [Required]
-        public int CustomerName { get; set; }
+        public string CustomerName { get; set; }
 
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
