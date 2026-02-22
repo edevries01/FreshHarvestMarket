@@ -1,11 +1,10 @@
 .vs/
+bin/
+obj/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
-# Build output folders
-bin/
-obj/
 
-# Rider IDE (optional)
-.idea/
+
+
