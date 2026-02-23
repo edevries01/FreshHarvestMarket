@@ -12,9 +12,6 @@ namespace FreshHarvestMarket.Models
 
         public User? User { get; set; }
 
-        [Required]
-        public string CustomerName { get; set; }
-
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
         [Required]
