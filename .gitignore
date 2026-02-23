@@ -1,4 +1,10 @@
 .vs/
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+
+
 *.suo
 *.user
 *.userosscache
