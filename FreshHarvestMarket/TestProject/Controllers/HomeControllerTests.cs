@@ -1,0 +1,63 @@
+using FreshHarvestMarket.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
+namespace TestProject;
+
+/// <summary>
+/// Contains all the tests for the HomeController class
+/// </summary>
+[TestClass]
+public class HomeControllerTests
+{
+    /// <summary>
+    /// Scenarios that expect success
+    /// when calling a 'GET' request on the 'Home' controller with the 'Index' action
+    /// </summary>
+    [TestMethod]
+    public void HomeController_Index()
+    {
+        //Arrange
+        ILogger<HomeController> nullLogger = new NullLogger<HomeController>(); //Not verifying logging... change if desired
+        HomeController testController = new HomeController(nullLogger);
+
+        //Act
+        IActionResult testResult = testController.Index();
+
+        //Assert
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        //If we make it this far, should be a ViewResult
+        ViewResult testResultViewResult = (ViewResult)testResult;
+
+        ViewResult testViewResult = (ViewResult)testResultViewResult;
+        Assert.AreEqual(null, testViewResult.ViewName);
+    }
+
+    /// <summary>
+    /// Scenarios that expect success
+    /// when calling a 'GET' request on the 'Home' controller with the 'Login' action
+    /// </summary>
+    [TestMethod]
+    public void HomeController_GetLogin()
+    {
+        //Arrange
+        ILogger<HomeController> nullLogger = new NullLogger<HomeController>(); //Not verifying logging... change if desired
+        HomeController testController = new HomeController(nullLogger);
+
+        //Act
+        IActionResult testResult = testController.Login();
+
+        //Assert
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        //If we make it this far, should be a ViewResult
+        ViewResult testResultViewResult = (ViewResult)testResult;
+
+        ViewResult testViewResult = (ViewResult)testResultViewResult;
+        Assert.AreEqual(null, testViewResult.ViewName);
+    }
+}

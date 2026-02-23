@@ -1,11 +1,13 @@
-.vs/
+
 [Dd]ebug/
 [Rr]elease/
 bin/
 obj/
-
-
+.vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+
+
+
