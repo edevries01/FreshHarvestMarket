@@ -1,0 +1,17 @@
+﻿namespace FreshHarvestMarket.Models
+{
+    public class Produce
+    {
+        public int ProduceId { get; set; }
+
+        public string ProduceName { get; set; } = string.Empty;
+
+        public string? ProduceDescription { get; set; }
+
+        public decimal UnitPrice { get; set; }
+
+        public string ProduceCategory { get; set; } = string.Empty;
+
+        public int InventoryTotal { get; set; }
+    }
+}
