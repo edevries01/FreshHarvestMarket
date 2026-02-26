@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+footer {
+    background-color: #f8f9fa;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
