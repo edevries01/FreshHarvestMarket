@@ -18,6 +18,11 @@ namespace FreshHarvestMarket.Data
         public DbSet<Produce> Produce { get; set; } = null!;
 
         /// <summary>
+        /// Object representation of the Order table
+        /// </summary>
+        public DbSet<Order> Orders { get; set; } = null!;
+
+        /// <summary>
         /// Seeds all of the data when we create/update the database
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -133,6 +138,15 @@ namespace FreshHarvestMarket.Data
                     InventoryTotal = 12
                 }
             );
+
+            modelBuilder.Entity<Order>)().HasData(
+                new Order() 
+                {
+                    OrderId = 1,
+                    UserId = 1
+
+                }
+                );
         }
     }
 }
