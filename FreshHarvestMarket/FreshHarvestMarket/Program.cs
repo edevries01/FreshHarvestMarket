@@ -1,7 +1,16 @@
+using FreshHarvestMarket.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Add dependency injection for DbContext
+builder.Services.AddDbContext<FreshMarketContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("FreshHarvest")
+));
 
 var app = builder.Build();
 
