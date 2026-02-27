@@ -10,7 +10,7 @@ namespace FreshHarvestMarket.Models
 
         public int? UserId {  get; set; } //Link to registered User. Null for non-memeber
 
-        public User? User { get; set; }
+        public User? User { get; set; } 
 
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
