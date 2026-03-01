@@ -139,7 +139,7 @@ namespace FreshHarvestMarket.Data
                 }
             );
 
-            modelBuilder.Entity<Order>)().HasData(
+            modelBuilder.Entity<Order>().HasData(
                 new Order() 
                 {
                     OrderId = 1,
