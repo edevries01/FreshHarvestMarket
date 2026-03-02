@@ -5,19 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FreshHarvestMarket.Models
 {
     //Edited OrderItem to complete class
+    //Updated Model to remove redundant properties- TB 3/1/2026
     public class OrderItem
     {
         public int OrderItemId { get; set; }
 
         public int ProductId { get; set; }
 
-        public string ProductName { get; set; } //Could probably remove this, is redunant if a ProductId is linked
-
         [Range(1, 100, ErrorMessage = "Please enter a quanity between 1 and 100.")]
         public int Quanity { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal UnitPrice { get; set; } //Same here, should not be needed if ProduceId is linked
 
         public decimal TotalPrice => Quanity * UnitPrice;
 
