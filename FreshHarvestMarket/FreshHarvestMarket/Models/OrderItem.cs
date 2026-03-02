@@ -12,10 +12,12 @@ namespace FreshHarvestMarket.Models
 
         public int ProduceId { get; set; } //changed from ProductId to ProduceId
 
-        [Range(1, 100, ErrorMessage = "Please enter a quanity between 1 and 100.")]
-        public int Quanity { get; set; }
+        public Produce? Produce { get; set; }
 
-        public decimal TotalPrice => Quanity * UnitPrice;
+        [Range(1, 100, ErrorMessage = "Please enter a quantity between 1 and 100.")]
+        public int Quantity { get; set; }
+
+        public decimal TotalPrice => Produce != null ? Quantity * Produce.UnitPrice : 0;
 
         //Foregin Key to Order
         public int OrderId { get; set; }
