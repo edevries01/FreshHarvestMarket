@@ -10,7 +10,7 @@ namespace FreshHarvestMarket.Models
     {
         public int OrderItemId { get; set; }
 
-        public int ProductId { get; set; }
+        public int ProduceId { get; set; } //changed from ProductId to ProduceId
 
         [Range(1, 100, ErrorMessage = "Please enter a quanity between 1 and 100.")]
         public int Quanity { get; set; }
