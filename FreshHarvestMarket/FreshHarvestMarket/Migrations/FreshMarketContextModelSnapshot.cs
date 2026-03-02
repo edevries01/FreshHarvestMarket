@@ -48,7 +48,7 @@ namespace FreshHarvestMarket.Migrations
 
                     b.HasKey("ProduceId");
 
-                    b.ToTable("Produce");
+                    b.ToTable("Produce", (string)null);
 
                     b.HasData(
                         new
