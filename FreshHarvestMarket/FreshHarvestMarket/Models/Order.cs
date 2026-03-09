@@ -4,22 +4,53 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FreshHarvestMarket.Models
 {
+    /// <summary>
+    /// Represents an order placed by a customer for FreshHarvest market
+    /// </summary>
     public class Order
     {
+        /// <summary>
+        /// Primary key for an order
+        /// </summary>
+        [Required]
+        [Key]
         public int OrderId { get; set; } 
 
-        public int? UserId {  get; set; } //Link to registered User. Null for non-memeber
+        /*
+         * Do not include any user stuff yet
+        public int? UserId {  get; set; }
 
-        public User? User { get; set; } 
+        public User? User { get; set; }
+        */
 
+        /// <summary>
+        /// Collection of order items associated with this order
+        /// </summary>
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
+        /// <summary>
+        /// The total of the order
+        /// </summary>
         [Required]
         public decimal OrderTotal { get; set; }
 
+        /// <summary>
+        /// The date the order was placed
+        /// </summary>
+        [Required]
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        public bool IsPickedUp { get; set; } = false;
+        /// <summary>
+        /// The date the order should be picked up from fresh harvest market
+        /// </summary>
+        [Required]
+        public DateTime PickupDate { get; set; }
+
+        /// <summary>
+        /// True if the order has been picked up
+        /// </summary>
+        [Required]
+        public bool IsPickedUp { get; set; }
 
 
     }
