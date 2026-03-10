@@ -13,14 +13,19 @@ namespace FreshHarvestMarket.Data
         }
 
         /// <summary>
-        /// Object representation of the Produce table
+        /// Representation of the Produce table
         /// </summary>
         public DbSet<Produce> Produce { get; set; } = null!;
 
         /// <summary>
-        /// Object representation of the Order table
+        /// Representation of the Order table
         /// </summary>
         public DbSet<Order> Orders { get; set; } = null!;
+
+        /// <summary>
+        /// Representations of the OrderItems table
+        /// </summary>
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         /// <summary>
         /// Seeds all of the data when we create/update the database
@@ -143,10 +148,44 @@ namespace FreshHarvestMarket.Data
                 new Order() 
                 {
                     OrderId = 1,
-                    UserId = 1
-
+                    OrderTotal = 12.50m,
+                    OrderDate = new DateTime(2026, 3, 1),
+                    PickupDate = new DateTime(2026, 3, 2),
+                    IsPickedUp = false
+                },
+                new Order() 
+                {
+                    OrderId = 2,
+                    OrderTotal = 22.00m,
+                    OrderDate = new DateTime(2026, 3, 3),
+                    PickupDate = new DateTime(2026, 3, 4),
+                    IsPickedUp = false
                 }
-                );
+            );
+
+            modelBuilder.Entity<OrderItem>().HasData(
+                new OrderItem
+                {
+                    OrderItemId = 1,
+                    OrderId = 1,
+                    ProduceId = 1,
+                    Quantity = 3
+                },
+                new OrderItem
+                {
+                    OrderItemId = 2,
+                    OrderId = 1,
+                    ProduceId = 2,
+                    Quantity = 2
+                },
+                new OrderItem
+                {
+                    OrderItemId = 3,
+                    OrderId = 2,
+                    ProduceId = 3,
+                    Quantity = 4
+                }
+            );
         }
     }
 }
