@@ -1,0 +1,66 @@
+﻿@*This view lets the operator view a specific order in more detail*@
+@model Order
+
+<div class="justify-content-center">
+    <h1>Order @Model.OrderId Details</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order Info</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pick-Up Date</td>
+                <td>@Model.PickupDate.ToString("MM/dd/yyyy")</td>
+            </tr>
+            <tr>
+                <td>Fufilled?</td>
+                @if(Model.IsPickedUp)
+                {
+                    <td>Yes</td>
+                }
+                else
+                {
+                    <td>No</td>
+                }
+            </tr>
+            <tr>
+                <td>Order Placed</td>
+                <td>@Model.OrderDate.ToString("MM/dd/yyyy")</td>
+            </tr>
+            <tr>
+                <td>Order Total</td>
+                <td>@Model.OrderTotal.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Products in Order</td>
+                <td>@Model.Items.Count</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1>Order Item Details</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Product</td>
+                <td>Quantity</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OrderItem orderItem in Model.Items)
+            {
+                <tr>
+                    <td>@orderItem.Produce!.ProduceName</td>
+                    <td>@orderItem.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@Model.OrderId" class="btn btn-primary">View Order</a>
+    <a asp-controller="Order" asp-action="UpdateFufilled" asp-route-OrderId="@Model.OrderId" class="btn btn-primary">Fufilled</a>
+    <a asp-controller="Order" asp-action="UpdateRejected" asp-route-OrderId="@Model.OrderId" class="btn btn-danger">Reject</a>
+</div>
