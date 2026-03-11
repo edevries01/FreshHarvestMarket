@@ -46,6 +46,7 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <param name="orderId">The id of the order to view</param>
         /// <returns>A view with details on a particular order</returns>
+        [HttpGet]
         public ViewResult ViewOrder(int orderId)
         {
             Order? order = _context.Orders
@@ -60,6 +61,64 @@ namespace FreshHarvestMarket.Controllers
             }
 
             return View(order);
+        }
+
+        /// <summary>
+        /// Returns a view where the operator chooses they want to reject an order
+        /// </summary>
+        /// <param name="orderId"></param>
+        [HttpGet]
+        public ActionResult ConfirmReject(int orderId)
+        {
+            ViewBag.OrderNumber = orderId;
+            return View();
+        }
+
+        /// <summary>
+        /// Updates an order's rejection status
+        /// Redirects the operator back to the order management page
+        /// </summary>
+        /// <returns>Manage Orders view</returns>
+        [HttpPost]
+        public ActionResult UpdateRejected(int orderId)
+        {
+            Order? order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+            
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            //Set rejected to true
+            order.Rejected = true;
+
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+               
+            return RedirectToAction("ManageOrders");
+        }
+
+        /// <summary>
+        /// Marks an order as fufilled
+        /// </summary>
+        /// <param name="orderId">ID of the order fufilled</param>
+        /// <returns>Manage Orders view</returns>
+        public ActionResult UpdateFufilled(int orderId) 
+        {
+            Order? order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            //Set rejected to true
+            order.IsPickedUp = true;
+
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageOrders");
         }
     }
 }

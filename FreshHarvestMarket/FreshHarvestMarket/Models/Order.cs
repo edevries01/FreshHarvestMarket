@@ -52,6 +52,10 @@ namespace FreshHarvestMarket.Models
         [Required]
         public bool IsPickedUp { get; set; }
 
-
+        /// <summary>
+        /// If true the order has been rejected by the operator/admin
+        /// </summary>
+        [Required]
+        public bool Rejected { get; set; }
     }
 }

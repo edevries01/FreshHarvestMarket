@@ -62,5 +62,5 @@
 
     <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@Model.OrderId" class="btn btn-primary">View Order</a>
     <a asp-controller="Order" asp-action="UpdateFufilled" asp-route-OrderId="@Model.OrderId" class="btn btn-primary">Fufilled</a>
-    <a asp-controller="Order" asp-action="UpdateRejected" asp-route-OrderId="@Model.OrderId" class="btn btn-danger">Reject</a>
+    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-OrderId="@Model.OrderId" class="btn btn-danger">Reject</a>
 </div>
