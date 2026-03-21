@@ -1,19 +1,25 @@
 ﻿@*This screen has the operator hit confirm before rejecting an order*@
-@{
-	int orderNumber = ViewBag.OrderNumber;
-}
+@model Order
+
+
 <div class="justify-content-center">
-	<div class="row">
-		<h1>Confirm Rejection</h1>
-	</div>
-	<div class="row">
-		<p>Are you sure you want to reject order @orderNumber?</p>
-	</div>
-	<div class="row">
-		<div class="col-3 justify-content-center">
-			<a asp-controller="Order" asp-action="UpdateRejected" asp-route-OrderId="@orderNumber" class="btn btn-danger">Reject</a>
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<h1>Confirm Rejection</h1>
 		</div>
-		<div class="col-3 justify-content-center">
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<p class="fw-bold">Are you sure you want to reject order @Model.OrderId?</p>
+		</div>
+	</div>
+	<div class="row mt-2 justify-content-center">
+		<div class="col-2 justify-content-center d-flex">
+			<form asp-action="ConfirmReject" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
+				<button type="submit" class="btn btn-danger">Reject</button>
+			</form>
+		</div>
+		<div class="col-2 justify-content-center d-flex">
 			<a asp-controller="Order" asp-action="ManageOrders" class="btn btn-primary">Cancel</a>
 		</div>
 	</div>

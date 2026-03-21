@@ -2,7 +2,12 @@
 @model Order
 
 <div class="justify-content-center">
-    <h1>Order @Model.OrderId Details</h1>
+    <div class="row">
+        <div class="col">
+            <h1>Order @Model.OrderId Details</h1>
+        </div>
+    </div>
+    
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -17,14 +22,7 @@
             </tr>
             <tr>
                 <td>Fufilled?</td>
-                @if(Model.IsPickedUp)
-                {
-                    <td>Yes</td>
-                }
-                else
-                {
-                    <td>No</td>
-                }
+                <td>@(Model.IsPickedUp ? "Yes" : "No")</td>
             </tr>
             <tr>
                 <td>Order Placed</td>
@@ -37,6 +35,10 @@
             <tr>
                 <td>Products in Order</td>
                 <td>@Model.Items.Count</td>
+            </tr>
+            <tr>
+                <td>Rejected?</td>
+                <td>@(Model.Rejected ? "Yes" : "No")</td>
             </tr>
         </tbody>
     </table>
@@ -60,7 +62,9 @@
         </tbody>
     </table>
 
-    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@Model.OrderId" class="btn btn-primary">View Order</a>
-    <a asp-controller="Order" asp-action="UpdateFufilled" asp-route-OrderId="@Model.OrderId" class="btn btn-primary">Fufilled</a>
-    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-OrderId="@Model.OrderId" class="btn btn-danger">Reject</a>
+    <a asp-controller="Order" asp-action="ManageOrders" class="btn btn-primary">Manage Orders</a>
+    <form asp-action="UpdateFufilled" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
+        <button type="submit" class="btn btn-primary">Fufilled</button>
+    </form>
+    <a asp-controller="Order" asp-action="UpdateRejected" asp-route-orderId="@Model.OrderId" class="btn btn-primary">Reject</a>
 </div>

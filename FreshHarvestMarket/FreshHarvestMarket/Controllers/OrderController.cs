@@ -70,8 +70,14 @@ namespace FreshHarvestMarket.Controllers
         [HttpGet]
         public ActionResult ConfirmReject(int orderId)
         {
-            ViewBag.OrderNumber = orderId;
-            return View();
+            Order? order = _context.Orders.Find(orderId);
+
+            if (order == null) 
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
 
         /// <summary>
@@ -103,6 +109,7 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <param name="orderId">ID of the order fufilled</param>
         /// <returns>Manage Orders view</returns>
+        [HttpPost]
         public ActionResult UpdateFufilled(int orderId) 
         {
             Order? order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
@@ -119,6 +126,15 @@ namespace FreshHarvestMarket.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("ManageOrders");
+        }
+
+        /// <summary>
+        /// Returns a view to filter and browse all orders including ones which can no longer be edited
+        /// </summary>
+        /// <returns></returns>
+        public ViewResult BrowseOrders()
+        {
+            throw new NotImplementedException();
         }
     }
 }

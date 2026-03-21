@@ -5,8 +5,17 @@
     Future: Add link to browse all orders, even fufilled ones
 *@
 @model List<Order>
+<div class="row">
+    <div class="col">
+        <h1>Manage Active Orders</h1>
+    </div>
+    <div class="col">
+        <div class="col">
+            <a class="btn btn-primary">See Archived</a>
+        </div>
+    </div>
+</div>
 
-<h1>Manage Orders</h1>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -14,6 +23,7 @@
             <th>Pickup Date</th>
             <th>Order Total</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -41,16 +51,12 @@
                 }
                 <td>
                     <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
-                    <a asp-controller="Order" asp-action="UpdateFufilled" asp-route-OrderId="@order.OrderId" class="btn btn-primary">Fufilled</a>
-                    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-OrderId="@order.OrderId" class="btn btn-danger">Reject</a>
+                    <form asp-action="UpdateFufilled" method="post" asp-route-OrderId="@order.OrderId" class="d-inline">
+                        <button type="submit" class="btn btn-primary">Fufilled</button>
+                    </form>
+                    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@order.OrderId" class="btn btn-primary">Reject</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-@*
-    Overdue: Past date and not fufilled
-    Upcoming: Pickup date is within a week and not fufilled
-    - : others that are not fufilled
-*@
