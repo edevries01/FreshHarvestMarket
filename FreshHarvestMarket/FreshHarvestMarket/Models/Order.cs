@@ -57,5 +57,27 @@ namespace FreshHarvestMarket.Models
         /// </summary>
         [Required]
         public bool Rejected { get; set; }
+
+        /// <summary>
+        /// Updates the order total to what it would be at time of execution
+        /// Can be called right before confirming a customer's order to lock in the total 
+        /// at the prices of the time
+        /// </summary>
+        public void UpdateOrderTotal()
+        {
+            //Order prices should not be updated once the order's life cycle is complete
+            if (IsPickedUp || Rejected)
+            {
+                return;
+            }
+
+            decimal runningTotal = 0;
+            foreach(OrderItem item in Items)
+            {
+                runningTotal += item.TotalPrice;
+            }
+
+            OrderTotal = runningTotal;
+        }
     }
 }
