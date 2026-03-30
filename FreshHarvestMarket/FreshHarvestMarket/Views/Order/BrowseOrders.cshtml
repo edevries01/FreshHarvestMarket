@@ -1,1 +1,91 @@
-﻿@*This view lets an operator browser all orders with filters, including past ones*@
+﻿@*
+    This view is the basic screen for viewing orders
+    It allows you to view and filters orders. Orders can also be cancelled here
+    Future: Users can only view THEIR orders. Admins can view all
+    Future: Add link to browse all orders, even fufilled ones
+*@
+
+@model BrowseOrdersViewModel
+
+<h2>Active Orders</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>Pickup Date</th>
+            <th>Order Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Order order in Model.ActiveOrders)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
+                <td>@order.OrderTotal.ToString("C")</td>
+                @if (order.PickupDate < DateTime.Now.Date)
+                {
+                    <td class="text-warning">Overdue</td>
+                }
+                else if (order.PickupDate.AddDays(7).Date < DateTime.Now.AddDays(7).Date)
+                {
+                    <td>Upcoming</td>
+                }
+                else if (order.PickupDate.Date == DateTime.Now.Date)
+                {
+                    <td>Pick-Up Today</td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td>
+                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
+                    <a asp-controller="Order" asp-action="ConfirmCancel" asp-route-orderId="@order.OrderId" class="btn btn-primary">Reject</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Past Orders</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>Pickup Date</th>
+            <th>Order Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Order order in Model.PastOrders)
+        {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
+                <td>@order.OrderTotal.ToString("C")</td>
+                @if (order.Rejected)
+                {
+                    <td class="text-warning">Rejected</td>
+                }
+                else if (order.IsPickedUp)
+                {
+                    <td>Fufilled</td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td>
+                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

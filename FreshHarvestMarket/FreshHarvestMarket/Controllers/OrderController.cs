@@ -1,5 +1,6 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,19 @@ namespace FreshHarvestMarket.Controllers
         /// <returns>View with display of existing orders</returns>
         public IActionResult Index()
         {
-            throw new NotImplementedException();
+            List<Order> allOrders = _context.Orders.ToList();
+
+            BrowseOrdersViewModel ordersVM = new BrowseOrdersViewModel();
+
+            //Grab all the upcoming/pastdue orders
+            List<Order> nonPickedUp = _context.Orders.Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
+            ordersVM.ActiveOrders = nonPickedUp ?? new List<Order>();
+
+            //Grab all the fufilled/cancelled orders
+            List<Order> pastOrders = _context.Orders.Where(o => o.IsPickedUp || o.Rejected).ToList();
+            ordersVM.PastOrders = pastOrders ?? new List<Order>();
+
+            return View("BrowseOrders", ordersVM);
         }
 
         //Add one for admins to view all orders
