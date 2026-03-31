@@ -1,5 +1,6 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,25 +20,42 @@ namespace FreshHarvestMarket.Controllers
         }
 
         /// <summary>
-        /// For now: Returns view with all of the orders
+        /// For now: Returns view with all of the orders. Applies some filters
         /// In Future: After Identity, only return orders for signed-in user
         /// </summary>
         /// <returns>View with display of existing orders</returns>
-        public IActionResult Index()
+        public IActionResult Index(BrowseOrdersViewModel model)
         {
-            List<Order> allOrders = _context.Orders.ToList();
-
-            BrowseOrdersViewModel ordersVM = new BrowseOrdersViewModel();
+            OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
 
             //Grab all the upcoming/pastdue orders
-            List<Order> nonPickedUp = _context.Orders.Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
-            ordersVM.ActiveOrders = nonPickedUp ?? new List<Order>();
+            if (model.IncludeActiveOrders)
+            {
+                List<Order> nonPickedUp = _context.Orders.Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
+                model.ActiveOrders = nonPickedUp ?? new List<Order>();
+            }
+            else
+            {
+                model.ActiveOrders = new List<Order>();
+            }
 
-            //Grab all the fufilled/cancelled orders
-            List<Order> pastOrders = _context.Orders.Where(o => o.IsPickedUp || o.Rejected).ToList();
-            ordersVM.PastOrders = pastOrders ?? new List<Order>();
+            if (model.IncludePastOrders)
+            {
+                //Grab all the fufilled/cancelled orders
+                List<Order> pastOrders = _context.Orders.Where(o => o.IsPickedUp || o.Rejected).ToList();
+                model.PastOrders = pastOrders ?? new List<Order>();
+            }
+            else 
+            {
+                model.PastOrders = new List<Order>();
+            }
 
-            return View("BrowseOrders", ordersVM);
+            if (!model.IncludeCancelledOrders)
+            {
+                model.PastOrders = model.PastOrders.Where(o => !o.Rejected).ToList();
+            }
+
+            return View("BrowseOrders", model);
         }
 
         //Add one for admins to view all orders

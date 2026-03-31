@@ -6,50 +6,94 @@
 *@
 
 @model BrowseOrdersViewModel
+<div class="row justify-content-center">
+    <h1 class="justify-content-center">Your Orders</h1>
+</div>
 
-<h2>Active Orders</h2>
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Order Number</th>
-            <th>Pickup Date</th>
-            <th>Order Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Order order in Model.ActiveOrders)
-        {
+<div class="row">
+    <div class="col-md-1 col-sm-4">
+        <a asp-action="Index"
+            asp-route-IncludeActiveOrders="@(!Model.IncludeActiveOrders)"
+            asp-route-IncludeCancelledOrders="@Model.IncludeCancelledOrders"
+            asp-route-IncludePastOrders="@Model.IncludePastOrders"
+            class="@(Model.IncludeActiveOrders ? "btn btn-dark" : "btn btn-light")">
+            Active Orders
+        </a>
+    </div>
+
+    <div class="col-md-1 col-sm-4">
+        <a asp-action="Index"
+           asp-for-IncludeActiveOrders="@Model.IncludeActiveOrders"
+           asp-route-IncludeCancelledOrders="@(!Model.IncludeCancelledOrders)"
+           asp-route-IncludePastOrders="@Model.IncludePastOrders"
+           class="@(Model.IncludeCancelledOrders ? "btn btn-dark" : "btn btn-light")">
+            Cancelled Orders
+        </a>
+    </div>
+
+    <div class="col-md-1 col-sm-4">
+        <a asp-action="Index"
+           asp-route-IncludeActiveOrders="@Model.IncludeActiveOrders"
+           asp-route-IncludeCancelledOrders="@Model.IncludeCancelledOrders"
+           asp-route-IncludePastOrders="@(!Model.IncludePastOrders)"
+           class="@(Model.IncludePastOrders ? "btn btn-dark" : "btn btn-light")">
+            Past Orders
+        </a>
+    </div>
+</div>
+
+@if (Model.ActiveOrders.Count < 1 && Model.PastOrders.Count < 1)
+{
+    <p class="mt-1">No orders to display!</p>
+}
+
+@if (Model.ActiveOrders.Count > 0)
+{
+    <h2>Active Orders</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>@order.OrderId</td>
-                <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
-                <td>@order.OrderTotal.ToString("C")</td>
-                @if (order.PickupDate < DateTime.Now.Date)
-                {
-                    <td class="text-warning">Overdue</td>
-                }
-                else if (order.PickupDate.AddDays(7).Date < DateTime.Now.AddDays(7).Date)
-                {
-                    <td>Upcoming</td>
-                }
-                else if (order.PickupDate.Date == DateTime.Now.Date)
-                {
-                    <td>Pick-Up Today</td>
-                }
-                else
-                {
-                    <td>-</td>
-                }
-                <td>
-                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
-                    <a asp-controller="Order" asp-action="ConfirmCancel" asp-route-orderId="@order.OrderId" class="btn btn-primary">Reject</a>
-                </td>
+                <th>Order Number</th>
+                <th>Pickup Date</th>
+                <th>Order Total</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (Order order in Model.ActiveOrders)
+            {
+                <tr class="@(order.PickupDate < DateTime.Now ? "table-danger" : "")">
+                    <td>@order.OrderId</td>
+                    <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
+                    <td>@order.OrderTotal.ToString("C")</td>
+                    @if (order.PickupDate < DateTime.Now.Date)
+                    {
+                        <td class="text-warning">Overdue</td>
+                    }
+                    else if (order.PickupDate.AddDays(7).Date < DateTime.Now.AddDays(7).Date)
+                    {
+                        <td>Upcoming</td>
+                    }
+                    else if (order.PickupDate.Date == DateTime.Now.Date)
+                    {
+                        <td>Pick-Up Today</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                    <td>
+                        <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
+@if(@Model.PastOrders.Count > 0)
+{
 <h2>Past Orders</h2>
 <table class="table table-bordered table-striped">
     <thead>
@@ -87,5 +131,7 @@
         }
     </tbody>
 </table>
+}
+
 
 

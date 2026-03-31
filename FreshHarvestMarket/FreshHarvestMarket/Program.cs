@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 
 //Add dependency injection for DbContext
@@ -27,9 +29,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseSession();
+app.UseSession();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name:"browseorder",
+    pattern: "{controller=Order}/{action=Index}/IncludeActive/{IncludeActiveOrders=true}/IncludePast/{IncludePastOrders=true}/IncludeCancelled/{IncludeCancelledOrders=true}"
+    );
+    
 
 app.MapControllerRoute(
     name: "default",
