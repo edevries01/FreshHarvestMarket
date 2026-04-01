@@ -13,30 +13,33 @@
 <div class="row">
     <div class="col-md-1 col-sm-4">
         <a asp-action="Index"
-            asp-route-IncludeActiveOrders="@(!Model.IncludeActiveOrders)"
-            asp-route-IncludeCancelledOrders="@Model.IncludeCancelledOrders"
-            asp-route-IncludePastOrders="@Model.IncludePastOrders"
-            class="@(Model.IncludeActiveOrders ? "btn btn-dark" : "btn btn-light")">
+            asp-controller="OrderFilters"
+            asp-route-Filters.IncludeActiveOrders="@(!Model.Filters.IncludeActiveOrders)"
+            asp-route-Filters.IncludeCancelledOrders="@Model.Filters.IncludeCancelledOrders"
+            asp-route-Filters.IncludePastOrders="@Model.Filters.IncludePastOrders"
+            class="@(Model.Filters.IncludeActiveOrders ? "btn btn-dark" : "btn btn-light")">
             Active Orders
         </a>
     </div>
 
     <div class="col-md-1 col-sm-4">
         <a asp-action="Index"
-           asp-for-IncludeActiveOrders="@Model.IncludeActiveOrders"
-           asp-route-IncludeCancelledOrders="@(!Model.IncludeCancelledOrders)"
-           asp-route-IncludePastOrders="@Model.IncludePastOrders"
-           class="@(Model.IncludeCancelledOrders ? "btn btn-dark" : "btn btn-light")">
+           asp-controller="OrderFilters"
+           asp-route-Filters.IncludeActiveOrders="@Model.Filters.IncludeActiveOrders"
+           asp-route-Filters.IncludeCancelledOrders="@(!Model.Filters.IncludeCancelledOrders)"
+           asp-route-Filters.IncludePastOrders="@Model.Filters.IncludePastOrders"
+           class="@(Model.Filters.IncludeCancelledOrders ? "btn btn-dark" : "btn btn-light")">
             Cancelled Orders
         </a>
     </div>
 
     <div class="col-md-1 col-sm-4">
         <a asp-action="Index"
-           asp-route-IncludeActiveOrders="@Model.IncludeActiveOrders"
-           asp-route-IncludeCancelledOrders="@Model.IncludeCancelledOrders"
-           asp-route-IncludePastOrders="@(!Model.IncludePastOrders)"
-           class="@(Model.IncludePastOrders ? "btn btn-dark" : "btn btn-light")">
+           asp-controller="OrderFilters"
+           asp-route-Filters.IncludeActiveOrders="@Model.Filters.IncludeActiveOrders"
+           asp-route-Filters.IncludeCancelledOrders="@Model.Filters.IncludeCancelledOrders"
+           asp-route-Filters.IncludePastOrders="@(!Model.Filters.IncludePastOrders)"
+           class="@(Model.Filters.IncludePastOrders ? "btn btn-dark" : "btn btn-light")">
             Past Orders
         </a>
     </div>

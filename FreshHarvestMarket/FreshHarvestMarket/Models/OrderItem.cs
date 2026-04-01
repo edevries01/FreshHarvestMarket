@@ -24,9 +24,6 @@ namespace FreshHarvestMarket.Models
 
         //Nullable for cart use
         public Order? Order { get; set; }
-
-
-
     }
     
     

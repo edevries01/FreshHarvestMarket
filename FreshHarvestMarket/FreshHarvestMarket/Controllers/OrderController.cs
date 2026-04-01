@@ -28,8 +28,13 @@ namespace FreshHarvestMarket.Controllers
         {
             OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
 
+            if (session.GetFilters() != null)
+            {
+                model.Filters = session.GetFilters()!; //Can ignore warning cause we check null right above
+            }
+
             //Grab all the upcoming/pastdue orders
-            if (model.IncludeActiveOrders)
+            if (model.Filters.IncludeActiveOrders)
             {
                 List<Order> nonPickedUp = _context.Orders.Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
                 model.ActiveOrders = nonPickedUp ?? new List<Order>();
@@ -39,7 +44,7 @@ namespace FreshHarvestMarket.Controllers
                 model.ActiveOrders = new List<Order>();
             }
 
-            if (model.IncludePastOrders)
+            if (model.Filters.IncludePastOrders)
             {
                 //Grab all the fufilled/cancelled orders
                 List<Order> pastOrders = _context.Orders.Where(o => o.IsPickedUp || o.Rejected).ToList();
@@ -50,7 +55,7 @@ namespace FreshHarvestMarket.Controllers
                 model.PastOrders = new List<Order>();
             }
 
-            if (!model.IncludeCancelledOrders)
+            if (!model.Filters.IncludeCancelledOrders)
             {
                 model.PastOrders = model.PastOrders.Where(o => !o.Rejected).ToList();
             }
