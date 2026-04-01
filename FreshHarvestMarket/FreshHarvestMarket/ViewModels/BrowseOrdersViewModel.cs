@@ -22,18 +22,13 @@ namespace FreshHarvestMarket.ViewModels
          */
 
         /// <summary>
-        /// Whether or not active order should be included in the view
+        /// The filters for the Browse Orders view
         /// </summary>
-        public bool IncludeActiveOrders { get; set; } = true;
-
-        /// <summary>
-        /// Whether or not cancelled orders should be included in the view
-        /// </summary>
-        public bool IncludeCancelledOrders { get; set; } = true;
-
-        /// <summary>
-        /// Whether or not to include orders that are past
-        /// </summary>
-        public bool IncludePastOrders { get; set; } = true;
+        public OrderFilters Filters { get; set; } = new OrderFilters() 
+        {
+            IncludeActiveOrders = true,
+            IncludeCancelledOrders = true,
+            IncludePastOrders = true,
+        };
     }
 }

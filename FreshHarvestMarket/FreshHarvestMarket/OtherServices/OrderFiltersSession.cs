@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace FreshHarvestMarket.OtherServices
 {
+    /// <summary>
+    /// Used to maintain filters on the Browse Orders screen through the session
+    /// </summary>
     public class OrderFiltersSession
     {
         private const string OrderFiltersKey = "OrderFilters";
@@ -16,33 +19,21 @@ namespace FreshHarvestMarket.OtherServices
         }
 
         /// <summary>
-        /// Store filtes from session
-        /// We make a new filters object so we don't store the List<order>
+        /// Stores the filters in session
         /// </summary>
-        /// <param name="filters"></param>
-        public void SetFilters(BrowseOrdersViewModel filters)
+        /// <param name="viewModel"></param>
+        public void SetFilters(BrowseOrdersViewModel viewModel)
         {
-            session.SetObject(OrderFiltersKey, new
-            {
-                filters.IncludeActiveOrders,
-                filters.IncludeCancelledOrders,
-                filters.IncludePastOrders
-            });
+            session.SetObject(OrderFiltersKey, viewModel.Filters);
         }
 
         /// <summary>
-        /// Get the session-stored filter, or a default if none exists
-        /// Default is all are true
+        /// Get the session-stored filter, or null if one doesn't exist
         /// </summary>
         /// <returns>BrowseOrders filter</returns>
-        public BrowseOrdersViewModel GetFilters()
+        public OrderFilters? GetFilters()
         {
-            return session.GetObject<BrowseOrdersViewModel>(OrderFiltersKey) ?? new BrowseOrdersViewModel
-            {
-                IncludeActiveOrders = true,
-                IncludeCancelledOrders = true,
-                IncludePastOrders = true
-            };
+            return session.GetObject<OrderFilters>(OrderFiltersKey);
         }
     }
 }
