@@ -30,8 +30,9 @@
 			{
 				<div class="col-sm-6 col-lg-4 mb-4">
 					<div class="card h-100 shadow-sm">
-						<div class="bg-light text-center py-4">
-							<i class="bi bi-basket" style="font-size: 3rem;"></i>
+						<div class="bg-light text-center">
+							<img src="~/images/@item.ImageUrl" class="card-img-top p-2" alt="@item.ProduceName"
+							style="height: 180px; object-fit: contain;" />
 
 						</div>
 
@@ -41,6 +42,14 @@
 							<p class="small text-secondary">In Stock: @item.InventoryTotal</p>
 							<!--Sends Item ID to Details page when clicked-->
 							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
+
+							<form asp-action="AddFavorite" method="post">
+								<input type="hidden" name="produceId" value="@item.ProduceId"/>
+								<button type="submit" class="btn btn-outline-danger">
+									<i class="bi bi-heart"></i>
+								</button>
+
+							</form>
 
 						</div>
 

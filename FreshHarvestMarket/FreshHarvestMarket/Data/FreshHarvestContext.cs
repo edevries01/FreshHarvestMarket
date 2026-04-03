@@ -28,6 +28,11 @@ namespace FreshHarvestMarket.Data
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         /// <summary>
+        /// Representation of the Favorites table
+        /// </summary>
+        public DbSet<Favorite> Favorites { get; set; } = null!;
+        
+        /// <summary>
         /// Seeds all of the data when we create/update the database
         /// </summary>
         /// <param name="modelBuilder"></param>
