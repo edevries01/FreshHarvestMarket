@@ -41,7 +41,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Fresh green zucchinis",
                     UnitPrice = 1.20m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 20
+                    InventoryTotal = 20,
+                    ImageUrl = "zucchini.jpg"
                 },
                 new Produce()
                 {
@@ -50,7 +51,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Ripe red tomatoes",
                     UnitPrice = 2.00m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 25
+                    InventoryTotal = 25,
+                    ImageUrl = "tomatoes.jpg"
                 },
                 new Produce()
                 {
@@ -59,7 +61,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Local raw honey",
                     UnitPrice = 6.00m,
                     ProduceCategory = "Other",
-                    InventoryTotal = 15
+                    InventoryTotal = 15,
+                    ImageUrl = "honey.jpg"
                 },
                 new Produce()
                 {
@@ -68,7 +71,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Juicy plums",
                     UnitPrice = 2.50m,
                     ProduceCategory = "Fruit",
-                    InventoryTotal = 18
+                    InventoryTotal = 18,
+                    ImageUrl = "plums.jpg"
                 },
                 new Produce()
                 {
@@ -77,7 +81,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Freshly harvested potatoes",
                     UnitPrice = 1.20m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 30
+                    InventoryTotal = 30,
+                    ImageUrl = "potatoes.jpg"
                 },
                 new Produce()
                 {
@@ -86,7 +91,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Sweet blueberries",
                     UnitPrice = 3.00m,
                     ProduceCategory = "Fruit",
-                    InventoryTotal = 12
+                    InventoryTotal = 12,
+                    ImageUrl = "blueberries.jpg"
                 },
                 new Produce()
                 {
@@ -95,7 +101,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Fresh sweet corn",
                     UnitPrice = 1.75m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 20
+                    InventoryTotal = 20,
+                    ImageUrl = "sweetcorn.jpg"
                 },
                 new Produce()
                 {
@@ -104,7 +111,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Green broccoli florets",
                     UnitPrice = 2.25m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 15
+                    InventoryTotal = 15,
+                    ImageUrl = "broccoli.jpg"
                 },
                 new Produce()
                 {
@@ -113,7 +121,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Fresh garlic bulbs",
                     UnitPrice = 0.80m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 40
+                    InventoryTotal = 40,
+                    ImageUrl = "garlic.jpg"
                 },
                 new Produce()
                 {
@@ -122,7 +131,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Sweet red cherries",
                     UnitPrice = 3.50m,
                     ProduceCategory = "Fruit",
-                    InventoryTotal = 10
+                    InventoryTotal = 10,
+                    ImageUrl = "cherries.jpg"
                 },
                 new Produce()
                 {
@@ -131,7 +141,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Organic carrots",
                     UnitPrice = 1.50m,
                     ProduceCategory = "Vegetable",
-                    InventoryTotal = 25
+                    InventoryTotal = 25,
+                    ImageUrl = "carrots.jpg"
                 },
                 new Produce()
                 {
@@ -140,7 +151,8 @@ namespace FreshHarvestMarket.Data
                     ProduceDescription = "Fresh raspberries",
                     UnitPrice = 3.00m,
                     ProduceCategory = "Fruit",
-                    InventoryTotal = 12
+                    InventoryTotal = 12,
+                    ImageUrl = "raspberries.jpg"
                 }
             );
 
