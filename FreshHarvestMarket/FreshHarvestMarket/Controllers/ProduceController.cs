@@ -44,5 +44,23 @@ namespace FreshHarvestMarket.Controllers
             if (item == null) return NotFound();
             return View(item);
         }
+
+        //Add Favorites
+        [HttpPost]
+        public IActionResult AddFavorite(int produceId)
+        {
+            var existing = _context.Favorites.FirstOrDefault(f => f.ProduceId == produceId);
+
+            if (existing == null)
+            {
+                var favorite = new Favorite { ProduceId = produceId };
+
+                _context.Favorites.Add(favorite);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+            
+        }
     }
 }
