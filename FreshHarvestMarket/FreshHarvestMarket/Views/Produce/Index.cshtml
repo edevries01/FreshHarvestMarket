@@ -1,0 +1,55 @@
+﻿@model BrowseProduceViewModel
+@{
+	ViewData["Title"] = "Marketplace";
+}
+
+<div class="row">
+	<div class="col-md-3">
+		<h3>Categories</h3>
+		<div class="list-group">
+			<a asp-action="Index" asp-route-category="All"
+			   class="list-group-item list-group-item-action @(Model.SelectedCategory == "All" ? "active" : "")">
+				All Produce
+			</a>
+			 <!--Button for every category-->
+			@foreach (string cat in Model.Categories)
+			{
+				<a asp-action="Index" asp-route-category="@cat" class="list-group-item list-group-item-action @(Model.SelectedCategory == cat ? "active" : "")">
+					@cat</a>
+			}
+
+		</div>
+
+	</div>
+
+	<div class="col-md-9">
+		<h2 class="mb-4">Browsing: @Model.SelectedCategory</h2>
+
+		<div class="row"> <!--Card for every item-->
+			@foreach (var item in Model.ProduceItems)
+			{
+				<div class="col-sm-6 col-lg-4 mb-4">
+					<div class="card h-100 shadow-sm">
+						<div class="bg-light text-center py-4">
+							<i class="bi bi-basket" style="font-size: 3rem;"></i>
+
+						</div>
+
+						<div class="card-body">
+							<h5 class="card-title">@item.ProduceName</h5>
+							<p class="card-text text-muted">@item.UnitPrice.ToString("C")</p>
+							<p class="small text-secondary">In Stock: @item.InventoryTotal</p>
+							<!--Sends Item ID to Details page when clicked-->
+							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
+
+						</div>
+
+					</div>
+
+				</div>
+			}
+
+		</div>
+
+	</div>
+</div>
