@@ -1,0 +1,50 @@
+﻿@model Produce
+@{
+	ViewData["Title"] = "Details - " + Model.ProduceName;
+}
+
+
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-md-6 mb-4">
+			<div class="card shadow-sm">
+				<img src="~/images/@Model.ImageUrl" class="img-fluid rounded-start p-3" alt="@Model.ProduceName"
+				style="max-height: 500px; object-fit: contain;" />
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<h1 class="display-4">@Model.ProduceName</h1>
+		<p class="badge bg-success fs-6">@Model.ProduceCategory</p>
+
+		<hr/>
+
+		<h3 class="text-muted">@Model.UnitPrice.ToString("C")</h3>
+		<p class="lead mt-3">@Model.ProduceDescription</p>
+
+		<div class="mt-4">
+			@*Display inventory status*@
+			<p><strong>Availability</strong> @Model.InventoryTotal units in stock</p>
+
+		</div>
+
+		<div class="d-flex gap-3 mt-5">
+			@*Back button to return to Market*@
+			<a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+				<i class="bi bi-arrow-left"></i> Back to Shop
+			</a>
+
+			@*Add to Favorites button*@
+			<form asp-action="AddFavorite" method="post">
+				<input type="hidden" name="produceId" value="@Model.ProduceId" />
+				<button type="submit" class="btn btn-danger btn-lg">
+					<i class="bi bi-heart-fill"></i> Add to Favorites
+				</button>
+			</form>
+		</div>
+
+	</div>
+
+</div>

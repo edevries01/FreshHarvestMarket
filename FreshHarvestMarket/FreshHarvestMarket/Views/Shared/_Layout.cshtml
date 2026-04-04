@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FreshHarvestMarket.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -51,15 +51,15 @@
             </div>
         </nav>
     </header>
-    <div class="container flex-grow-1">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center py-3">
-            <p class="mb-1">
+    <footer class="border-top footer text-muted mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">
                 &copy; @DateTime.Now.Year - Fresh Harvest Market
             </p>
             <p class="mb-0">
