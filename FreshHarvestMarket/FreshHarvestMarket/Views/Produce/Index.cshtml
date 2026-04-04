@@ -11,11 +11,12 @@
 			   class="list-group-item list-group-item-action @(Model.SelectedCategory == "All" ? "active" : "")">
 				All Produce
 			</a>
-			 <!--Button for every category-->
+			<!--Button for every category-->
 			@foreach (string cat in Model.Categories)
 			{
 				<a asp-action="Index" asp-route-category="@cat" class="list-group-item list-group-item-action @(Model.SelectedCategory == cat ? "active" : "")">
-					@cat</a>
+					@cat
+				</a>
 			}
 
 		</div>
@@ -25,14 +26,15 @@
 	<div class="col-md-9">
 		<h2 class="mb-4">Browsing: @Model.SelectedCategory</h2>
 
-		<div class="row"> <!--Card for every item-->
+		<div class="row">
+			<!--Card for every item-->
 			@foreach (var item in Model.ProduceItems)
 			{
 				<div class="col-sm-6 col-lg-4 mb-4">
 					<div class="card h-100 shadow-sm">
 						<div class="bg-light text-center">
 							<img src="~/images/@item.ImageUrl" class="card-img-top p-2" alt="@item.ProduceName"
-							style="height: 180px; object-fit: contain;" />
+								 style="height: 180px; object-fit: contain;" />
 
 						</div>
 
@@ -44,7 +46,7 @@
 							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
 
 							<form asp-action="AddFavorite" method="post">
-								<input type="hidden" name="produceId" value="@item.ProduceId"/>
+								<input type="hidden" name="produceId" value="@item.ProduceId" />
 								<button type="submit" class="btn btn-outline-danger">
 									<i class="bi bi-heart"></i>
 								</button>
