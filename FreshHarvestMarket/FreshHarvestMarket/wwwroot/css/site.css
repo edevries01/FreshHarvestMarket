@@ -32,3 +32,13 @@ footer {
     display: flex;
     align-items: center;
 }
+
+.heart-btn:hover i::before {
+    content: "\f415";
+    transition: all 0.2s ease-in-out;
+}
+
+.heart-btn:hover i {
+    transform: scale(1.2);
+    display: inline-block;
+}

@@ -45,10 +45,10 @@
 							<!--Sends Item ID to Details page when clicked-->
 							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
 
-							<form asp-action="AddFavorite" method="post">
+							<form asp-action="AddFavorite" method="post" class="mt-2 text-end">
 								<input type="hidden" name="produceId" value="@item.ProduceId" />
-								<button type="submit" class="btn btn-outline-danger">
-									<i class="bi bi-heart"></i>
+								<button type="submit" class="btn border-0 bg-transparent p-0 shadow-none heart-btn">
+									<i class="bi bi-heart fs-4 text-danger"></i>
 								</button>
 
 							</form>
