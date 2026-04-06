@@ -60,7 +60,42 @@ namespace FreshHarvestMarket.Controllers
             }
 
             return RedirectToAction("Index");
-            
+
+        }
+
+        //Get Produce/Favorites
+        public IActionResult Favorites()
+        {
+            // Join Favorites table with Produce table to get full details
+            var favoriteItems = _context.Favorites
+                .Join(_context.Produce,
+                f => f.ProduceId,
+                p => p.ProduceId,
+                (f, p) => p).ToList();
+
+            var viewModel = new FavoritesViewModel
+            {
+                FavoriteItems = favoriteItems
+            };
+
+            return View(viewModel);
+        }
+
+        //Post Produce/DeleteFavorite
+        [HttpPost]
+        public IActionResult DeleteFavorite(int produceId)
+        {
+            //Find record in Favorites table
+            var favorite = _context.Favorites.FirstOrDefault(f => f.ProduceId == produceId);
+
+            if (favorite != null)
+            {
+                _context.Favorites.Remove(favorite);
+                _context.SaveChanges();
+            }
+
+            //Redirect back to Favorites view to refresh list
+            return RedirectToAction("Favorites");
         }
     }
 }
