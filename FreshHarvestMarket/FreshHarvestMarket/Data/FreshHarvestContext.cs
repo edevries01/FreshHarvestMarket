@@ -42,8 +42,8 @@ namespace FreshHarvestMarket.Data
                 new Produce()
                 {
                     ProduceId = 1,
-                    ProduceName = "Zuccihini",
-                    ProduceDescription = "Fresh green zucchinis",
+                    ProduceName = "Zucchini",
+                    ProduceDescription = "Fresh green zucchini from Williamsburg, Iowa",
                     UnitPrice = 1.20m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 20,
@@ -53,7 +53,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 2,
                     ProduceName = "Tomatoes",
-                    ProduceDescription = "Ripe red tomatoes",
+                    ProduceDescription = "Ripe red tomatoes from Victor, Iowa",
                     UnitPrice = 2.00m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 25,
@@ -63,7 +63,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 3,
                     ProduceName = "Honey",
-                    ProduceDescription = "Local raw honey",
+                    ProduceDescription = "Local raw honey from Victor, Iowa",
                     UnitPrice = 6.00m,
                     ProduceCategory = "Other",
                     InventoryTotal = 15,
@@ -73,7 +73,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 4,
                     ProduceName = "Plums",
-                    ProduceDescription = "Juicy plums",
+                    ProduceDescription = "Juicy plums from Amana, Iowa",
                     UnitPrice = 2.50m,
                     ProduceCategory = "Fruit",
                     InventoryTotal = 18,
@@ -83,7 +83,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 5,
                     ProduceName = "Potatoes",
-                    ProduceDescription = "Freshly harvested potatoes",
+                    ProduceDescription = "Freshly harvested potatoes from Ladora, Iowa",
                     UnitPrice = 1.20m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 30,
@@ -93,7 +93,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 6,
                     ProduceName = "Blueberries",
-                    ProduceDescription = "Sweet blueberries",
+                    ProduceDescription = "Sweet blueberries from Tiffin, Iowa",
                     UnitPrice = 3.00m,
                     ProduceCategory = "Fruit",
                     InventoryTotal = 12,
@@ -103,9 +103,8 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 7,
                     ProduceName = "Sweet Corn",
-                    ProduceDescription = "Fresh sweet corn",
+                    ProduceDescription = "Fresh sweet corn from Marengo, Iowa",
                     UnitPrice = 1.75m,
-                    ProduceCategory = "Vegetable",
                     InventoryTotal = 20,
                     ImageUrl = "sweetcorn.jpg"
                 },
@@ -113,7 +112,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 8,
                     ProduceName = "Broccoli",
-                    ProduceDescription = "Green broccoli florets",
+                    ProduceDescription = "Green broccoli florets from Millersburg, Iowa",
                     UnitPrice = 2.25m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 15,
@@ -123,7 +122,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 9,
                     ProduceName = "Garlic",
-                    ProduceDescription = "Fresh garlic bulbs",
+                    ProduceDescription = "Fresh garlic bulbs from Montezuma, Iowa",
                     UnitPrice = 0.80m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 40,
@@ -133,7 +132,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 10,
                     ProduceName = "Cherries",
-                    ProduceDescription = "Sweet red cherries",
+                    ProduceDescription = "Sweet red cherries from Solon, Iowa",
                     UnitPrice = 3.50m,
                     ProduceCategory = "Fruit",
                     InventoryTotal = 10,
@@ -143,7 +142,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 11,
                     ProduceName = "Carrots",
-                    ProduceDescription = "Organic carrots",
+                    ProduceDescription = "Organic carrots from Kalona, Iowa",
                     UnitPrice = 1.50m,
                     ProduceCategory = "Vegetable",
                     InventoryTotal = 25,
@@ -153,7 +152,7 @@ namespace FreshHarvestMarket.Data
                 {
                     ProduceId = 12,
                     ProduceName = "Raspberries",
-                    ProduceDescription = "Fresh raspberries",
+                    ProduceDescription = "Fresh raspberries from Swisher, Iowa",
                     UnitPrice = 3.00m,
                     ProduceCategory = "Fruit",
                     InventoryTotal = 12,
