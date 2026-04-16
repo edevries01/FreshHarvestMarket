@@ -67,13 +67,16 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-4 mb-4">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted mt-auto">
         <div class="container text-center">
+
+            @await Component.InvokeAsync("Weather")
+
             <p class="mb-0">
                 &copy; @DateTime.Now.Year - Fresh Harvest Market
             </p>

@@ -1,4 +1,5 @@
 using FreshHarvestMarket.Data;
+using FreshHarvestMarket.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<WeatherService>();
 
 //Add dependency injection for DbContext
 builder.Services.AddDbContext<FreshMarketContext>(options =>
