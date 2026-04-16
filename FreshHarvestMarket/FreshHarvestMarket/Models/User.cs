@@ -2,6 +2,7 @@
 
 namespace FreshHarvestMarket.Models
 {
+    //User Info
     public class User
     {
         public int UserId { get; set; }
