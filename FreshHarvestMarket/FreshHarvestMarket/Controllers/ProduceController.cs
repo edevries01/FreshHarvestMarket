@@ -1,6 +1,7 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FreshHarvestMarket.Controllers
@@ -96,6 +97,61 @@ namespace FreshHarvestMarket.Controllers
 
             //Redirect back to Favorites view to refresh list
             return RedirectToAction("Favorites");
+        }
+
+        //Admin actions
+        //[Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult Create(Produce item)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Produce.Add(item);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(item);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        public IActionResult Edit(int id)
+        {
+            var item = _context.Produce.Find(id);
+            if (item == null) return NotFound();
+            return View(item);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult Edit(Produce item)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Produce.Update(item);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(item);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var item = _context.Produce.Find();
+            if (item != null)
+            {
+                _context.Produce.Remove(item);
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
