@@ -9,6 +9,9 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<WeatherService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
+builder.Services.AddScoped<CartService>();
 
 //Add dependency injection for DbContext
 builder.Services.AddDbContext<FreshMarketContext>(options =>
