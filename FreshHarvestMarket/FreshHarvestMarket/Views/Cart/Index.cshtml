@@ -1,0 +1,60 @@
+﻿@model List<FreshHarvestMarket.Models.CartItem>
+
+<h2>Your Cart</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/images/@item.ImageUrl"
+                         style="width:60px;height:60px;object-fit:cover;" />
+                </td>
+                <td>@item.ProduceName</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>
+                    <form asp-action="Update" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="id" value="@item.ProduceId" />
+
+                        <input type="number"
+                               name="quantity"
+                               value="@item.Quantity"
+                               min="1"
+                               class="form-control form-control-sm"
+                               style="width:80px;" />
+
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Update
+                        </button>
+                    </form>
+                </td>
+                <td>@item.LineTotal.ToString("C")</td>
+                <td>
+                    <a asp-action="Remove" asp-route-id="@item.ProduceId"
+                       class="btn btn-danger btn-sm">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Total: @ViewBag.Total.ToString("C")</h3>
+
+<a asp-controller="Checkout" asp-action="Index"
+   class="btn btn-success">Checkout</a>
+
+<a asp-controller="Produce" asp-action="Index" class="btn btn-outline-secondary">
+    Keep Shopping
+</a>

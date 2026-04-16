@@ -55,6 +55,17 @@
 							<!--Sends Item ID to Details page when clicked-->
 							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
 
+
+							<a asp-controller="Cart"
+							   asp-action="Add"
+							   asp-route-id="@item.ProduceId"
+							   asp-route-name="@item.ProduceName"
+							   asp-route-image="@item.ImageUrl"
+							   asp-route-price="@item.UnitPrice"
+							   asp-route-maxQuantity="@item.InventoryTotal"
+							   class="btn btn-primary w-100 mt-2">
+								Add to Cart
+							</a>
 							
 						
 							@*Restrict when Admin role impleneted*@
@@ -73,8 +84,6 @@
 								</form>
 
 							</div>
-						
-						
 						
 
 							<form asp-action="AddFavorite" method="post" class="mt-2 text-end">
