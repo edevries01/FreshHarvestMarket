@@ -4,15 +4,55 @@
 
 <form asp-action="PlaceOrder" method="post">
 
-    <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-    <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-    <input asp-for="Email" class="form-control" placeholder="Email" />
-    <input asp-for="Phone" class="form-control" placeholder="Phone" />
+    <!-- Validation summary -->
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-    <label>Pickup Date</label>
-    <input asp-for="PickupDate" type="date" class="form-control" />
+    <!-- First Name -->
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" placeholder="Enter first name" required />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
 
-    <button type="submit" class="btn btn-success mt-3">
+    <!-- Last Name -->
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" placeholder="Enter last name" required />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" placeholder="Enter email" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Phone -->
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" required />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <!-- Pickup Date -->
+    <div class="mb-3">
+        <label asp-for="PickupDate" class="form-label">Pickup Date</label>
+        <input asp-for="PickupDate"
+               type="date"
+               class="form-control"
+               value="@DateTime.Now.ToString("yyyy-MM-dd")"
+               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+               required />
+        <span asp-validation-for="PickupDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">
         Place Order
     </button>
+
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

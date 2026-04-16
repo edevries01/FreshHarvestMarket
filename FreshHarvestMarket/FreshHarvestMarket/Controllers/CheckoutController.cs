@@ -31,7 +31,7 @@ namespace FreshHarvestMarket.Controllers
             // TODO: save order to DB later
             // (this is where your Order entity gets created)
 
-            _cart.ClearCart(); // optional but recommended
+            _cart.ClearCart(); 
 
             return RedirectToAction("Confirmation");
         }
