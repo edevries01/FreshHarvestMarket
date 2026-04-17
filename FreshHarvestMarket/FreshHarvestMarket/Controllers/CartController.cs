@@ -50,7 +50,19 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult Update(int id, int quantity)
         {
+            var cartItem = _cart.GetCart().FirstOrDefault(x => x.ProduceId == id);
+
+            if (cartItem == null)
+                return RedirectToAction("Index");
+
+            if (quantity > cartItem.MaxQuantity)
+            {
+                TempData["CartError"] = $"Only {cartItem.MaxQuantity} available for {cartItem.ProduceName}.";
+                quantity = cartItem.MaxQuantity;
+            }
+
             _cart.UpdateQuantity(id, quantity);
+
             return RedirectToAction("Index");
         }
     }
