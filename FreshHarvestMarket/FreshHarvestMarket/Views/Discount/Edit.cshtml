@@ -1,0 +1,31 @@
+﻿@*Screen for adding/editing a discount*@
+@model Discount
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-action="Edit" method="post">
+	<div asp-validation-summary="All" class="text-danger"></div>
+
+	<div class="mb-3">
+		<label asp-for="ProduceId" class="form-label">Produce</label>
+		<select asp-for="ProduceId" class="form-select">
+			<option value="">select a product</option>
+			@foreach (Produce p in ViewBag.Produce)
+			{
+				<option value="@p.ProduceId">@p.ProduceName</option>
+			}
+		</select>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="DiscountAmount" class="for-label">Discount Amount</label>
+		<input asp-for="DiscountAmount" class="form-control" />
+	</div>
+
+	<input type="hidden" asp-for="DiscountId" />
+
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Cancel</a>
+</form>
