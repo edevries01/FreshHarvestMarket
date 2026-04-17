@@ -1,7 +1,44 @@
-﻿<h2>Order Confirmed 🎉</h2>
+﻿@model FreshHarvestMarket.ViewModels.ConfirmationViewModel
 
-<p>Your order has been reserved successfully.</p>
+<h2>🎉 Order Confirmed!</h2>
 
-<p>Please pick up your order on the date you selected.</p>
+<p>
+    Thank you, <strong>@Model.FirstName @Model.LastName</strong>!<br />
+    Your order has been reserved.
+</p>
 
-<p><strong>Thank you for your business!</strong></p>
+<hr />
+
+<h4>Pickup Details</h4>
+<p><strong>Date:</strong> @Model.PickupDate.ToString("MMMM dd, yyyy")</p>
+
+<hr />
+
+<h4>Order Summary</h4>
+
+@foreach (var item in Model.Items)
+{
+    <div class="card mb-3 p-2">
+        <div class="d-flex gap-3 align-items-center">
+
+            <img src="~/images/@item.ImageUrl"
+                 style="width:100px;height:100px;object-fit:cover;" />
+
+            <div>
+                <h5>@item.ProduceName</h5>
+                <p>@item.LineTotal.ToString("C")</p>
+                <p>Quantity: @item.Quantity</p>
+            </div>
+
+        </div>
+    </div>
+}
+
+<hr />
+
+<h4>Total: @Model.Total.ToString("C")</h4>
+
+<p class="mt-3">
+    Please pick up your order on <strong>@Model.PickupDate.ToString("MM/dd/yyyy")</strong>.<br />
+    Thank you for your business!
+</p>

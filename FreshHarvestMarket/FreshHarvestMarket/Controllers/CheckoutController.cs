@@ -6,11 +6,11 @@ namespace FreshHarvestMarket.Controllers
 {
     public class CheckoutController : Controller
     {
-        private readonly CartService _cart;
+        private readonly CartService _cartService;
 
-        public CheckoutController(CartService cart)
+        public CheckoutController(CartService cartService)
         {
-            _cart = cart;
+            _cartService = cartService;
         }
 
         [HttpGet]
@@ -26,15 +26,24 @@ namespace FreshHarvestMarket.Controllers
             if (!ModelState.IsValid)
                 return View("Index", model);
 
-            var cart = _cart.GetCart();
+            var cart = _cartService.GetCart();
 
-            // TODO: save order to DB later
-            // (this is where your Order entity gets created)
+            var confirmation = new ConfirmationViewModel
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Phone = model.Phone,
+                PickupDate = model.PickupDate,
+                Items = cart
+            };
 
-            _cart.ClearCart(); 
+            _cartService.ClearCart();
 
-            return RedirectToAction("Confirmation");
+            return View("Confirmation", confirmation);
         }
+        // TODO: save order to DB later
+        // (this is where Order entity gets created)
 
         public IActionResult Confirmation()
         {
