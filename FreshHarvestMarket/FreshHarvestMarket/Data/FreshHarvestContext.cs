@@ -31,6 +31,11 @@ namespace FreshHarvestMarket.Data
         /// Representation of the Favorites table
         /// </summary>
         public DbSet<Favorite> Favorites { get; set; } = null!;
+
+        /// <summary>
+        /// Representation of the discounts table
+        /// </summary>
+        public DbSet<Discount> Discounts { get; set; } = null!;
         
         /// <summary>
         /// Seeds all of the data when we create/update the database
