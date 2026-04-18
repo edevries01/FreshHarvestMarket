@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreshHarvestMarket.Migrations
 {
-    [DbContext(typeof(FreshMarketContext))]
+    [DbContext(typeof(FreshHarvestContext))]
     [Migration("20260311030839_AddRejectedField")]
     partial class AddRejectedField
     {

@@ -3,6 +3,9 @@
     public class CartItem
     {
         public int ProduceId { get; set; }
+
+        public Produce? Produce { get; set; }
+
         public string ProduceName { get; set; } = "";
         public string ImageUrl { get; set; } = "";
         public decimal Price { get; set; }

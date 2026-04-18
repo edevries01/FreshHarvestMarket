@@ -8,9 +8,9 @@ namespace FreshHarvestMarket.Services
     public class CartService
     {
         private readonly IHttpContextAccessor _http;
-        private readonly FreshMarketContext _context;
+        private readonly FreshHarvestContext _context;
 
-        public CartService(IHttpContextAccessor http, FreshMarketContext context)
+        public CartService(IHttpContextAccessor http, FreshHarvestContext context)
         {
             _http = http;
             _context = context;

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreshHarvestMarket.Migrations
 {
-    [DbContext(typeof(FreshMarketContext))]
+    [DbContext(typeof(FreshHarvestContext))]
     [Migration("20260310015753_UpdateOrderItems")]
     partial class UpdateOrderItems
     {

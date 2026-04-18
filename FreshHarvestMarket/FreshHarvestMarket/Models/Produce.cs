@@ -15,5 +15,11 @@
         public int InventoryTotal { get; set; }
 
         public string? ImageUrl { get; set; } = "placeholder.jpg";
+
+        /// <summary>
+        /// Navigation property for discount tied to produce item
+        /// </summary>
+        public Discount? Discount { get; set; }
+
     }
 }

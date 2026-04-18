@@ -12,9 +12,9 @@ namespace FreshHarvestMarket.Controllers
     /// </summary>
     public class OrderController : Controller
     {
-        private FreshMarketContext _context;
+        private FreshHarvestContext _context;
 
-        public OrderController(FreshMarketContext ctx)
+        public OrderController(FreshHarvestContext ctx)
         {
             _context = ctx;
         }

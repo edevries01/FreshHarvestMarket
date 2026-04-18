@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreshHarvestMarket.Migrations
 {
-    [DbContext(typeof(FreshMarketContext))]
+    [DbContext(typeof(FreshHarvestContext))]
     [Migration("20260227005220_Initial")]
     partial class Initial
     {

@@ -9,9 +9,9 @@ namespace FreshHarvestMarket.Controllers
     public class CheckoutController : Controller
     {
         private readonly CartService _cartService;
-        private readonly FreshMarketContext _context;
+        private readonly FreshHarvestContext _context;
 
-        public CheckoutController(CartService cartService, FreshMarketContext context)
+        public CheckoutController(CartService cartService, FreshHarvestContext context)
         {
             _cartService = cartService;
             _context = context;

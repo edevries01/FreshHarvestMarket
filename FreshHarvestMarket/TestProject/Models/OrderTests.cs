@@ -15,13 +15,13 @@ public class OrderTests
     /// Makes it easier to write new test cases
     /// </summary>
     /// <returns>In-memory database</returns>
-    private FreshMarketContext GetInMemoryContext()
+    private FreshHarvestContext GetInMemoryContext()
     {
         //Make new in-memory database
-        DbContextOptions options = new DbContextOptionsBuilder<FreshMarketContext>()
+        DbContextOptions options = new DbContextOptionsBuilder<FreshHarvestContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
 
-        var context = new FreshMarketContext(options);
+        var context = new FreshHarvestContext(options);
 
         //Add data and save
         //This was last updated 3/23/2026 and is based on the current context class data
@@ -111,7 +111,7 @@ public class OrderTests
     public void Order_UpdateOrderTotal() 
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
 
         //Act
         Order testOrder = context.Orders.Include(o => o.Items).FirstOrDefault()!;

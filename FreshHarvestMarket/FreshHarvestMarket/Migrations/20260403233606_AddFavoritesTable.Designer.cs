@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreshHarvestMarket.Migrations
 {
-    [DbContext(typeof(FreshMarketContext))]
+    [DbContext(typeof(FreshHarvestContext))]
     [Migration("20260403233606_AddFavoritesTable")]
     partial class AddFavoritesTable
     {

@@ -1,4 +1,6 @@
 using FreshHarvestMarket.Data;
+using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +14,14 @@ builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<IRepository<Discount>, FreshHarvestRepository<Discount>>();
+builder.Services.AddScoped<IRepository<Produce>, FreshHarvestRepository<Produce>>();
+builder.Services.AddScoped<IRepository<Favorite>, FreshHarvestRepository<Favorite>>();
+builder.Services.AddScoped<IRepository<Order>, FreshHarvestRepository<Order>>();
+builder.Services.AddScoped<IRepository<OrderItem>, FreshHarvestRepository<OrderItem>>();
 
 //Add dependency injection for DbContext
-builder.Services.AddDbContext<FreshMarketContext>(options =>
+builder.Services.AddDbContext<FreshHarvestContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("FreshHarvest")
 ));
