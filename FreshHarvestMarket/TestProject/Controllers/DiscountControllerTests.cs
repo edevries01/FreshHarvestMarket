@@ -1,56 +1,13 @@
-﻿using FreshHarvestMarket.Models;
-using Microsoft.EntityFrameworkCore;
+using FreshHarvestMarket.Models;
+using System.Net.Sockets;
 
-namespace FreshHarvestMarket.Data
+namespace TestProject;
+
+[TestClass]
+public class DiscountControllerTests
 {
-    /// <summary>
-    /// Database connectivity for the Produce class
-    /// </summary>
-    public class FreshHarvestContext : DbContext
-    {
-        public FreshHarvestContext(DbContextOptions options) : base(options)
-        {
-        }
-
-        /// <summary>
-        /// Representation of the Produce table
-        /// </summary>
-        public DbSet<Produce> Produce { get; set; } = null!;
-
-        /// <summary>
-        /// Representation of the Order table
-        /// </summary>
-        public DbSet<Order> Orders { get; set; } = null!;
-
-        /// <summary>
-        /// Representations of the OrderItems table
-        /// </summary>
-        public DbSet<OrderItem> OrderItems { get; set; } = null!;
-
-        /// <summary>
-        /// Representation of the Favorites table
-        /// </summary>
-        public DbSet<Favorite> Favorites { get; set; } = null!;
-
-        /// <summary>
-        /// Representation of the discounts table
-        /// </summary>
-        public DbSet<Discount> Discounts { get; set; } = null!;
-        
-        /// <summary>
-        /// Seeds all of the data when we create/update the database
-        /// </summary>
-        /// <param name="modelBuilder"></param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        {
-            //Ensure the 1-1 relationship of discount and produce works right
-            modelBuilder.Entity<Produce>()
-                .HasOne(p => p.Discount)
-                .WithOne(d => d.Produce)
-                .HasForeignKey<Discount>(d => d.ProduceId);
-
-            modelBuilder.Entity<Produce>().HasData(
-                new Produce()
+    //Copied the seed data from FreshHarvestContext
+    IQueryable<Produce> testProduce = new List<Produce> {new Produce()
                 {
                     ProduceId = 1,
                     ProduceName = "Zucchini",
@@ -168,54 +125,9 @@ namespace FreshHarvestMarket.Data
                     ProduceCategory = "Fruit",
                     InventoryTotal = 12,
                     ImageUrl = "raspberries.jpg"
-                }
-            );
+                } }.AsQueryable();
 
-            modelBuilder.Entity<Order>().HasData(
-                new Order() 
-                {
-                    OrderId = 1,
-                    OrderTotal = 12.50m,
-                    OrderDate = new DateTime(2026, 3, 1),
-                    PickupDate = new DateTime(2026, 3, 2),
-                    IsPickedUp = false
-                },
-                new Order() 
-                {
-                    OrderId = 2,
-                    OrderTotal = 22.00m,
-                    OrderDate = new DateTime(2026, 3, 3),
-                    PickupDate = new DateTime(2026, 3, 4),
-                    IsPickedUp = false
-                }
-            );
-
-            modelBuilder.Entity<OrderItem>().HasData(
-                new OrderItem
-                {
-                    OrderItemId = 1,
-                    OrderId = 1,
-                    ProduceId = 1,
-                    Quantity = 3
-                },
-                new OrderItem
-                {
-                    OrderItemId = 2,
-                    OrderId = 1,
-                    ProduceId = 2,
-                    Quantity = 2
-                },
-                new OrderItem
-                {
-                    OrderItemId = 3,
-                    OrderId = 2,
-                    ProduceId = 3,
-                    Quantity = 4
-                }
-            );
-
-            modelBuilder.Entity<Discount>().HasData(
-                new Discount
+    IQueryable<Discount> testDiscounts = new List<Discount>() {new Discount
                 {
                     DiscountId = 1,
                     DiscountAmount = 50,
@@ -226,7 +138,19 @@ namespace FreshHarvestMarket.Data
                     DiscountId = 2,
                     DiscountAmount = 3,
                     ProduceId = 3
-                });
+                } }.AsQueryable();
+
+    //Had to just assign everything manually since .Load() leads to nullreference exception on IQueryable
+    private void LoadProperties()
+    {
+        foreach (Discount discount in testDiscounts) 
+        {
+            discount.Produce = testProduce.FirstOrDefault(p => p.ProduceId == discount.ProduceId);
         }
+    }
+
+    [TestMethod]
+    public void TestMethod1()
+    {
     }
 }

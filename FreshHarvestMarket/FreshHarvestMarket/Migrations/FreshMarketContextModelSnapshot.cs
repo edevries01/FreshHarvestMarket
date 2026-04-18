@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreshHarvestMarket.Migrations
 {
-    [DbContext(typeof(FreshMarketContext))]
+    [DbContext(typeof(FreshHarvestContext))]
     partial class FreshMarketContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -38,9 +38,24 @@ namespace FreshHarvestMarket.Migrations
 
                     b.HasKey("DiscountId");
 
-                    b.HasIndex("ProduceId");
+                    b.HasIndex("ProduceId")
+                        .IsUnique();
 
                     b.ToTable("Discounts");
+
+                    b.HasData(
+                        new
+                        {
+                            DiscountId = 1,
+                            DiscountAmount = 50,
+                            ProduceId = 1
+                        },
+                        new
+                        {
+                            DiscountId = 2,
+                            DiscountAmount = 3,
+                            ProduceId = 3
+                        });
                 });
 
             modelBuilder.Entity("FreshHarvestMarket.Models.Favorite", b =>
@@ -316,8 +331,8 @@ namespace FreshHarvestMarket.Migrations
             modelBuilder.Entity("FreshHarvestMarket.Models.Discount", b =>
                 {
                     b.HasOne("FreshHarvestMarket.Models.Produce", "Produce")
-                        .WithMany()
-                        .HasForeignKey("ProduceId")
+                        .WithOne("Discount")
+                        .HasForeignKey("FreshHarvestMarket.Models.Discount", "ProduceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -357,6 +372,11 @@ namespace FreshHarvestMarket.Migrations
             modelBuilder.Entity("FreshHarvestMarket.Models.Order", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Produce", b =>
+                {
+                    b.Navigation("Discount");
                 });
 #pragma warning restore 612, 618
         }

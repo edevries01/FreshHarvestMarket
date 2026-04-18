@@ -8,9 +8,9 @@ namespace FreshHarvestMarket.Controllers
 {
     public class ProduceController : Controller
     {
-        private FreshMarketContext _context;
+        private FreshHarvestContext _context;
 
-        public ProduceController(FreshMarketContext context)
+        public ProduceController(FreshHarvestContext context)
         {
             _context = context;
         }

@@ -1,5 +1,6 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -12,14 +13,13 @@ namespace FreshHarvestMarket.Controllers
     /// </summary>
     public class DiscountController : Controller
     {
-        /// <summary>
-        /// Context service for movie entities
-        /// </summary>
-        private FreshMarketContext context { get; set; }
+        private IRepository<Discount> _DiscountRepository { get; set; }
+        private IRepository<Produce> _ProduceRepository { get; set; }
 
-        public DiscountController(FreshMarketContext ctx)
+        public DiscountController(IRepository<Discount> discountRepository, IRepository<Produce> produceRepository)
         {
-            context = ctx;
+            _DiscountRepository = discountRepository;
+            _ProduceRepository = produceRepository;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace FreshHarvestMarket.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
-            List<Discount> discounts = context.Discounts.Include(d => d.Produce).ToList();
+            List<Discount> discounts = _DiscountRepository.GetAll().Include(d => d.Produce).ToList();
             return View(discounts);
         }
 
@@ -38,12 +38,12 @@ namespace FreshHarvestMarket.Controllers
         /// <returns>View for adding new discount</returns>
         public IActionResult Add()
         {
-            List<int> existingDiscounts = context.Discounts.Select(d => d.ProduceId).ToList();
+            List<int> existingDiscounts = _DiscountRepository.GetAll().Select(d => d.ProduceId).ToList();
 
             ViewBag.Action = "Add";
 
             //Only get products that don't alreday have a discount
-            ViewBag.Produce = context.Produce
+            ViewBag.Produce = _ProduceRepository.GetAll()
                 .Where(p => !existingDiscounts.Contains(p.ProduceId))
                 .OrderBy(p => p.ProduceName).ToList();
 
@@ -59,8 +59,12 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult Edit(int id)
         {
             ViewBag.Action = "Edit";
-            ViewBag.Produce = context.Produce.OrderBy(p => p.ProduceName).ToList();
-            Discount discount = context.Discounts.Find(id);
+            ViewBag.Produce = _ProduceRepository.GetAll().OrderBy(p => p.ProduceName).ToList();
+            Discount? discount = _DiscountRepository.GetAll().Where(d => d.DiscountId == id).FirstOrDefault();
+
+            if (discount == null)
+                return RedirectToAction("Index");
+
             return View(discount);
         }
 
@@ -73,34 +77,33 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult Edit(Discount discount)
         {
             //Check if this item already has a discount
-            Discount existingDiscount = context.Discounts
+            Discount? existingDiscount = _DiscountRepository.GetAll()
                 .Where(d => d.ProduceId == discount.ProduceId)
                 .FirstOrDefault();
 
-            if (existingDiscount != null)
-            {
-                ModelState.AddModelError(nameof(discount.ProduceId), "This produce already has a discount");
-            }
-
             if (ModelState.IsValid)
             {
-                
+                //Delete old one in place of new one
+                if (existingDiscount != null)
+                {
+                    _DiscountRepository.Delete(existingDiscount);
+                }
 
                 if (discount.DiscountId == 0)
                 {
-                    context.Discounts.Add(discount);
+                    _DiscountRepository.Insert(discount);
                 }
                 else
                 {
-                    context.Discounts.Update(discount);
+                    _DiscountRepository.Update(discount);
                 }
-                context.SaveChanges();
+                _DiscountRepository.Save();
                 return RedirectToAction("Index");
             }
             else
             {
                 ViewBag.Action = (discount.DiscountId == 0) ? "Add" : "Edit";
-                ViewBag.Produce = context.Produce.OrderBy(p => p.ProduceName).ToList();
+                ViewBag.Produce = _ProduceRepository.GetAll().OrderBy(p => p.ProduceName).ToList();
                 return View(discount);
             }
         }
@@ -113,15 +116,13 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            Discount discount = context.Discounts.Find(id);
+            Discount? discount = _DiscountRepository.GetAll().Where(d => d.DiscountId == id).FirstOrDefault();
             if (discount != null)
             {
-                context.Discounts.Remove(discount);
-                context.SaveChanges();
+                _DiscountRepository.Delete(discount);
+                _DiscountRepository.Save();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Discount");
         }
-
-
     }
 }

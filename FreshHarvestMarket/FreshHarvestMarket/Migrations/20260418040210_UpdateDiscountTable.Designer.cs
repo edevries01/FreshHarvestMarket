@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshHarvestMarket.Migrations
 {
     [DbContext(typeof(FreshHarvestContext))]
-    [Migration("20260310014846_AddOrders")]
-    partial class AddOrders
+    [Migration("20260418040210_UpdateDiscountTable")]
+    partial class UpdateDiscountTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,60 @@ namespace FreshHarvestMarket.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Discount", b =>
+                {
+                    b.Property<int>("DiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiscountId"));
+
+                    b.Property<int>("DiscountAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProduceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DiscountId");
+
+                    b.HasIndex("ProduceId")
+                        .IsUnique();
+
+                    b.ToTable("Discounts");
+
+                    b.HasData(
+                        new
+                        {
+                            DiscountId = 1,
+                            DiscountAmount = 50,
+                            ProduceId = 1
+                        },
+                        new
+                        {
+                            DiscountId = 2,
+                            DiscountAmount = 3,
+                            ProduceId = 3
+                        });
+                });
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Favorite", b =>
+                {
+                    b.Property<int>("FavoriteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FavoriteId"));
+
+                    b.Property<int>("ProduceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FavoriteId");
+
+                    b.HasIndex("ProduceId");
+
+                    b.ToTable("Favorites");
+                });
 
             modelBuilder.Entity("FreshHarvestMarket.Models.Order", b =>
                 {
@@ -45,6 +99,9 @@ namespace FreshHarvestMarket.Migrations
                     b.Property<DateTime>("PickupDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Rejected")
+                        .HasColumnType("bit");
+
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
@@ -56,7 +113,8 @@ namespace FreshHarvestMarket.Migrations
                             IsPickedUp = false,
                             OrderDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderTotal = 12.50m,
-                            PickupDate = new DateTime(2026, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PickupDate = new DateTime(2026, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rejected = false
                         },
                         new
                         {
@@ -64,7 +122,8 @@ namespace FreshHarvestMarket.Migrations
                             IsPickedUp = false,
                             OrderDate = new DateTime(2026, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderTotal = 22.00m,
-                            PickupDate = new DateTime(2026, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PickupDate = new DateTime(2026, 3, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rejected = false
                         });
                 });
 
@@ -91,7 +150,7 @@ namespace FreshHarvestMarket.Migrations
 
                     b.HasIndex("ProduceId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
 
                     b.HasData(
                         new
@@ -153,111 +212,145 @@ namespace FreshHarvestMarket.Migrations
                         new
                         {
                             ProduceId = 1,
+                            ImageUrl = "zucchini.jpg",
                             InventoryTotal = 20,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Fresh green zucchinis",
-                            ProduceName = "Zuccihini",
+                            ProduceDescription = "Fresh green zucchini from Williamsburg, Iowa",
+                            ProduceName = "Zucchini",
                             UnitPrice = 1.20m
                         },
                         new
                         {
                             ProduceId = 2,
+                            ImageUrl = "tomatoes.jpg",
                             InventoryTotal = 25,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Ripe red tomatoes",
+                            ProduceDescription = "Ripe red tomatoes from Victor, Iowa",
                             ProduceName = "Tomatoes",
                             UnitPrice = 2.00m
                         },
                         new
                         {
                             ProduceId = 3,
+                            ImageUrl = "honey.jpg",
                             InventoryTotal = 15,
                             ProduceCategory = "Other",
-                            ProduceDescription = "Local raw honey",
+                            ProduceDescription = "Local raw honey from Victor, Iowa",
                             ProduceName = "Honey",
                             UnitPrice = 6.00m
                         },
                         new
                         {
                             ProduceId = 4,
+                            ImageUrl = "plums.jpg",
                             InventoryTotal = 18,
                             ProduceCategory = "Fruit",
-                            ProduceDescription = "Juicy plums",
+                            ProduceDescription = "Juicy plums from Amana, Iowa",
                             ProduceName = "Plums",
                             UnitPrice = 2.50m
                         },
                         new
                         {
                             ProduceId = 5,
+                            ImageUrl = "potatoes.jpg",
                             InventoryTotal = 30,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Freshly harvested potatoes",
+                            ProduceDescription = "Freshly harvested potatoes from Ladora, Iowa",
                             ProduceName = "Potatoes",
                             UnitPrice = 1.20m
                         },
                         new
                         {
                             ProduceId = 6,
+                            ImageUrl = "blueberries.jpg",
                             InventoryTotal = 12,
                             ProduceCategory = "Fruit",
-                            ProduceDescription = "Sweet blueberries",
+                            ProduceDescription = "Sweet blueberries from Tiffin, Iowa",
                             ProduceName = "Blueberries",
                             UnitPrice = 3.00m
                         },
                         new
                         {
                             ProduceId = 7,
+                            ImageUrl = "sweetcorn.jpg",
                             InventoryTotal = 20,
-                            ProduceCategory = "Vegetable",
-                            ProduceDescription = "Fresh sweet corn",
+                            ProduceCategory = "",
+                            ProduceDescription = "Fresh sweet corn from Marengo, Iowa",
                             ProduceName = "Sweet Corn",
                             UnitPrice = 1.75m
                         },
                         new
                         {
                             ProduceId = 8,
+                            ImageUrl = "broccoli.jpg",
                             InventoryTotal = 15,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Green broccoli florets",
+                            ProduceDescription = "Green broccoli florets from Millersburg, Iowa",
                             ProduceName = "Broccoli",
                             UnitPrice = 2.25m
                         },
                         new
                         {
                             ProduceId = 9,
+                            ImageUrl = "garlic.jpg",
                             InventoryTotal = 40,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Fresh garlic bulbs",
+                            ProduceDescription = "Fresh garlic bulbs from Montezuma, Iowa",
                             ProduceName = "Garlic",
                             UnitPrice = 0.80m
                         },
                         new
                         {
                             ProduceId = 10,
+                            ImageUrl = "cherries.jpg",
                             InventoryTotal = 10,
                             ProduceCategory = "Fruit",
-                            ProduceDescription = "Sweet red cherries",
+                            ProduceDescription = "Sweet red cherries from Solon, Iowa",
                             ProduceName = "Cherries",
                             UnitPrice = 3.50m
                         },
                         new
                         {
                             ProduceId = 11,
+                            ImageUrl = "carrots.jpg",
                             InventoryTotal = 25,
                             ProduceCategory = "Vegetable",
-                            ProduceDescription = "Organic carrots",
+                            ProduceDescription = "Organic carrots from Kalona, Iowa",
                             ProduceName = "Carrots",
                             UnitPrice = 1.50m
                         },
                         new
                         {
                             ProduceId = 12,
+                            ImageUrl = "raspberries.jpg",
                             InventoryTotal = 12,
                             ProduceCategory = "Fruit",
-                            ProduceDescription = "Fresh raspberries",
+                            ProduceDescription = "Fresh raspberries from Swisher, Iowa",
                             ProduceName = "Raspberries",
                             UnitPrice = 3.00m
                         });
+                });
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Discount", b =>
+                {
+                    b.HasOne("FreshHarvestMarket.Models.Produce", "Produce")
+                        .WithOne("Discount")
+                        .HasForeignKey("FreshHarvestMarket.Models.Discount", "ProduceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produce");
+                });
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Favorite", b =>
+                {
+                    b.HasOne("FreshHarvestMarket.Models.Produce", "Produce")
+                        .WithMany()
+                        .HasForeignKey("ProduceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produce");
                 });
 
             modelBuilder.Entity("FreshHarvestMarket.Models.OrderItem", b =>
@@ -282,6 +375,11 @@ namespace FreshHarvestMarket.Migrations
             modelBuilder.Entity("FreshHarvestMarket.Models.Order", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("FreshHarvestMarket.Models.Produce", b =>
+                {
+                    b.Navigation("Discount");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,13 +14,13 @@ public class OrderControllerTests
     /// Returns an in-memory database for testing
     /// </summary>
     /// <returns>An in-memory database</returns>
-    private FreshMarketContext GetInMemoryContext()
+    private FreshHarvestContext GetInMemoryContext()
     {
         //Make new in-memory database
-        DbContextOptions options = new DbContextOptionsBuilder<FreshMarketContext>()
+        DbContextOptions options = new DbContextOptionsBuilder<FreshHarvestContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
 
-        var context = new FreshMarketContext(options);
+        var context = new FreshHarvestContext(options);
 
         //Add data and save
         //This was last updated 3/23/2026 and is based on the current context class data
@@ -111,7 +111,7 @@ public class OrderControllerTests
     public void OrderController_ManageOrders()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -139,7 +139,7 @@ public class OrderControllerTests
     public void OrderController_ViewOrder() 
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -164,7 +164,7 @@ public class OrderControllerTests
     public void OrderController_ConfirmReject()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -192,7 +192,7 @@ public class OrderControllerTests
     public void OrderController_ConfirmReject_NotFound()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -211,7 +211,7 @@ public class OrderControllerTests
     public void OrderController_UpdateRejected() 
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -235,7 +235,7 @@ public class OrderControllerTests
     public void OrderController_UpdateRejected_NotFound()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -254,7 +254,7 @@ public class OrderControllerTests
     public void OrderController_UpdateFufilled()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
@@ -277,7 +277,7 @@ public class OrderControllerTests
     public void OrderController_UpdateFufilled_NotFound()
     {
         //Arrange
-        FreshMarketContext context = GetInMemoryContext();
+        FreshHarvestContext context = GetInMemoryContext();
         OrderController controller = new OrderController(context);
 
         //Act
