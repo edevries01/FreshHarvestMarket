@@ -1,6 +1,7 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.OtherServices;
+using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,15 @@ namespace FreshHarvestMarket.Controllers
     /// </summary>
     public class OrderController : Controller
     {
-        private FreshHarvestContext _context;
+        private IRepository<Order> _orderRepo;
 
-        public OrderController(FreshHarvestContext ctx)
+        /// <summary>
+        /// OrderController constructor
+        /// </summary>
+        /// <param name="orderRepo">Service for accessing Order table in database</param>
+        public OrderController(IRepository<Order> orderRepo)
         {
-            _context = ctx;
+            _orderRepo = orderRepo;
         }
 
         /// <summary>
@@ -36,7 +41,7 @@ namespace FreshHarvestMarket.Controllers
             //Grab all the upcoming/pastdue orders
             if (model.Filters.IncludeActiveOrders)
             {
-                List<Order> nonPickedUp = _context.Orders.Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
+                List<Order> nonPickedUp = _orderRepo.GetAll().Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
                 model.ActiveOrders = nonPickedUp ?? new List<Order>();
             }
             else
@@ -47,7 +52,7 @@ namespace FreshHarvestMarket.Controllers
             if (model.Filters.IncludePastOrders)
             {
                 //Grab all the fufilled/cancelled orders
-                List<Order> pastOrders = _context.Orders.Where(o => o.IsPickedUp || o.Rejected).ToList();
+                List<Order> pastOrders = _orderRepo.GetAll().Where(o => o.IsPickedUp || o.Rejected).ToList();
                 model.PastOrders = pastOrders ?? new List<Order>();
             }
             else 
@@ -70,9 +75,9 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <returns>View with all unfufilled orders</returns>
         [HttpGet]
-        public ViewResult ManageOrders()
+        public IActionResult ManageOrders()
         {
-            List<Order> orders =  _context.Orders.Where(o => !o.IsPickedUp).OrderBy(o => o.PickupDate).ToList();
+            List<Order> orders = _orderRepo.GetAll().Where(o => !o.IsPickedUp).OrderBy(o => o.PickupDate).ToList();
 
             return View(orders);
         }
@@ -83,9 +88,9 @@ namespace FreshHarvestMarket.Controllers
         /// <param name="orderId">The id of the order to view</param>
         /// <returns>A view with details on a particular order</returns>
         [HttpGet]
-        public ViewResult ViewOrder(int orderId)
+        public IActionResult ViewOrder(int orderId)
         {
-            Order? order = _context.Orders
+            Order? order = _orderRepo.GetAll()
                 .Include(o => o.Items)
                 .ThenInclude(oi => oi.Produce)
                 .Where(o => o.OrderId == orderId)
@@ -104,9 +109,9 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         [HttpGet]
-        public ActionResult ConfirmReject(int orderId)
+        public IActionResult ConfirmReject(int orderId)
         {
-            Order? order = _context.Orders.Find(orderId);
+            Order? order = _orderRepo.GetAll().FirstOrDefault(o => o.OrderId == orderId);
 
             if (order == null) 
             {
@@ -122,9 +127,9 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
-        public ActionResult UpdateRejected(int orderId)
+        public IActionResult UpdateRejected(int orderId)
         {
-            Order? order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+            Order? order = _orderRepo.GetAll().Where(o => o.OrderId == orderId).FirstOrDefault();
             
             if (order == null)
             {
@@ -134,8 +139,8 @@ namespace FreshHarvestMarket.Controllers
             //Set rejected to true
             order.Rejected = true;
 
-            _context.Orders.Update(order);
-            _context.SaveChanges();
+            _orderRepo.Update(order);
+            _orderRepo.Save();
                
             return RedirectToAction("ManageOrders");
         }
@@ -146,9 +151,9 @@ namespace FreshHarvestMarket.Controllers
         /// <param name="orderId">ID of the order fufilled</param>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
-        public ActionResult UpdateFufilled(int orderId) 
+        public IActionResult UpdateFufilled(int orderId) 
         {
-            Order? order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+            Order? order = _orderRepo.GetAll().Where(o => o.OrderId == orderId).FirstOrDefault();
 
             if (order == null)
             {
@@ -158,8 +163,8 @@ namespace FreshHarvestMarket.Controllers
             //Set rejected to true
             order.IsPickedUp = true;
 
-            _context.Orders.Update(order);
-            _context.SaveChanges();
+            _orderRepo.Update(order);
+            _orderRepo.Save();
 
             return RedirectToAction("ManageOrders");
         }
@@ -168,7 +173,7 @@ namespace FreshHarvestMarket.Controllers
         /// Returns a view to filter and browse all orders including ones which can no longer be edited
         /// </summary>
         /// <returns></returns>
-        public ViewResult BrowseOrders()
+        public IActionResult BrowseOrders()
         {
             throw new NotImplementedException();
         }

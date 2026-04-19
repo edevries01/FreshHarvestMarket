@@ -7,7 +7,7 @@ namespace FreshHarvestMarket.OtherServices
     /// <summary>
     /// Used to maintain filters on the Browse Orders screen through the session
     /// </summary>
-    public class OrderFiltersSession
+    public class OrderFiltersSession : IOrderFiltersSession
     {
         private const string OrderFiltersKey = "OrderFilters";
 

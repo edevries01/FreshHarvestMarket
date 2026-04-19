@@ -9,15 +9,20 @@ namespace FreshHarvestMarket.Controllers
     /// </summary>
     public class OrderFiltersController : Controller
     {
+        private IOrderFiltersSession _session;
+
+        public OrderFiltersController(IOrderFiltersSession orderFiltersSession) 
+        {
+            _session = orderFiltersSession;
+        }
+
         /// <summary>
         /// Updates the filters in session data and then uses PRG to return to browse orders
         /// </summary>
         /// <returns>Redirection to the browse orders view</returns>
         public IActionResult Index(BrowseOrdersViewModel viewModel)
         {
-            OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
-
-            session.SetFilters(viewModel);
+            _session.SetFilters(viewModel);
 
             return RedirectToAction("Index", "Order");
         }

@@ -1,31 +1,22 @@
 namespace TestProject;
-using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Data;
+using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
+using Moq;
 using System;
-using FreshHarvestMarket.Controllers;
-using Microsoft.AspNetCore.Mvc;
 
 [TestClass]
 public class OrderControllerTests
 {
-    /// <summary>
-    /// Returns an in-memory database for testing
-    /// </summary>
-    /// <returns>An in-memory database</returns>
-    private FreshHarvestContext GetInMemoryContext()
+    //Fake produce for testing
+    //Can set repo mocks to return these collections for predictable data
+    private IQueryable<Produce> testProduce = new List<Produce>()
     {
-        //Make new in-memory database
-        DbContextOptions options = new DbContextOptionsBuilder<FreshHarvestContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
-
-        var context = new FreshHarvestContext(options);
-
-        //Add data and save
-        //This was last updated 3/23/2026 and is based on the current context class data
-        context.Produce.AddRange(
-            new Produce()
+        new Produce()
             {
                 ProduceId = 1,
                 ProduceName = "Zuccihini",
@@ -34,28 +25,29 @@ public class OrderControllerTests
                 ProduceCategory = "Vegetable",
                 InventoryTotal = 20
             },
-            new Produce()
-            {
-                ProduceId = 2,
-                ProduceName = "Tomatoes",
-                ProduceDescription = "Ripe red tomatoes",
-                UnitPrice = 2.00m,
-                ProduceCategory = "Vegetable",
-                InventoryTotal = 25
-            },
-            new Produce()
-            {
-                ProduceId = 3,
-                ProduceName = "Honey",
-                ProduceDescription = "Local raw honey",
-                UnitPrice = 6.00m,
-                ProduceCategory = "Other",
-                InventoryTotal = 15
-            }
-        );
+        new Produce()
+        {
+            ProduceId = 2,
+            ProduceName = "Tomatoes",
+            ProduceDescription = "Ripe red tomatoes",
+            UnitPrice = 2.00m,
+            ProduceCategory = "Vegetable",
+            InventoryTotal = 25
+        },
+        new Produce()
+        {
+            ProduceId = 3,
+            ProduceName = "Honey",
+            ProduceDescription = "Local raw honey",
+            UnitPrice = 6.00m,
+            ProduceCategory = "Other",
+            InventoryTotal = 15
+        }
+    }.AsQueryable();
 
-        context.Orders.AddRange(
-            new Order()
+    private IQueryable<Order> testOrders = new List<Order>()
+    {
+        new Order()
             {
                 OrderId = 1,
                 OrderTotal = 12.50m,
@@ -73,9 +65,10 @@ public class OrderControllerTests
                 IsPickedUp = false,
                 Rejected = false
             }
-        );
+    }.AsQueryable();
 
-        context.OrderItems.AddRange(
+    private IQueryable<OrderItem> testOrderItems = new List<OrderItem>()
+    {
             new OrderItem
             {
                 OrderItemId = 1,
@@ -97,10 +90,15 @@ public class OrderControllerTests
                 ProduceId = 3,
                 Quantity = 4
             }
-        );
+    }.AsQueryable();
 
-        context.SaveChanges();
-        return context;
+    private void LoadProperties()
+    {
+        foreach (OrderItem orderItem in testOrderItems)
+        {
+            orderItem.Produce = testProduce.FirstOrDefault(p => p.ProduceId == orderItem.ProduceId);
+            orderItem.Order = testOrders.FirstOrDefault(p => p.OrderId == orderItem.OrderId);
+        }
     }
 
     /// <summary>
@@ -111,17 +109,22 @@ public class OrderControllerTests
     public void OrderController_ManageOrders()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ViewResult result = controller.ManageOrders();
+        var result = controller.ManageOrders();
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOfType( result.Model, typeof(List<Order>));
+        Assert.IsInstanceOfType(result, typeof(ViewResult));
+        ViewResult resultViewResult = (ViewResult)result;
+        Assert.IsInstanceOfType( resultViewResult.Model, typeof(List<Order>));
 
-        List<Order> orders = (List<Order>)result.Model;
+        List<Order> orders = (List<Order>)resultViewResult.Model;
 
         //All should be active orders
         Assert.IsFalse(orders.Any(o => o.IsPickedUp == true));
@@ -139,17 +142,22 @@ public class OrderControllerTests
     public void OrderController_ViewOrder() 
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ViewResult result = controller.ViewOrder(1);
+        var result = controller.ViewOrder(1);
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOfType(result.Model, typeof(Order));
+        Assert.IsInstanceOfType(result, typeof(ViewResult));
+        ViewResult resultViewResult = (ViewResult)result;
+        Assert.IsInstanceOfType(resultViewResult.Model, typeof(Order));
 
-        Order order = (Order)result.Model;
+        Order order = (Order)resultViewResult.Model;
 
         //Verify correct order was grabbed
         Assert.IsTrue(order.OrderId == 1);
@@ -164,11 +172,14 @@ public class OrderControllerTests
     public void OrderController_ConfirmReject()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ActionResult result = controller.ConfirmReject(1);
+        var result = controller.ConfirmReject(1);
 
         //Assert
         Assert.IsNotNull(result);
@@ -192,11 +203,14 @@ public class OrderControllerTests
     public void OrderController_ConfirmReject_NotFound()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ActionResult result = controller.ConfirmReject(99999);
+        var result = controller.ConfirmReject(99999);
 
         //Assert
         Assert.IsNotNull(result);
@@ -211,20 +225,24 @@ public class OrderControllerTests
     public void OrderController_UpdateRejected() 
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
+        Order testOrder = testOrders.FirstOrDefault(o => o.OrderId == 1)!;
 
         //Act
-        ActionResult result = controller.UpdateRejected(1);
+        var result = controller.UpdateRejected(1);
 
         //Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
 
         //Verify it was updated
-        Order? updatedOrder = context.Orders.Find(1);
-        Assert.IsNotNull(updatedOrder);
-        Assert.IsTrue(updatedOrder.Rejected);
+        //mockDiscountRepo.Verify(r => r.GetAll(), Times.Once);
+        mockOrderRepo.Verify(r => r.Update(testOrder), Times.Once());
+        mockOrderRepo.Verify(r => r.Save(), Times.Once());
     }
 
     /// <summary>
@@ -235,11 +253,14 @@ public class OrderControllerTests
     public void OrderController_UpdateRejected_NotFound()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ActionResult result = controller.UpdateRejected(99999);
+        var result = controller.UpdateRejected(99999);
 
         //Assert
         Assert.IsNotNull(result);
@@ -254,19 +275,26 @@ public class OrderControllerTests
     public void OrderController_UpdateFufilled()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
+
+        Order testOrder = testOrders.FirstOrDefault(o => o.OrderId == 1)!;
 
         //Act
-        ActionResult result = controller.UpdateFufilled(1);
+        var result = controller.UpdateFufilled(1);
 
         //Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
 
-        Order? updatedOrder = context.Orders.Find(1);
-        Assert.IsNotNull(updatedOrder);
-        Assert.IsTrue(updatedOrder.IsPickedUp);
+        //Order? updatedOrder = context.Orders.Find(1);
+        //Assert.IsNotNull(updatedOrder);
+        //Assert.IsTrue(updatedOrder.IsPickedUp);
+        mockOrderRepo.Verify(r => r.Update(testOrder), Times.Once());
+        mockOrderRepo.Verify(r => r.Save(), Times.Once());
     }
 
     /// <summary>
@@ -277,11 +305,14 @@ public class OrderControllerTests
     public void OrderController_UpdateFufilled_NotFound()
     {
         //Arrange
-        FreshHarvestContext context = GetInMemoryContext();
-        OrderController controller = new OrderController(context);
+        LoadProperties();
+        Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+        mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+
+        OrderController controller = new OrderController(mockOrderRepo.Object);
 
         //Act
-        ActionResult result = controller.UpdateFufilled(99999);
+        var result = controller.UpdateFufilled(99999);
 
         //Assert
         Assert.IsNotNull(result);

@@ -5,6 +5,7 @@ namespace FreshHarvestMarket.Repositories
 {
     /// <summary>
     /// Generic repository service for every data entit from the FreshHarvest database
+    /// Can be used when a moer specific Repository service is not desired
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class FreshHarvestRepository<T> : IRepository<T> where T : class
