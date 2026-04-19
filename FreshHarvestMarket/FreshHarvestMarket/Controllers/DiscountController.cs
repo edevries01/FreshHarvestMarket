@@ -124,5 +124,7 @@ namespace FreshHarvestMarket.Controllers
             }
             return RedirectToAction("Index", "Discount");
         }
+
+
     }
 }

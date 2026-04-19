@@ -1,4 +1,8 @@
+using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System.Net.Sockets;
 
 namespace TestProject;
@@ -150,7 +154,212 @@ public class DiscountControllerTests
     }
 
     [TestMethod]
-    public void TestMethod1()
+    public void Index_Get_ReturnViewSuccessfully()
     {
+        LoadProperties();
+
+        //Arrange
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        //Act
+        var testResult = discountController.Index();
+
+        //Assert
+        //Should return a ViewResult
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        //Should have List<Discount> as the model
+        ViewResult testResultView = (ViewResult)testResult;
+        Assert.IsNotNull(testResultView.Model);
+        Assert.IsInstanceOfType(testResultView.Model, typeof(List<Discount>));
+
+        mockDiscountRepo.Verify(r => r.GetAll(), Times.Once);
+    }
+
+    [TestMethod]
+    public void Add_Get_ReturnAddEditViewSuccessfully()
+    {
+        LoadProperties();
+
+        //ARRANGE
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        //ACT
+        var testResult = discountController.Add();
+
+        //ASSERT
+        //Should return a ViewResult
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        //Should have Discount as the model
+        ViewResult testResultView = (ViewResult)testResult;
+        Assert.IsNotNull(testResultView.Model);
+        Assert.IsInstanceOfType(testResultView.Model, typeof(Discount));
+
+        //We don't put any produce items that already have a discount in the options
+        Assert.IsNotNull(testResultView.ViewData["Produce"]);
+        Assert.IsInstanceOfType(testResultView.ViewData["Produce"], typeof(List<Produce>));
+        List<Produce> viewProduce = (List<Produce>)testResultView.ViewData["Produce"]!;
+        //We have a produce with an ID of 1 already, so it should not have been added to the viwe
+        Assert.IsFalse(viewProduce.Any(p => p.ProduceId == 1));
+        //This one should be in there
+        Assert.IsTrue(viewProduce.Any(p => p.ProduceId == 2));
+
+        //Verify calls
+        mockProduceRepo.Verify(r => r.GetAll(), Times.Once);
+    }
+
+    [TestMethod]
+    public void Edit_Get_ReturnAddEditViewSuccessfully() 
+    {
+        LoadProperties();
+
+        //ARRANGE
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        //ACT
+        var testResult = discountController.Edit(1);
+
+        //ASSERT
+        //Should return a ViewResult
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        //Should have Discount as the model
+        ViewResult testResultView = (ViewResult)testResult;
+        Assert.IsNotNull(testResultView.Model);
+        Assert.IsInstanceOfType(testResultView.Model, typeof(Discount));
+
+        //Verify the right item is on the model
+        Discount testResultModel = (Discount)testResultView.Model;
+        Assert.IsTrue(testResultModel.DiscountId == 1);
+        Assert.IsTrue(testResultModel.DiscountAmount == 50);
+
+        //Verify calls
+        mockProduceRepo.Verify(r => r.GetAll(), Times.Once);
+        mockDiscountRepo.Verify(r => r.GetAll(), Times.Once);
+    }
+
+    [TestMethod]
+    public void Edit_Post_UpdateDiscountSuccessfully()
+    {
+        LoadProperties();
+
+        //ARRANGE
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        Discount discountToEdit = new Discount() {
+            DiscountId = 1,
+            DiscountAmount = 50,
+            ProduceId = 1
+        };
+        discountToEdit.DiscountAmount = 32;
+
+
+        //ACT
+        var testResult = discountController.Edit(discountToEdit);
+
+        //ASSERT
+        //Should return a ViewResult (rerouted to index)
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(RedirectToActionResult));
+
+
+        //Verify calls
+        mockDiscountRepo.Verify(r => r.Update(discountToEdit), Times.Once);
+        mockDiscountRepo.Verify(r => r.Save(), Times.Once);
+    }
+
+    [TestMethod]
+    public void Edit_Post_FailModelValidation()
+    {
+        LoadProperties();
+
+        //ARRANGE
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        Discount discountToEdit = new Discount()
+        {
+            DiscountId = 1,
+            DiscountAmount = 50,
+            ProduceId = 1
+        };
+        discountToEdit.DiscountAmount = 32;
+        discountController.ModelState.AddModelError("ModelValidationError", "I am an error, and nothing less!");
+
+        //ACT
+        var testResult = discountController.Edit(discountToEdit);
+
+        //ASSERT
+        //Should return a ViewResult
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(ViewResult));
+
+        ViewResult testResultView = (ViewResult)testResult;
+        Assert.IsNotNull(testResultView.Model);
+        Assert.IsInstanceOfType(testResultView.Model, typeof(Discount));
+
+        //Verify the right item is on the model
+        Discount testResultModel = (Discount)testResultView.Model;
+        Assert.IsTrue(testResultModel.DiscountId == 1);
+        Assert.IsTrue(testResultModel.DiscountAmount == 32);
+    }
+
+    /// <summary>
+    /// When a POST is sent to the Discount Controller, should successfully delete the discount
+    /// </summary>
+    [TestMethod]
+    public void Delete_Post_DeleteDiscountSuccessfully()
+    {
+        LoadProperties();
+
+        //ARRANGE
+        Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+        mockDiscountRepo.Setup(r => r.GetAll()).Returns(testDiscounts);
+        Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
+        mockProduceRepo.Setup(r => r.GetAll()).Returns(testProduce);
+
+        DiscountController discountController = new DiscountController(mockDiscountRepo.Object, mockProduceRepo.Object);
+
+        Discount discountToDelete = testDiscounts.FirstOrDefault(d => d.DiscountId == 1)!;
+
+        //Act
+        var testResult = discountController.Delete(1);
+
+        //Assert
+        //Should return a ViewResult
+        Assert.IsNotNull(testResult);
+        Assert.IsInstanceOfType(testResult, typeof(RedirectToActionResult));
+
+        //Verify calls
+        mockDiscountRepo.Verify(r => r.Delete(discountToDelete), Times.Once);
+        mockDiscountRepo.Verify(r => r.Save(), Times.Once);
     }
 }
