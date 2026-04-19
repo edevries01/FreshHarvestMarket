@@ -1,5 +1,6 @@
 using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IRepository<Produce>, FreshHarvestRepository<Produce>
 builder.Services.AddScoped<IRepository<Favorite>, FreshHarvestRepository<Favorite>>();
 builder.Services.AddScoped<IRepository<Order>, FreshHarvestRepository<Order>>();
 builder.Services.AddScoped<IRepository<OrderItem>, FreshHarvestRepository<OrderItem>>();
+builder.Services.AddScoped<IOrderFiltersSession, OrderFiltersSession>();
 
 //Add dependency injection for DbContext
 builder.Services.AddDbContext<FreshHarvestContext>(options =>
