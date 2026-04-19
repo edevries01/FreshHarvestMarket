@@ -13,9 +13,9 @@ namespace FreshHarvestMarket.OtherServices
 
         private ISession session { get; set; }
 
-        public OrderFiltersSession(ISession session)
+        public OrderFiltersSession(IHttpContextAccessor httpContextAccessor)
         {
-            this.session = session;
+            session = httpContextAccessor.HttpContext.Session;
         }
 
         /// <summary>

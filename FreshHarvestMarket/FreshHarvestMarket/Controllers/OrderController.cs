@@ -14,14 +14,16 @@ namespace FreshHarvestMarket.Controllers
     public class OrderController : Controller
     {
         private IRepository<Order> _orderRepo;
+        private IOrderFiltersSession _orderFiltersSession;
 
         /// <summary>
         /// OrderController constructor
         /// </summary>
         /// <param name="orderRepo">Service for accessing Order table in database</param>
-        public OrderController(IRepository<Order> orderRepo)
+        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess)
         {
             _orderRepo = orderRepo;
+            _orderFiltersSession = sess;
         }
 
         /// <summary>
@@ -31,11 +33,11 @@ namespace FreshHarvestMarket.Controllers
         /// <returns>View with display of existing orders</returns>
         public IActionResult Index(BrowseOrdersViewModel model)
         {
-            OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
+            //OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
 
-            if (session.GetFilters() != null)
+            if (_orderFiltersSession.GetFilters() != null)
             {
-                model.Filters = session.GetFilters()!; //Can ignore warning cause we check null right above
+                model.Filters = _orderFiltersSession.GetFilters()!; //Can ignore warning cause we check null right above
             }
 
             //Grab all the upcoming/pastdue orders

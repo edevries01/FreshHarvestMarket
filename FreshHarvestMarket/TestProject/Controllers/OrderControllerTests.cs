@@ -2,6 +2,7 @@ namespace TestProject;
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -112,8 +113,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.ManageOrders();
@@ -145,8 +147,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.ViewOrder(1);
@@ -175,8 +178,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.ConfirmReject(1);
@@ -206,8 +210,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.ConfirmReject(99999);
@@ -228,8 +233,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
         Order testOrder = testOrders.FirstOrDefault(o => o.OrderId == 1)!;
 
         //Act
@@ -256,8 +262,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.UpdateRejected(99999);
@@ -278,8 +285,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         Order testOrder = testOrders.FirstOrDefault(o => o.OrderId == 1)!;
 
@@ -308,8 +316,9 @@ public class OrderControllerTests
         LoadProperties();
         Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
+        Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
 
-        OrderController controller = new OrderController(mockOrderRepo.Object);
+        OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object);
 
         //Act
         var result = controller.UpdateFufilled(99999);
