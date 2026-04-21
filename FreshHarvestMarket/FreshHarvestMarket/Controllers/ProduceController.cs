@@ -1,5 +1,6 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,17 +9,19 @@ namespace FreshHarvestMarket.Controllers
 {
     public class ProduceController : Controller
     {
-        private FreshHarvestContext _context;
+        private IRepository<Produce> _produceRepository;
+        private IRepository<Favorite> _favoriteRepository;
 
-        public ProduceController(FreshHarvestContext context)
+        public ProduceController(IRepository<Produce> produceRepository, IRepository<Favorite> favoriteRepository)
         {
-            _context = context;
+            _produceRepository = produceRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         //Retrieves a list of produce from the database, filtered by catgetory (optional)
         public IActionResult Index(string category = "All")
         {
-            var produceQuery = _context.Produce.AsQueryable();
+            var produceQuery = _produceRepository.GetAll().AsQueryable();
 
             if (category != "All")
             {
@@ -29,7 +32,7 @@ namespace FreshHarvestMarket.Controllers
             {
                 ProduceItems = produceQuery.ToList(),
                 SelectedCategory = category,
-                Categories = _context.Produce
+                Categories = _produceRepository.GetAll()
                     .Select(p => p.ProduceCategory)
                     .Distinct()
                     .ToList()
@@ -41,7 +44,7 @@ namespace FreshHarvestMarket.Controllers
         //Finds produce item by ID. Returns NotFound if item not found.
         public IActionResult Details(int id)
         {
-            var item = _context.Produce.Find(id);
+            var item = _produceRepository.GetAll().FirstOrDefault(p => p.ProduceId == id);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -50,14 +53,14 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult AddFavorite(int produceId)
         {
-            var existing = _context.Favorites.FirstOrDefault(f => f.ProduceId == produceId);
+            var existing = _favoriteRepository.GetAll().FirstOrDefault(f => f.ProduceId == produceId);
 
             if (existing == null)
             {
                 var favorite = new Favorite { ProduceId = produceId };
 
-                _context.Favorites.Add(favorite);
-                _context.SaveChanges();
+                _favoriteRepository.Insert(favorite);
+                _favoriteRepository.Save();
             }
 
             return RedirectToAction("Index");
@@ -68,8 +71,8 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult Favorites()
         {
             // Join Favorites table with Produce table to get full details
-            var favoriteItems = _context.Favorites
-                .Join(_context.Produce,
+            var favoriteItems = _favoriteRepository.GetAll()
+                .Join(_produceRepository.GetAll(),
                 f => f.ProduceId,
                 p => p.ProduceId,
                 (f, p) => p).ToList();
@@ -87,12 +90,12 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult DeleteFavorite(int produceId)
         {
             //Find record in Favorites table
-            var favorite = _context.Favorites.FirstOrDefault(f => f.ProduceId == produceId);
+            var favorite = _favoriteRepository.GetAll().FirstOrDefault(f => f.ProduceId == produceId);
 
             if (favorite != null)
             {
-                _context.Favorites.Remove(favorite);
-                _context.SaveChanges();
+                _favoriteRepository.Delete(favorite);
+                _favoriteRepository.Save();
             }
 
             //Redirect back to Favorites view to refresh list
@@ -112,8 +115,8 @@ namespace FreshHarvestMarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Produce.Add(item);
-                _context.SaveChanges();
+                _produceRepository.Insert(item);
+                _produceRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -123,7 +126,7 @@ namespace FreshHarvestMarket.Controllers
         //[Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
-            var item = _context.Produce.Find(id);
+            var item = _produceRepository.GetAll().FirstOrDefault(p=>p.ProduceId==id);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -134,8 +137,8 @@ namespace FreshHarvestMarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Produce.Update(item);
-                _context.SaveChanges();
+                _produceRepository.Update(item);
+                _produceRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(item);
@@ -145,11 +148,12 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var item = _context.Produce.Find();
+            //var item = _context.Produce.Find(); I left this here since I changed the logic, missing id?
+            var item = _produceRepository.GetAll().FirstOrDefault(p=>p.ProduceId==id);
             if (item != null)
             {
-                _context.Produce.Remove(item);
-                _context.SaveChanges();
+                _produceRepository.Delete(item);
+                _produceRepository.Save();
             }
             return RedirectToAction(nameof(Index));
         }
