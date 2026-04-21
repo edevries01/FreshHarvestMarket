@@ -13,14 +13,13 @@ builder.Services.AddSession();
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
-builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<IRepository<Discount>, FreshHarvestRepository<Discount>>();
 builder.Services.AddScoped<IRepository<Produce>, FreshHarvestRepository<Produce>>();
 builder.Services.AddScoped<IRepository<Favorite>, FreshHarvestRepository<Favorite>>();
 builder.Services.AddScoped<IRepository<Order>, FreshHarvestRepository<Order>>();
 builder.Services.AddScoped<IRepository<OrderItem>, FreshHarvestRepository<OrderItem>>();
 builder.Services.AddScoped<IOrderFiltersSession, OrderFiltersSession>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 //Add dependency injection for DbContext
 builder.Services.AddDbContext<FreshHarvestContext>(options =>
