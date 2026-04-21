@@ -1,4 +1,4 @@
-﻿// Car Controller.cs
+﻿// Cart Controller.cs
 
 using FreshHarvestMarket.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +8,9 @@ namespace FreshHarvestMarket.Controllers
 {
     public class CartController : Controller
     {
-        private readonly CartService _cart;
+        private readonly ICartService _cart;
 
-        public CartController(CartService cart)
+        public CartController(ICartService cart)
         {
             _cart = cart;
         }

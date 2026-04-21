@@ -5,7 +5,7 @@ using FreshHarvestMarket.Data;
 
 namespace FreshHarvestMarket.Services
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly IHttpContextAccessor _http;
         private readonly FreshHarvestContext _context;
