@@ -102,12 +102,20 @@ namespace FreshHarvestMarket.Controllers
             return RedirectToAction("Favorites");
         }
 
+        //[Authorize(Roles = "Admin")]
+        public IActionResult ManageProduce()
+        {
+            var items = _produceRepository.GetAll().ToList();
+            return View(items);
+        }
+
         //Admin actions
         //[Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
+
 
         //[Authorize(Roles = "Admin")]
         [HttpPost]
@@ -117,11 +125,12 @@ namespace FreshHarvestMarket.Controllers
             {
                 _produceRepository.Insert(item);
                 _produceRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ManageProduce));
             }
 
             return View(item);
         }
+
 
         //[Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
@@ -139,9 +148,26 @@ namespace FreshHarvestMarket.Controllers
             {
                 _produceRepository.Update(item);
                 _produceRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ManageProduce));
             }
             return View(item);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult UpdateInventory(int produceId, int inventoryTotal)
+        {
+            var item = _produceRepository.GetAll().FirstOrDefault(p => p.ProduceId == produceId);
+
+            if (item != null)
+            {
+                item.InventoryTotal = inventoryTotal;
+
+                _produceRepository.Update(item);
+                _produceRepository.Save();
+            }
+
+            return RedirectToAction(nameof(ManageProduce));
         }
 
         //[Authorize(Roles = "Admin")]
@@ -155,7 +181,7 @@ namespace FreshHarvestMarket.Controllers
                 _produceRepository.Delete(item);
                 _produceRepository.Save();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ManageProduce));
         }
     }
 }
