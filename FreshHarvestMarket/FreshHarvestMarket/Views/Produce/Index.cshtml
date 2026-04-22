@@ -46,25 +46,38 @@
 						<div class="card-body">
 							<h5 class="card-title">@item.ProduceName</h5>
 							<p class="card-text text-muted">@item.UnitPrice.ToString("C")</p>
-							<p class="small text-secondary">In Stock: @item.InventoryTotal</p>
+
+							@if (item.InventoryTotal > 0)
+							{
+								<p class="small text-success">In Stock: @item.InventoryTotal</p>
+							}
+							else
+							{
+								<p class="small text-danger">Out of Stock</p>
+							}
+
 							<!--Sends Item ID to Details page when clicked-->
 							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
 
-
-							<a asp-controller="Cart"
-							   asp-action="Add"
-							   asp-route-id="@item.ProduceId"
-							   asp-route-name="@item.ProduceName"
-							   asp-route-image="@item.ImageUrl"
-							   asp-route-price="@item.UnitPrice"
-							   asp-route-maxQuantity="@item.InventoryTotal"
-							   class="btn btn-primary w-100 mt-2">
-								Add to Cart
-							</a>
-							
-						
-						
-						
+							@if (item.InventoryTotal > 0)
+							{
+								<a asp-controller="Cart"
+								   asp-action="Add"
+								   asp-route-id="@item.ProduceId"
+								   asp-route-name="@item.ProduceName"
+								   asp-route-image="@item.ImageUrl"
+								   asp-route-price="@item.UnitPrice"
+								   asp-route-maxQuantity="@item.InventoryTotal"
+								   class="btn btn-primary w-100 mt-2">
+									Add to Cart
+								</a>
+							}
+							else
+							{
+								<button class="btn btn-secondary w-100 mt-2" disabled>
+									Out of Stock
+								</button>
+							}
 
 							<form asp-action="AddFavorite" method="post" class="mt-2 text-end">
 								<input type="hidden" name="produceId" value="@item.ProduceId" />
