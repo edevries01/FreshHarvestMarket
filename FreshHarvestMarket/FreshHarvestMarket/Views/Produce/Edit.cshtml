@@ -1,0 +1,41 @@
+﻿@model FreshHarvestMarket.Models.Produce
+
+<h2>Edit Produce</h2>
+
+<form asp-action="Edit" method="post">
+
+	<input type="hidden" asp-for="ProduceId"/>
+
+	<div class="mb-3">
+		<label asp-for="ProduceName"></label>
+		<input asp-for="ProduceName" class="form-control"/>
+
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="ProduceDescription"></label>
+		<input asp-for="ProduceDescription" class="form-control" />
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="UnitPrice"></label>
+		<input asp-for="UnitPrice" class="form-control" />
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="ProduceCategory"></label>
+		<input asp-for="ProduceCategory" class="form-control" />
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="ImageUrl"></label>
+		<input asp-for="ImageUrl" class="form-control" />
+	</div>
+	
+	<!--Save-->
+	<button type="submit" class="btn btn-success">
+		Save Changes
+	</button>
+
+
+</form>
