@@ -30,7 +30,21 @@
                          style="width:60px;height:60px;object-fit:cover;" />
                 </td>
                 <td>@item.ProduceName</td>
-                <td>@item.Price.ToString("C")</td>
+                <td>
+                    @if (User.Identity.IsAuthenticated && item.DiscountAmount.HasValue && item.DiscountAmount > 0)
+                    {
+                        <span class="text-muted text-decoration-line-through">
+                            @item.Price.ToString("C")
+                        </span>
+                        <span class="text-success">
+                            @item.DiscountedPrice.ToString("C")
+                        </span>
+                    }
+                    else
+                    {
+                        @item.Price.ToString("C")
+                    }
+                </td>
                 <td>
                     <form asp-action="Update" method="post" class="d-flex gap-2">
                         <input type="hidden" name="id" value="@item.ProduceId" />
