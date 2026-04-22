@@ -47,13 +47,17 @@
 							<h5 class="card-title">@item.ProduceName</h5>
 							<p class="card-text text-muted">@item.UnitPrice.ToString("C")</p>
 
-							@if (item.InventoryTotal > 0)
+							@if (item.InventoryTotal == 0)
 							{
-								<p class="small text-success">In Stock: @item.InventoryTotal</p>
+								<p class="small text-danger">Out of Stock</p>
+							}
+							else if (item.InventoryTotal <= 5)
+							{
+								<p class="small text-warning">Only @item.InventoryTotal left!</p>
 							}
 							else
 							{
-								<p class="small text-danger">Out of Stock</p>
+								<p class="small text-success">In Stock: @item.InventoryTotal</p>
 							}
 
 							<!--Sends Item ID to Details page when clicked-->
