@@ -15,15 +15,17 @@ namespace FreshHarvestMarket.Controllers
     {
         private IRepository<Order> _orderRepo;
         private IOrderFiltersSession _orderFiltersSession;
+        private readonly FreshHarvestContext _context;
 
         /// <summary>
         /// OrderController constructor
         /// </summary>
         /// <param name="orderRepo">Service for accessing Order table in database</param>
-        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess)
+        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess, FreshHarvestContext context)
         {
             _orderRepo = orderRepo;
             _orderFiltersSession = sess;
+            _context = context;
         }
 
         /// <summary>
@@ -153,20 +155,46 @@ namespace FreshHarvestMarket.Controllers
         /// <param name="orderId">ID of the order fufilled</param>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
-        public IActionResult UpdateFufilled(int orderId) 
+        public IActionResult UpdateFufilled(int orderId)
         {
-            Order? order = _orderRepo.GetAll().Where(o => o.OrderId == orderId).FirstOrDefault();
+            Order? order = _orderRepo.GetAll()
+                .Include(o => o.Items)
+                .FirstOrDefault(o => o.OrderId == orderId);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            //Set rejected to true
+            if (order.IsPickedUp)
+                return RedirectToAction("ManageOrders");
+
+            // Loop through order items & reduce inventory
+            foreach (var item in order.Items)
+            {
+                var produce = _context.Produce
+                    .FirstOrDefault(p => p.ProduceId == item.ProduceId);
+
+                if (produce != null)
+                {
+                    produce.InventoryTotal -= item.Quantity;
+
+                    // prevents negative inventory
+                    if (produce.InventoryTotal < 0)
+                    {
+                        produce.InventoryTotal = 0;
+                    }
+                }
+            }
+
+            // Mark order as fulfilled
             order.IsPickedUp = true;
 
             _orderRepo.Update(order);
             _orderRepo.Save();
+
+            // Save inventory changes
+            _context.SaveChanges();
 
             return RedirectToAction("ManageOrders");
         }
