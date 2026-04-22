@@ -17,7 +17,6 @@ namespace FreshHarvestMarket.Services
         }
 
         private ISession Session => _http.HttpContext!.Session;
-
         private const string Key = "CART";
 
         // -------------------------
@@ -44,18 +43,26 @@ namespace FreshHarvestMarket.Services
         public void AddItem(CartItem item)
         {
             var cart = GetCart();
-
             var product = _context.Produce
                 .FirstOrDefault(p => p.ProduceId == item.ProduceId);
 
             if (product == null) return;
+
+            // Apply discount if user is logged in
+            if (_http.HttpContext!.User.Identity!.IsAuthenticated)
+            {
+                var discount = _context.Discounts
+                    .FirstOrDefault(d => d.ProduceId == product.ProduceId);
+
+                // If no discount, set DiscountAmount to 0, otherwise apply the discount
+                item.DiscountAmount = discount?.DiscountAmount ?? 0;
+            }
 
             var existing = cart.FirstOrDefault(x => x.ProduceId == item.ProduceId);
 
             if (existing != null)
             {
                 int newQty = existing.Quantity + item.Quantity;
-
                 existing.Quantity = Math.Min(newQty, product.InventoryTotal);
             }
             else

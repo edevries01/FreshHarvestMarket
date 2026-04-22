@@ -12,5 +12,10 @@
         public int Quantity { get; set; }
         public int MaxQuantity { get; set; }
         public decimal LineTotal => Price * Quantity;
+
+        public int? DiscountAmount { get; set; }  // Discount percentage, nullable because it won't always be applied
+        public decimal DiscountedPrice => DiscountAmount.HasValue
+                                            ? Price * (1 - DiscountAmount.Value / 100m)
+                                            : Price;  // Calculate discounted price
     }
 }

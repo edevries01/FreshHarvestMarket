@@ -38,7 +38,10 @@ namespace FreshHarvestMarket.Controllers
                 OrderDate = DateTime.Now,
                 PickupDate = model.PickupDate,
                 IsPickedUp = false,
-                OrderTotal = cart.Sum(x => x.LineTotal)
+                // Apply discount if user is logged in
+                OrderTotal = User.Identity!.IsAuthenticated
+                    ? cart.Sum(x => x.DiscountedPrice * x.Quantity)  // Discounted price if logged in
+                    : cart.Sum(x => x.LineTotal)  // Regular price if not logged in
             };
 
             _context.Orders.Add(order);
