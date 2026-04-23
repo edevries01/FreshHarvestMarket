@@ -1,4 +1,6 @@
 ﻿using FreshHarvestMarket.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FreshHarvestMarket.Data
@@ -6,7 +8,7 @@ namespace FreshHarvestMarket.Data
     /// <summary>
     /// Database connectivity for the Produce class
     /// </summary>
-    public class FreshHarvestContext : DbContext
+    public class FreshHarvestContext : IdentityDbContext<User>
     {
         public FreshHarvestContext(DbContextOptions options) : base(options)
         {
@@ -36,13 +38,15 @@ namespace FreshHarvestMarket.Data
         /// Representation of the discounts table
         /// </summary>
         public DbSet<Discount> Discounts { get; set; } = null!;
-        
+
         /// <summary>
         /// Seeds all of the data when we create/update the database
         /// </summary>
         /// <param name="modelBuilder"></param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //Ensure the 1-1 relationship of discount and produce works right
             modelBuilder.Entity<Produce>()
                 .HasOne(p => p.Discount)
@@ -172,7 +176,7 @@ namespace FreshHarvestMarket.Data
             );
 
             modelBuilder.Entity<Order>().HasData(
-                new Order() 
+                new Order()
                 {
                     OrderId = 1,
                     OrderTotal = 12.50m,
@@ -180,7 +184,7 @@ namespace FreshHarvestMarket.Data
                     PickupDate = new DateTime(2026, 3, 2),
                     IsPickedUp = false
                 },
-                new Order() 
+                new Order()
                 {
                     OrderId = 2,
                     OrderTotal = 22.00m,
@@ -227,6 +231,43 @@ namespace FreshHarvestMarket.Data
                     DiscountAmount = 3,
                     ProduceId = 3
                 });
+
+
+        }
+
+        /// <summary>
+        /// Taken from textbook
+        /// Seeds an admin user, creates admin role if it does not exist
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static async Task CreateAdminUser(IServiceProvider serviceProvider)
+        {
+            using (var scoped = serviceProvider.CreateScope())
+            {
+                UserManager<User> userManager = scoped.ServiceProvider.GetRequiredService<UserManager<User>>();
+                RoleManager<IdentityRole> roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                string username = "admin";
+                string pwd = "Capybara";
+                string roleName = "Admin";
+
+                // if role doesn't exist, create it
+                if (await roleManager.FindByNameAsync(roleName) == null)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+
+                if (await userManager.FindByNameAsync(username) == null)
+                {
+                    User user = new User() { UserName = username };
+                    var result = await userManager.CreateAsync(user, pwd);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+            }
         }
     }
 }

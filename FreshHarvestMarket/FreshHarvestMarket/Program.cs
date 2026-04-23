@@ -3,6 +3,7 @@ using FreshHarvestMarket.Models;
 using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,15 @@ builder.Services.AddDbContext<FreshHarvestContext>(options =>
         builder.Configuration.GetConnectionString("FreshHarvest")
 ));
 
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 5;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+})
+    .AddEntityFrameworkStores<FreshHarvestContext>()
+    .AddDefaultTokenProviders();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,7 +54,9 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name:"browseorder",
@@ -55,5 +67,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+await FreshHarvestContext.CreateAdminUser(app.Services);
 
 app.Run();

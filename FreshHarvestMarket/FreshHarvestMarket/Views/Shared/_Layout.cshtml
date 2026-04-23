@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using FreshHarvestMarket.Models;
+@inject SignInManager<User> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -64,12 +68,30 @@
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="Discount" asp-action="Index">Manage Discounts</a>
                                 </li>
-
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
-                        </li>
+                        <!--Nav items for login, from class examples-->
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            // signed-in user - Log Out button and username
+                            <li class="nav-item">
+
+                                <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
+                                    <input type="submit" value="Log Out" />
+                                    <span class="text-light">@User.Identity.Name</span>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            // anonymous user - Register link and Log In button
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">&nbsp;Log In</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
