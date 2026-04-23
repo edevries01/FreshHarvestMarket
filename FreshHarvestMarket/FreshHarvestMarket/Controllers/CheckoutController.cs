@@ -32,6 +32,26 @@ namespace FreshHarvestMarket.Controllers
 
             var cart = _cartService.GetCart();
 
+            bool isLoggedIn = User.Identity!.IsAuthenticated;
+
+            if (isLoggedIn)
+            {
+                foreach (var item in cart)
+                {
+                    var discount = _context.Discounts
+                        .FirstOrDefault(d => d.ProduceId == item.ProduceId);
+
+                    item.DiscountAmount = discount?.DiscountAmount ?? 0;
+                }
+            }
+            else
+            {
+                foreach (var item in cart)
+                {
+                    item.DiscountAmount = 0;
+                }
+            }
+
             // CREATE ORDER
             var order = new Order
             {
@@ -62,6 +82,8 @@ namespace FreshHarvestMarket.Controllers
 
             _context.SaveChanges();
 
+            var finalCart = _cartService.GetCart();
+
             // CLEAR CART
             _cartService.ClearCart();
 
@@ -73,7 +95,7 @@ namespace FreshHarvestMarket.Controllers
                 Email = model.Email,
                 Phone = model.Phone,
                 PickupDate = model.PickupDate,
-                Items = cart
+                Items = finalCart
             };
 
             return View("Confirmation", confirmation);

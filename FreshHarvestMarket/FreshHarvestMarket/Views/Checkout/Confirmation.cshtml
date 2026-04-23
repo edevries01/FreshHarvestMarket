@@ -83,15 +83,56 @@
 
             <div>
                 <h5>@item.ProduceName</h5>
-                <p>@item.LineTotal.ToString("C")</p>
-                <p>Quantity: @item.Quantity</p>
-            </div>
+
+                <p>
+                    @if (User.Identity.IsAuthenticated && item.DiscountAmount.HasValue && item.DiscountAmount > 0)
+                    {
+                        <span class="text-muted text-decoration-line-through me-2">
+                            @item.Price.ToString("C")
+                        </span>
+
+                        <span class="text-success">
+                            @item.DiscountedPrice.ToString("C")
+                        </span>
+                    }
+                    else
+                    {
+                        <span>@item.Price.ToString("C")</span>
+                    }
+            </p>
+
+            <p>Quantity: @item.Quantity</p>
+
+            <p>
+                <strong>Total:</strong>
+                @(
+                                User.Identity.IsAuthenticated &&
+                                item.DiscountAmount.HasValue &&
+                                item.DiscountAmount > 0
+                                ? (item.DiscountedPrice * item.Quantity).ToString("C")
+                                : item.LineTotal.ToString("C")
+                                )
+            </p>
+        </div>
 
         </div>
     </div>
 }
 
 <hr />
+
+@{
+    var originalTotal = Model.Items.Sum(x => x.Price * x.Quantity);
+    var discountedTotal = Model.Total;
+    var savings = originalTotal - discountedTotal;
+}
+
+@if (User.Identity.IsAuthenticated && savings > 0)
+{
+    <p class="text-success fw-semibold">
+        You saved @savings.ToString("C") on this order!
+    </p>
+}
 
 <h4>Total: @Model.Total.ToString("C")</h4>
 
