@@ -11,39 +11,39 @@
 <form asp-action="Create" method="post">
 
 	<div class="mb-3">
-		<label asp-for="ProduceName"></label>
+		<label asp-for="ProduceName">Produce Name</label>
 		<input asp-for="ProduceName" class="form-control"/>
 		<span asp-validation-for="ProduceName" class="text-danger"></span>
 
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="ProduceDescription"></label>
+		<label asp-for="ProduceDescription">Produce Description</label>
 		<textarea asp-for="ProduceDescription" class="form-control"></textarea>
 
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="UnitPrice"></label>
+		<label asp-for="UnitPrice">Unit Price</label>
 		<input asp-for="UnitPrice" class="form-control" type="number" step="0.01"/>
 
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="ProduceCategory"></label>
+		<label asp-for="ProduceCategory">Produce Category</label>
 		<input asp-for="ProduceCategory" class="form-control" />
 
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="InventoryTotal"></label>
+		<label asp-for="InventoryTotal">Inventory Total</label>
 		<input asp-for="InventoryTotal" class="form-control" />
 
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="ImageUrl"></label>
-		<input asp-for="ImageUrl" class="form-control" placeholder="apple.jpg" />
+		<label asp-for="ImageUrl">Image URL</label>
+		<input asp-for="ImageUrl" class="form-control" placeholder="default.jpg" />
 
 		
 
