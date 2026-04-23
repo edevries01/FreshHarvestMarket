@@ -26,8 +26,10 @@
         {
             <tr>
                 <td>
-                    <img src="~/images/@item.ImageUrl"
-                         style="width:60px;height:60px;object-fit:cover;" />
+                    <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl)
+                                     ? Url.Content("~/images/default.jpg")
+                                     : Url.Content("~/images/" + item.ImageUrl))"
+                     style="width:60px;height:60px;object-fit:cover;" />
                 </td>
                 <td>@item.ProduceName</td>
                 <td>
