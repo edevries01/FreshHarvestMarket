@@ -35,38 +35,53 @@ namespace FreshHarvestMarket.Controllers
         /// <returns>View with display of existing orders</returns>
         public IActionResult Index(BrowseOrdersViewModel model)
         {
-            //OrderFiltersSession session = new OrderFiltersSession(HttpContext.Session);
-
             if (_orderFiltersSession.GetFilters() != null)
             {
-                model.Filters = _orderFiltersSession.GetFilters()!; //Can ignore warning cause we check null right above
+                model.Filters = _orderFiltersSession.GetFilters()!;
             }
 
-            //Grab all the upcoming/pastdue orders
+            var allOrders = _orderRepo.GetAll().ToList();
+
+            // -------------------------
+            // ACTIVE (only not finished)
+            // -------------------------
             if (model.Filters.IncludeActiveOrders)
             {
-                List<Order> nonPickedUp = _orderRepo.GetAll().Where(o => !o.IsPickedUp).Where(o => !o.Rejected).ToList();
-                model.ActiveOrders = nonPickedUp ?? new List<Order>();
+                model.ActiveOrders = allOrders
+                    .Where(o => !o.IsPickedUp && !o.Rejected)
+                    .ToList();
             }
             else
             {
                 model.ActiveOrders = new List<Order>();
             }
 
+            // -------------------------
+            // PAST (FULFILLED ONLY)
+            // -------------------------
             if (model.Filters.IncludePastOrders)
             {
-                //Grab all the fufilled/cancelled orders
-                List<Order> pastOrders = _orderRepo.GetAll().Where(o => o.IsPickedUp || o.Rejected).ToList();
-                model.PastOrders = pastOrders ?? new List<Order>();
+                model.PastOrders = allOrders
+                    .Where(o => o.IsPickedUp && !o.Rejected)
+                    .ToList();
             }
-            else 
+            else
             {
                 model.PastOrders = new List<Order>();
             }
 
-            if (!model.Filters.IncludeCancelledOrders)
+            // -------------------------
+            // CANCELLED (REJECTED ONLY)
+            // -------------------------
+            if (model.Filters.IncludeCancelledOrders)
             {
-                model.PastOrders = model.PastOrders.Where(o => !o.Rejected).ToList();
+                model.CancelledOrders = allOrders
+                    .Where(o => o.Rejected)
+                    .ToList();
+            }
+            else
+            {
+                model.CancelledOrders = new List<Order>();
             }
 
             return View("BrowseOrders", model);
@@ -81,7 +96,10 @@ namespace FreshHarvestMarket.Controllers
         [HttpGet]
         public IActionResult ManageOrders()
         {
-            List<Order> orders = _orderRepo.GetAll().Where(o => !o.IsPickedUp && !o.Rejected).OrderBy(o => o.PickupDate).ToList();
+            List<Order> orders = _orderRepo.GetAll()
+                .Where(o => !o.IsPickedUp && !o.Rejected)
+                .OrderBy(o => o.PickupDate)
+                .ToList();
 
             return View(orders);
         }
