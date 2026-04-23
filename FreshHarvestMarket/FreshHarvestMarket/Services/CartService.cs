@@ -86,8 +86,15 @@ namespace FreshHarvestMarket.Services
 
         public decimal GetTotal()
         {
-            return GetCart().Sum(x => x.LineTotal);
+            var cart = GetCart();
+
+            return cart.Sum(x =>
+                (x.DiscountAmount.HasValue && x.DiscountAmount > 0)
+                    ? x.DiscountedPrice * x.Quantity
+                    : x.Price * x.Quantity
+            );
         }
+
         public void ClearCart()
         {
             Session.Remove(Key);

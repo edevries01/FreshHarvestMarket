@@ -12,6 +12,10 @@ namespace FreshHarvestMarket.ViewModels
 
         public List<CartItem> Items { get; set; } = new();
 
-        public decimal Total => Items.Sum(x => x.LineTotal);
+        public decimal Total => Items.Sum(x =>
+            (x.DiscountAmount.HasValue && x.DiscountAmount > 0)
+                ? x.DiscountedPrice * x.Quantity
+                : x.Price * x.Quantity
+        );
     }
 }
