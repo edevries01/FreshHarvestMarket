@@ -51,10 +51,10 @@
                 }
                 <td>
                     <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
-                    <form asp-action="UpdateFufilled" method="post" asp-route-OrderId="@order.OrderId" class="d-inline">
-                        <button type="submit" class="btn btn-primary">Fufilled</button>
+                    <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@order.OrderId" class="d-inline">
+                        <button type="submit" class="btn btn-primary">Fulfilled</button>
                     </form>
-                    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@order.OrderId" class="btn btn-primary">Reject</a>
+                    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@order.OrderId" class="btn btn-danger">Reject</a>
                 </td>
             </tr>
         }

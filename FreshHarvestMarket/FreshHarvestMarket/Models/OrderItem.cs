@@ -19,7 +19,7 @@ namespace FreshHarvestMarket.Models
 
         public decimal TotalPrice => Produce != null ? Quantity * Produce.UnitPrice : 0;
 
-        //Foregin Key to Order
+        //Foreign Key to Order
         public int OrderId { get; set; }
 
         //Nullable for cart use

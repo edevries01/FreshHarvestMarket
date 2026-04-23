@@ -21,7 +21,7 @@
                 <td>@Model.PickupDate.ToString("MM/dd/yyyy")</td>
             </tr>
             <tr>
-                <td>Fufilled?</td>
+                <td>Fulfilled?</td>
                 <td>@(Model.IsPickedUp ? "Yes" : "No")</td>
             </tr>
             <tr>
@@ -80,8 +80,8 @@
     </table>
 
     <a asp-controller="Order" asp-action="ManageOrders" class="btn btn-primary">Manage Orders</a>
-    <form asp-action="UpdateFufilled" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
-        <button type="submit" class="btn btn-primary">Fufilled</button>
+    <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
+        <button type="submit" class="btn btn-primary">Fulfilled</button>
     </form>
-    <a asp-controller="Order" asp-action="UpdateRejected" asp-route-orderId="@Model.OrderId" class="btn btn-primary">Reject</a>
+    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@Model.OrderId" class="btn btn-danger">Reject</a>
 </div>
