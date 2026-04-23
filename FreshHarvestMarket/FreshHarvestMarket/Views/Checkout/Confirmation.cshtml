@@ -2,18 +2,75 @@
 
 <h2>🎉 Order Confirmed!</h2>
 
-<p>
-    Thank you, <strong>@Model.FirstName @Model.LastName</strong>!<br />
-    Your order has been reserved.
-</p>
+<!-- Confirmation Alert Section -->
+<div class="alert alert-success mt-3">
+    <h4 class="mb-2">Thank you, @Model.FirstName @Model.LastName!</h4>
+
+    <p class="mb-2">
+        Your order has been successfully placed and items have been reserved in our system.
+    </p>
+
+    <p class="mb-2">
+        Please note that reservation does not guarantee availability until your order has been processed.
+    </p>
+
+    <hr />
+
+    <p class="mb-1">
+        <strong>Pickup Location:</strong> Fresh Harvest Market, Williamsburg, Iowa
+    </p>
+
+    <p class="mb-1">
+        <strong>Pickup Date:</strong> @Model.PickupDate.ToString("MMMM dd, yyyy")
+    </p>
+
+    <p class="mb-1">
+        <strong>Pickup Hours:</strong> 8:00 AM – 6:00 PM
+    </p>
+
+    <hr />
+
+    <p class="mb-2">
+        Please arrive during pickup hours and the date above to ensure your order is ready and available.
+    </p>
+
+    <p class="mb-2">
+        You will receive an email confirmation of your reservation shortly for your records.
+    </p>
+</div>
+
+<!-- Pickup Instructions Section -->
+<div class="card mt-4 shadow-sm border-0 bg-light">
+    <div class="card-body">
+
+        <h5 class="mb-3">
+            <i class="bi bi-box-seam text-success me-2"></i>
+            Pickup Instructions
+        </h5>
+
+        <p class="mb-2">
+            Please pick up your order at <strong>Fresh Harvest Market, Williamsburg, Iowa</strong>
+            during our regular pickup hours of <strong>8:00 AM – 6:00 PM</strong>.
+        </p>
+
+        <p class="mb-2">
+            If you are picking up after 6:00 PM, please use the electronic pickup box.
+        </p>
+
+        <p class="mb-2">
+            Payment can be completed at pickup using electronic methods such as credit or debit.
+        </p>
+
+        <p class="mb-2">
+            If picking up in person during regular hours, cash is also accepted.
+        </p>
+
+    </div>
+</div>
 
 <hr />
 
-<h4>Pickup Details</h4>
-<p><strong>Date:</strong> @Model.PickupDate.ToString("MMMM dd, yyyy")</p>
-
-<hr />
-
+<!-- Order Summary Section -->
 <h4>Order Summary</h4>
 
 @foreach (var item in Model.Items)
