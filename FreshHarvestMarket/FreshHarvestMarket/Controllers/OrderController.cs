@@ -81,7 +81,7 @@ namespace FreshHarvestMarket.Controllers
         [HttpGet]
         public IActionResult ManageOrders()
         {
-            List<Order> orders = _orderRepo.GetAll().Where(o => !o.IsPickedUp).OrderBy(o => o.PickupDate).ToList();
+            List<Order> orders = _orderRepo.GetAll().Where(o => !o.IsPickedUp && !o.Rejected).OrderBy(o => o.PickupDate).ToList();
 
             return View(orders);
         }
@@ -150,12 +150,12 @@ namespace FreshHarvestMarket.Controllers
         }
 
         /// <summary>
-        /// Marks an order as fufilled
+        /// Marks an order as fulfilled
         /// </summary>
-        /// <param name="orderId">ID of the order fufilled</param>
+        /// <param name="orderId">ID of the order fulfilled</param>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
-        public IActionResult UpdateFufilled(int orderId)
+        public IActionResult UpdateFulfilled(int orderId)
         {
             Order? order = _orderRepo.GetAll()
                 .Include(o => o.Items)

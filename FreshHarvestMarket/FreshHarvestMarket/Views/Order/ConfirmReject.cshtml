@@ -15,7 +15,12 @@
 	</div>
 	<div class="row mt-2 justify-content-center">
 		<div class="col-2 justify-content-center d-flex">
-			<form asp-action="ConfirmReject" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
+			<form asp-controller="Order"
+				  asp-action="UpdateRejected"
+				  method="post"
+				  asp-route-orderId="@Model.OrderId"
+				  class="d-inline">
+
 				<button type="submit" class="btn btn-danger">Reject</button>
 			</form>
 		</div>

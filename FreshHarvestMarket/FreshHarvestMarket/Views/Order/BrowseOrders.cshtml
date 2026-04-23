@@ -2,7 +2,7 @@
     This view is the basic screen for viewing orders
     It allows you to view and filters orders. Orders can also be cancelled here
     Future: Users can only view THEIR orders. Admins can view all
-    Future: Add link to browse all orders, even fufilled ones
+    Future: Add link to browse all orders, even fulfilled ones
 *@
 
 @model BrowseOrdersViewModel
@@ -121,7 +121,7 @@
                 }
                 else if (order.IsPickedUp)
                 {
-                    <td>Fufilled</td>
+                    <td>Fulfilled</td>
                 }
                 else
                 {
