@@ -17,6 +17,11 @@ namespace FreshHarvestMarket.ViewModels
         /// </summary>
         public List<Order> ActiveOrders { get; set; } = new List<Order>();
 
+        /// <summary>
+        /// A list of all Rejected/Cancelled orders
+        /// </summary>
+        public List<Order> CancelledOrders { get; set; } = new List<Order>();
+
         /*
          * Below here, is the stuff for filters
          */

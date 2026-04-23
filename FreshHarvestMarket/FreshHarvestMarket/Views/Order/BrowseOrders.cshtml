@@ -95,46 +95,77 @@
     </table>
 }
 
-@if(@Model.PastOrders.Count > 0)
+@if (Model.PastOrders.Count > 0)
 {
-<h2>Past Orders</h2>
-<table class="table orders-table">
-    <thead>
-        <tr>
-            <th>Order Number</th>
-            <th>Pickup Date</th>
-            <th>Order Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Order order in Model.PastOrders)
-        {
-            <tr>
-                <td>@order.OrderId</td>
-                <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
-                <td>@order.OrderTotal.ToString("C")</td>
-                @if (order.Rejected)
-                {
-                    <td class="text-warning">Rejected</td>
-                }
-                else if (order.IsPickedUp)
-                {
-                    <td>Fulfilled</td>
-                }
-                else
-                {
-                    <td>-</td>
-                }
-                <td>
-                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-outline-success">View Order</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-}
+    <h2>Past Orders</h2>
 
+    <table class="table orders-table">
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>Pickup Date</th>
+                <th>Order Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Order order in Model.PastOrders)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
+                    <td>@order.OrderTotal.ToString("C")</td>
+                    <td>Fulfilled</td>
+                    <td>
+                        <a asp-controller="Order"
+                           asp-action="ViewOrder"
+                           asp-route-orderId="@order.OrderId"
+                           class="btn btn-outline-success">
+                            View Order
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.CancelledOrders.Count > 0)
+{
+    <h2>Cancelled Orders</h2>
+
+    <table class="table orders-table">
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>Pickup Date</th>
+                <th>Order Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Order order in Model.CancelledOrders)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
+                    <td>@order.OrderTotal.ToString("C")</td>
+                    <td class="text-danger">Cancelled</td>
+                    <td>
+                        <a asp-controller="Order"
+                           asp-action="ViewOrder"
+                           asp-route-orderId="@order.OrderId"
+                           class="btn btn-outline-success">
+                            View Order
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
