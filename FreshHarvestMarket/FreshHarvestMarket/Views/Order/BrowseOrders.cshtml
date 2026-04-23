@@ -6,43 +6,43 @@
 *@
 
 @model BrowseOrdersViewModel
-<div class="row justify-content-center">
-    <h1 class="justify-content-center">Your Orders</h1>
+<div class="row justify-content-center orders-page">
+    <h1 class="fw-bold">Your Orders</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-1 col-sm-4">
+<div class="d-flex gap-2 justify-content-end mb-4 flex-wrap">
+    
         <a asp-action="Index"
             asp-controller="OrderFilters"
             asp-route-Filters.IncludeActiveOrders="@(!Model.Filters.IncludeActiveOrders)"
             asp-route-Filters.IncludeCancelledOrders="@Model.Filters.IncludeCancelledOrders"
             asp-route-Filters.IncludePastOrders="@Model.Filters.IncludePastOrders"
-            class="@(Model.Filters.IncludeActiveOrders ? "btn btn-dark" : "btn btn-light")">
+            class="order-filter-btn @(Model.Filters.IncludeActiveOrders ? "btn btn-success" : "btn btn-outline-success")">
             Active Orders
         </a>
-    </div>
+    
 
-    <div class="col-md-1 col-sm-4">
+    
         <a asp-action="Index"
            asp-controller="OrderFilters"
            asp-route-Filters.IncludeActiveOrders="@Model.Filters.IncludeActiveOrders"
            asp-route-Filters.IncludeCancelledOrders="@(!Model.Filters.IncludeCancelledOrders)"
            asp-route-Filters.IncludePastOrders="@Model.Filters.IncludePastOrders"
-           class="@(Model.Filters.IncludeCancelledOrders ? "btn btn-dark" : "btn btn-light")">
+           class="order-filter-btn @(Model.Filters.IncludeCancelledOrders ? "btn btn-success" : "btn btn-outline-success")">
             Cancelled Orders
         </a>
-    </div>
+    
 
-    <div class="col-md-1 col-sm-4">
+    
         <a asp-action="Index"
            asp-controller="OrderFilters"
            asp-route-Filters.IncludeActiveOrders="@Model.Filters.IncludeActiveOrders"
            asp-route-Filters.IncludeCancelledOrders="@Model.Filters.IncludeCancelledOrders"
            asp-route-Filters.IncludePastOrders="@(!Model.Filters.IncludePastOrders)"
-           class="@(Model.Filters.IncludePastOrders ? "btn btn-dark" : "btn btn-light")">
+           class="order-filter-btn @(Model.Filters.IncludePastOrders ? "btn btn-success" : "btn btn-outline-success")">
             Past Orders
         </a>
-    </div>
+    
 </div>
 
 @if (Model.ActiveOrders.Count < 1 && Model.PastOrders.Count < 1)
@@ -53,7 +53,7 @@
 @if (Model.ActiveOrders.Count > 0)
 {
     <h2>Active Orders</h2>
-    <table class="table table-bordered table-striped">
+    <table class="table orders-table">
         <thead>
             <tr>
                 <th>Order Number</th>
@@ -87,7 +87,7 @@
                         <td>-</td>
                     }
                     <td>
-                        <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
+                        <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-outline-success">View Order</a>
                     </td>
                 </tr>
             }
@@ -98,7 +98,7 @@
 @if(@Model.PastOrders.Count > 0)
 {
 <h2>Past Orders</h2>
-<table class="table table-bordered table-striped">
+<table class="table orders-table">
     <thead>
         <tr>
             <th>Order Number</th>
@@ -128,7 +128,7 @@
                     <td>-</td>
                 }
                 <td>
-                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
+                    <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-outline-success">View Order</a>
                 </td>
             </tr>
         }

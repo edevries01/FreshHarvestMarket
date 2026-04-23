@@ -35,8 +35,15 @@ namespace FreshHarvestMarket.Controllers
                 Categories = _produceRepository.GetAll()
                     .Select(p => p.ProduceCategory)
                     .Distinct()
+                    .ToList(),
+
+                 FavoriteIds = _favoriteRepository.GetAll()
+                    .Select(f => f.ProduceId)
                     .ToList()
             };
+
+            
+
             return View(viewModel);
 
         }
@@ -71,15 +78,19 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult Favorites()
         {
             // Join Favorites table with Produce table to get full details
-            var favoriteItems = _favoriteRepository.GetAll()
-                .Join(_produceRepository.GetAll(),
-                f => f.ProduceId,
-                p => p.ProduceId,
-                (f, p) => p).ToList();
+            var favorites = _favoriteRepository.GetAll().ToList();
+
+                var favoriteItems = _produceRepository.GetAll()
+                    .ToList()
+                    .Where(p => favorites.Any(f => f.ProduceId == p.ProduceId))
+                    .ToList();
+
 
             var viewModel = new FavoritesViewModel
             {
-                FavoriteItems = favoriteItems
+                FavoriteItems = favoriteItems,
+
+                FavoriteIds = favorites.Select(f => f.ProduceId).ToList()
             };
 
             return View(viewModel);
