@@ -28,8 +28,13 @@
 	</div>
 
 	<div class="mb-3">
-		<label asp-for="ProduceCategory">Produce Category</label>
-		<input asp-for="ProduceCategory" class="form-control" />
+		<label asp-for="ProduceCategory"></label>
+		<select asp-for="ProduceCategory" class="form-select">
+			<option value="">-- Select Category --</option>
+			<option value="Fruit">Fruit</option>
+			<option value="Vegetable">Vegetable</option>
+			<option value="Other">Other</option>
+		</select>
 		<span asp-validation-for="ProduceCategory" class="text-danger"></span>
 	</div>
 
