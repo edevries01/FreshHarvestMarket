@@ -15,17 +15,17 @@ namespace FreshHarvestMarket.Controllers
     {
         private IRepository<Order> _orderRepo;
         private IOrderFiltersSession _orderFiltersSession;
-        private readonly FreshHarvestContext _context;
+        private IRepository<Produce> _produceRepo;
 
         /// <summary>
         /// OrderController constructor
         /// </summary>
         /// <param name="orderRepo">Service for accessing Order table in database</param>
-        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess, FreshHarvestContext context)
+        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess, IRepository<Produce> produceRepo)
         {
             _orderRepo = orderRepo;
             _orderFiltersSession = sess;
-            _context = context;
+            _produceRepo = produceRepo;
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace FreshHarvestMarket.Controllers
             // Loop through order items & reduce inventory
             foreach (var item in order.Items)
             {
-                var produce = _context.Produce
+                var produce = _produceRepo.GetAll()
                     .FirstOrDefault(p => p.ProduceId == item.ProduceId);
 
                 if (produce != null)
@@ -194,7 +194,7 @@ namespace FreshHarvestMarket.Controllers
             _orderRepo.Save();
 
             // Save inventory changes
-            _context.SaveChanges();
+            _produceRepo.Save();
 
             return RedirectToAction("ManageOrders");
         }
