@@ -49,8 +49,12 @@
 
 						<!--Image container-->
 						<div class="bg-white text-center border-bottom">
-							<img src="~/images/@item.ImageUrl" class="card-img-top p-2" alt="@item.ProduceName"
-								 style="height: 180px; object-fit: cover;" />
+							<img src="@(string.IsNullOrEmpty(item.ImageUrl)
+									? Url.Content("~/images/default.jpg")
+									: Url.Content("~/images/" + item.ImageUrl))"
+								class="card-img-top p-2"
+								alt="@item.ProduceName"
+								style="height: 180px; object-fit: cover;" />
 
 						</div>
 
