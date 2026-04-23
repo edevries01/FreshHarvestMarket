@@ -50,8 +50,6 @@
                 <td></td>
                 <td>Product</td>
                 <td>Quantity</td>
-                <td>Price</td>
-                <td>Total</td>
             </tr>
         </thead>
         <tbody>
@@ -64,16 +62,6 @@
                     </td>
                     <td>@orderItem.Produce!.ProduceName</td>
                     <td>@orderItem.Quantity</td>
-                    <td>
-                        @orderItem.Produce!.UnitPrice.ToString("C")
-                    </td>
-                    <td>
-                        @{
-                            decimal unitPrice = orderItem.Produce!.UnitPrice;
-                            decimal lineTotal = orderItem.Quantity * unitPrice;
-                        }
-                        @lineTotal.ToString("C")
-                    </td>
                 </tr>
             }
         </tbody>
