@@ -6,5 +6,7 @@ namespace FreshHarvestMarket.ViewModels
     public class FavoritesViewModel
     {
         public List<Produce> FavoriteItems { get; set; } = new List<Produce>();
+
+        public List<int> FavoriteIds { get; set; } = new();
     }
 }

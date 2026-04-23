@@ -1,12 +1,17 @@
-﻿@model BrowseProduceViewModel
+﻿
+@model BrowseProduceViewModel
+
 @{
 	ViewData["Title"] = "Marketplace";
+
 }
 
 <div class="row">
 	<div class="col-md-3">
-		<h3>Categories</h3>
-		<div class="list-group">
+		<h4 class="fw-bold mb-3 text-success">Categories</h4>
+
+
+		<div class="list-group shadow-sm rounded">
 			<a asp-action="Index" asp-route-category="All"
 			   class="list-group-item list-group-item-action @(Model.SelectedCategory == "All" ? "active" : "")">
 				All Produce
@@ -36,10 +41,16 @@
 			@foreach (var item in Model.ProduceItems)
 			{
 				<div class="col-sm-6 col-lg-4 mb-4">
-					<div class="card h-100 shadow-sm">
-						<div class="bg-light text-center">
+					@{
+						bool isFavorite = Model.FavoriteIds.Contains(item.ProduceId);
+					}
+					<!--Card container-->
+					<div class="card h-100 shadow-sm produce-card">
+
+						<!--Image container-->
+						<div class="bg-white text-center border-bottom">
 							<img src="~/images/@item.ImageUrl" class="card-img-top p-2" alt="@item.ProduceName"
-								 style="height: 180px; object-fit: contain;" />
+								 style="height: 180px; object-fit: cover;" />
 
 						</div>
 
@@ -48,7 +59,7 @@
 							<p class="card-text text-muted">@item.UnitPrice.ToString("C")</p>
 							<p class="small text-secondary">In Stock: @item.InventoryTotal</p>
 							<!--Sends Item ID to Details page when clicked-->
-							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-success w-100">View Details</a>
+							<a asp-action="Details" asp-route-id="@item.ProduceId" class="btn btn-outline-success w-100">View Details</a>
 
 
 							<a asp-controller="Cart"
@@ -69,7 +80,7 @@
 							<form asp-action="AddFavorite" method="post" class="mt-2 text-end">
 								<input type="hidden" name="produceId" value="@item.ProduceId" />
 								<button type="submit" class="btn border-0 bg-transparent p-0 shadow-none heart-btn">
-									<i class="bi bi-heart fs-4 text-danger"></i>
+									<i class="bi @(isFavorite ? "bi-heart-fill" : "bi-heart") fs-4 text-danger heart-icon"></i>
 								</button>
 
 							</form>

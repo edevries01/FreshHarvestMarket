@@ -12,5 +12,7 @@ namespace FreshHarvestMarket.ViewModels
 
         //List of all categories found in the database
         public List<string> Categories { get; set; } = new();
+
+        public List<int> FavoriteIds { get; set; } = new();
     }
 }
