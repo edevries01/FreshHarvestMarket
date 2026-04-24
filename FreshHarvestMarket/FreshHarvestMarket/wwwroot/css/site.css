@@ -253,7 +253,11 @@ footer {
 
 /* Print Details on Confirmation Page*/
 @media print {
-    button, .btn, nav, footer {
+    nav, footer {
+        display: none !important;
+    }
+
+    .no-print {
         display: none !important;
     }
 
