@@ -250,3 +250,22 @@ footer {
     background-color: #fff3cd;
     color: var(--text-dark);
 }
+
+/* Print Details on Confirmation Page*/
+@media print {
+    button, .btn, nav, footer {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
