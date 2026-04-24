@@ -90,6 +90,7 @@ namespace FreshHarvestMarket.Controllers
             // BUILD CONFIRMATION VIEWMODEL
             var confirmation = new ConfirmationViewModel
             {
+                OrderId = order.OrderId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
