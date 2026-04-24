@@ -78,12 +78,18 @@
                         @if (signInManager.IsSignedIn(User))
                         {
                             // signed-in user - Log Out button and username
-                            <li class="nav-item">
+                            <li class="nav-item d-flex align-items-center gap-2">
+
+                                <span class="navbar-text text-success fw-semibold">
+                                    👋 Welcome, @User.Identity.Name!
+                                </span>
 
                                 <form method="post" asp-action="LogOut" asp-controller="Account" asp-area="">
-                                    <input type="submit" value="Log Out" />
-                                    <span class="text-light">@User.Identity.Name</span>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        Log Out
+                                    </button>
                                 </form>
+
                             </li>
                         }
                         else
