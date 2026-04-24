@@ -60,7 +60,32 @@
 
 						<div class="card-body">
 							<h5 class="card-title">@item.ProduceName</h5>
-							<p class="card-text text-muted">@item.UnitPrice.ToString("C")</p>
+						@if (User.Identity.IsAuthenticated &&
+												item.Discount != null &&
+												item.Discount.DiscountAmount > 0)
+							{
+								var discounted = item.UnitPrice * (1 - item.Discount.DiscountAmount / 100.0m);
+
+								<p class="card-text">
+									<span class="text-muted text-decoration-line-through me-2">
+										@item.UnitPrice.ToString("C")
+									</span>
+
+									<span class="text-success fw-bold">
+										@discounted.ToString("C")
+									</span>
+								</p>
+
+								<span class="badge bg-success mb-2">
+									Save @item.Discount.DiscountAmount%
+								</span>
+							}
+							else
+							{
+								<p class="card-text text-muted">
+									@item.UnitPrice.ToString("C")
+								</p>
+							}
 
 							@if (item.InventoryTotal == 0)
 							{
