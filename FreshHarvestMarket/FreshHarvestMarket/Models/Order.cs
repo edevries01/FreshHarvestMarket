@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FreshHarvestMarket.Models
 {
@@ -57,6 +58,14 @@ namespace FreshHarvestMarket.Models
         /// </summary>
         [Required]
         public bool Rejected { get; set; }
+
+        /// <summary>
+        /// Navagation property
+        /// </summary>
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+
+        public string? UserId { get; set; }
 
         /// <summary>
         /// Updates the order total to what it would be at time of execution

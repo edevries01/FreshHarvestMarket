@@ -267,6 +267,12 @@ namespace FreshHarvestMarket.Data
                         await userManager.AddToRoleAsync(user, roleName);
                     }
                 }
+
+                //Add "Regular" role for other users
+                if (await roleManager.FindByNameAsync("Regular") == null)
+                {
+                    await roleManager.CreateAsync(new IdentityRole("Regular"));
+                }
             }
         }
     }
