@@ -2,6 +2,20 @@
 
 <h2>Your Cart</h2>
 
+@if (!Model.Any())
+{
+    <div class="text-center mt-5">
+        <h3>Your cart is empty 🛒</h3>
+        <p>Start shopping fresh produce!</p>
+
+        <a asp-controller="Produce" asp-action="Index"
+           class="btn btn-success mt-3">
+            Browse Produce
+        </a>
+    </div>
+    return;
+}
+
 @if (TempData["CartError"] != null)
 {
     <div class="alert alert-danger">
