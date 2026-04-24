@@ -4,6 +4,7 @@ using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FreshHarvestMarket.Controllers
 {
@@ -21,7 +22,9 @@ namespace FreshHarvestMarket.Controllers
         //Retrieves a list of produce from the database, filtered by catgetory (optional)
         public IActionResult Index(string category = "All")
         {
-            var produceQuery = _produceRepository.GetAll().AsQueryable();
+            var produceQuery = _produceRepository.GetAll()
+                .Include(p => p.Discount)
+                .AsQueryable();
 
             if (category != "All")
             {
@@ -51,8 +54,12 @@ namespace FreshHarvestMarket.Controllers
         //Finds produce item by ID. Returns NotFound if item not found.
         public IActionResult Details(int id)
         {
-            var item = _produceRepository.GetAll().FirstOrDefault(p => p.ProduceId == id);
+            var item = _produceRepository.GetAll()
+                .Include(p => p.Discount)
+                .FirstOrDefault(p => p.ProduceId == id);
+
             if (item == null) return NotFound();
+
             return View(item);
         }
 
