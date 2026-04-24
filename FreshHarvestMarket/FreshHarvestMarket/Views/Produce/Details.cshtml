@@ -8,8 +8,12 @@
 	<div class="row">
 		<div class="col-md-6 mb-4">
 			<div class="card shadow-sm">
-				<img src="~/images/@Model.ImageUrl" class="img-fluid rounded-start p-3" alt="@Model.ProduceName"
-				style="max-height: 500px; object-fit: contain;" />
+				<img src="@(string.IsNullOrWhiteSpace(Model.ImageUrl)
+					 ? Url.Content("~/images/default.jpg")
+					 : Url.Content("~/images/" + Model.ImageUrl))"
+					 class="img-fluid rounded-start p-3"
+					 alt="@Model.ProduceName"
+					 style="max-height: 500px; object-fit: contain;" />
 			</div>
 
 		</div>
