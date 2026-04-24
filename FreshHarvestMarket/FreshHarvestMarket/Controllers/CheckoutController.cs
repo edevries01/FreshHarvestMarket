@@ -2,6 +2,7 @@
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Services;
 using FreshHarvestMarket.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FreshHarvestMarket.Controllers
@@ -10,11 +11,14 @@ namespace FreshHarvestMarket.Controllers
     {
         private readonly ICartService _cartService;
         private readonly FreshHarvestContext _context;
+        private UserManager<User> _userManager;
 
-        public CheckoutController(ICartService cartService, FreshHarvestContext context)
+
+        public CheckoutController(ICartService cartService, FreshHarvestContext context, UserManager<User> userManager)
         {
             _cartService = cartService;
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -63,6 +67,12 @@ namespace FreshHarvestMarket.Controllers
                     ? cart.Sum(x => x.DiscountedPrice * x.Quantity)  // Discounted price if logged in
                     : cart.Sum(x => x.LineTotal)  // Regular price if not logged in
             };
+
+            //if signed-in, tie order to user
+            if (User.Identity.IsAuthenticated)
+            {
+                order.UserId = _userManager.GetUserId(User);
+            }
 
             _context.Orders.Add(order);
             _context.SaveChanges(); // generates OrderId

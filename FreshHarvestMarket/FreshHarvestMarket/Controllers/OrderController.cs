@@ -3,6 +3,8 @@ using FreshHarvestMarket.Models;
 using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,21 +13,24 @@ namespace FreshHarvestMarket.Controllers
     /// <summary>
     /// Controller for Order data entity
     /// </summary>
+    [Authorize]
     public class OrderController : Controller
     {
         private IRepository<Order> _orderRepo;
         private IOrderFiltersSession _orderFiltersSession;
         private IRepository<Produce> _produceRepo;
+        private UserManager<User> _userManager;
 
         /// <summary>
         /// OrderController constructor
         /// </summary>
         /// <param name="orderRepo">Service for accessing Order table in database</param>
-        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess, IRepository<Produce> produceRepo)
+        public OrderController(IRepository<Order> orderRepo, IOrderFiltersSession sess, IRepository<Produce> produceRepo, UserManager<User> userManager)
         {
             _orderRepo = orderRepo;
             _orderFiltersSession = sess;
             _produceRepo = produceRepo;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -40,7 +45,10 @@ namespace FreshHarvestMarket.Controllers
                 model.Filters = _orderFiltersSession.GetFilters()!;
             }
 
-            var allOrders = _orderRepo.GetAll().ToList();
+            //Cannot be null, due to [Authorize] requiring auth on this controller
+            string userId = _userManager.GetUserId(User)!;
+
+            List<Order> allOrders = _orderRepo.GetAll().Where(o => o.UserId == userId).ToList();
 
             // -------------------------
             // ACTIVE (only not finished)
@@ -94,6 +102,7 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <returns>View with all unfufilled orders</returns>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ManageOrders()
         {
             List<Order> orders = _orderRepo.GetAll()
@@ -131,6 +140,7 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ConfirmReject(int orderId)
         {
             Order? order = _orderRepo.GetAll().FirstOrDefault(o => o.OrderId == orderId);
@@ -149,6 +159,7 @@ namespace FreshHarvestMarket.Controllers
         /// </summary>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateRejected(int orderId)
         {
             Order? order = _orderRepo.GetAll().Where(o => o.OrderId == orderId).FirstOrDefault();
@@ -173,6 +184,7 @@ namespace FreshHarvestMarket.Controllers
         /// <param name="orderId">ID of the order fulfilled</param>
         /// <returns>Manage Orders view</returns>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateFulfilled(int orderId)
         {
             Order? order = _orderRepo.GetAll()
