@@ -1,5 +1,6 @@
 ﻿using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
+using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -10,21 +11,42 @@ namespace FreshHarvestMarket.Controllers
     public class CheckoutController : Controller
     {
         private readonly ICartService _cartService;
-        private readonly FreshHarvestContext _context;
-        private UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IRepository<User> _userRepo;
+        private readonly IRepository<Order> _orderRepo;
+        private readonly IRepository<Discount> _discountRepo;
+        private readonly IRepository<OrderItem> _orderItemRepo;
 
 
-        public CheckoutController(ICartService cartService, FreshHarvestContext context, UserManager<User> userManager)
+        public CheckoutController(ICartService cartService, UserManager<User> userManager, IRepository<User> userRepo, IRepository<OrderItem> orderItemRepo)
         {
             _cartService = cartService;
-            _context = context;
             _userManager = userManager;
+            _userRepo = userRepo;
+            _orderItemRepo = orderItemRepo;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             var model = new CheckoutViewModel();
+
+            //If they are logged in we can pre-fill some of their information from the User table
+            //We expect that the user may choose to change this
+            bool loggedIn = User.Identity!.IsAuthenticated;
+            if (loggedIn) 
+            {
+                string userId = _userManager.GetUserId(User)!;
+                User? authedUser = _userRepo.GetAll().FirstOrDefault(u => u.Id == userId);
+
+                if (authedUser != null) 
+                {
+                    model.Phone = authedUser.PhoneNumber!; //null should not matter
+                    model.Email = authedUser.Email!; //null should not matter
+                    model.FirstName = authedUser.FirstName!;
+                    model.LastName = authedUser.LastName!;
+                }
+            }
             return View(model);
         }
 
@@ -42,7 +64,7 @@ namespace FreshHarvestMarket.Controllers
             {
                 foreach (var item in cart)
                 {
-                    var discount = _context.Discounts
+                    var discount = _discountRepo.GetAll()
                         .FirstOrDefault(d => d.ProduceId == item.ProduceId);
 
                     item.DiscountAmount = discount?.DiscountAmount ?? 0;
@@ -74,8 +96,8 @@ namespace FreshHarvestMarket.Controllers
                 order.UserId = _userManager.GetUserId(User);
             }
 
-            _context.Orders.Add(order);
-            _context.SaveChanges(); // generates OrderId
+            _orderRepo.Insert(order);
+            _orderRepo.Save(); // generates OrderId
 
             // CREATE ORDER ITEMS
             foreach (var item in cart)
@@ -87,10 +109,10 @@ namespace FreshHarvestMarket.Controllers
                     Quantity = item.Quantity
                 };
 
-                _context.OrderItems.Add(orderItem);
+                _orderItemRepo.Insert(orderItem);
             }
 
-            _context.SaveChanges();
+            _orderItemRepo.Save();
 
             var finalCart = _cartService.GetCart();
 

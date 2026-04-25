@@ -29,7 +29,9 @@ namespace FreshHarvestMarket.Controllers
                 var user = new FreshHarvestMarket.Models.User
                 {
                     UserName = model.Username,
-                    Email = model.Email
+                    Email = model.Email,
+                    FirstName = model.Firstname ?? null,
+                    LastName = model.Lastname ?? null
                 };
 
                 var result = await userManager.CreateAsync(user, model.Password);
