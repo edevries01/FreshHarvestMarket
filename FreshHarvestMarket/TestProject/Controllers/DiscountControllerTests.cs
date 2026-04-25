@@ -151,6 +151,7 @@ public class DiscountControllerTests
         {
             discount.Produce = testProduce.FirstOrDefault(p => p.ProduceId == discount.ProduceId);
         }
+
     }
 
     [TestMethod]
