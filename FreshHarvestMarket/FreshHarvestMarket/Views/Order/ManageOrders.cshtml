@@ -16,6 +16,14 @@
     </div>*@
 </div>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -29,26 +37,37 @@
     <tbody>
         @foreach (Order order in Model)
         {
+            bool hasInventoryIssue = order.Items.Any(i =>
+            i.Produce != null &&
+            i.Produce.InventoryTotal < i.Quantity);
             <tr>
                 <td>@order.OrderId</td>
                 <td>@order.PickupDate.ToString("MM/dd/yyyy")</td>
                 <td>@order.OrderTotal.ToString("C")</td>
-                @if (order.PickupDate < DateTime.Now.Date)
-                {
-                    <td class="text-warning">Overdue</td>
-                }
-                else if (order.PickupDate.AddDays(7).Date < DateTime.Now.AddDays(7).Date)
-                {
-                    <td>Upcoming</td>
-                }
-                else if (order.PickupDate.Date == DateTime.Now.Date)
-                {
-                    <td>Pick-Up Today</td>
-                }
-                else
-                {
-                    <td>-</td>
-                }
+                <td>
+                    @if (order.PickupDate < DateTime.Now.Date)
+                    {
+                        <span class="text-warning">Overdue</span>
+                    }
+                    else if (order.PickupDate.AddDays(7).Date < DateTime.Now.AddDays(7).Date)
+                    {
+                        <span>Upcoming</span>
+                    }
+                    else if (order.PickupDate.Date == DateTime.Now.Date)
+                    {
+                        <span>Pick-Up Today</span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+
+                    @* inventory warning badge *@
+                    @if (hasInventoryIssue)
+                    {
+                        <span class="badge bg-danger ms-2">Low stock</span>
+                    }
+                </td>
                 <td>
                     <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">View Order</a>
                     <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@order.OrderId" class="d-inline">

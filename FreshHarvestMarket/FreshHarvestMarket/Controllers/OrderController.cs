@@ -106,6 +106,8 @@ namespace FreshHarvestMarket.Controllers
         public IActionResult ManageOrders()
         {
             List<Order> orders = _orderRepo.GetAll()
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Produce)
                 .Where(o => !o.IsPickedUp && !o.Rejected)
                 .OrderBy(o => o.PickupDate)
                 .ToList();
@@ -198,6 +200,23 @@ namespace FreshHarvestMarket.Controllers
 
             if (order.IsPickedUp)
                 return RedirectToAction("ManageOrders");
+
+            // hard stop validation when fulfilling
+            foreach (var item in order.Items)
+            {
+                var produce = _produceRepo.GetAll()
+                    .FirstOrDefault(p => p.ProduceId == item.ProduceId);
+
+                if (produce == null)
+                    continue;
+
+                if (produce.InventoryTotal < item.Quantity)
+                {
+                    TempData["Error"] =
+                        $"Cannot fulfill order. Not enough inventory for {produce.ProduceName}.";
+                    return RedirectToAction("ManageOrders");
+                }
+            }
 
             // Loop through order items & reduce inventory
             foreach (var item in order.Items)
