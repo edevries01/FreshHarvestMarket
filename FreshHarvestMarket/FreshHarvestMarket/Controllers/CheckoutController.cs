@@ -16,14 +16,17 @@ namespace FreshHarvestMarket.Controllers
         private readonly IRepository<Order> _orderRepo;
         private readonly IRepository<Discount> _discountRepo;
         private readonly IRepository<OrderItem> _orderItemRepo;
+        private readonly IHttpContextAccessor _contextAccessor;
 
 
-        public CheckoutController(ICartService cartService, UserManager<User> userManager, IRepository<User> userRepo, IRepository<OrderItem> orderItemRepo)
+        public CheckoutController(ICartService cartService, UserManager<User> userManager, IRepository<User> userRepo, 
+            IRepository<OrderItem> orderItemRepo, IHttpContextAccessor contextAccessor)
         {
             _cartService = cartService;
             _userManager = userManager;
             _userRepo = userRepo;
             _orderItemRepo = orderItemRepo;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpGet]
@@ -33,11 +36,13 @@ namespace FreshHarvestMarket.Controllers
 
             //If they are logged in we can pre-fill some of their information from the User table
             //We expect that the user may choose to change this
-            bool loggedIn = User.Identity!.IsAuthenticated;
+            bool loggedIn = _contextAccessor.HttpContext.User.Identity.IsAuthenticated;
+
             if (loggedIn) 
             {
-                string userId = _userManager.GetUserId(User)!;
+                string userId = _userManager.GetUserId(_contextAccessor.HttpContext.User)!;
                 User? authedUser = _userRepo.GetAll().FirstOrDefault(u => u.Id == userId);
+    
 
                 if (authedUser != null) 
                 {

@@ -2,18 +2,21 @@
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using FreshHarvestMarket.Data;
+using FreshHarvestMarket.Repositories;
 
 namespace FreshHarvestMarket.Services
 {
     public class CartService : ICartService
     {
         private readonly IHttpContextAccessor _http;
-        private readonly FreshHarvestContext _context;
+        private readonly IRepository<Produce> _produceRepo;
+        private readonly IRepository<Discount> _discountRepo;
 
-        public CartService(IHttpContextAccessor http, FreshHarvestContext context)
+        public CartService(IHttpContextAccessor http, IRepository<Produce> produceRepo, IRepository<Discount> discountRepo)
         {
             _http = http;
-            _context = context;
+            _produceRepo = produceRepo;
+            _discountRepo = discountRepo;
         }
 
         private ISession Session => _http.HttpContext!.Session;
@@ -43,7 +46,7 @@ namespace FreshHarvestMarket.Services
         public void AddItem(CartItem item)
         {
             var cart = GetCart();
-            var product = _context.Produce
+            var product = _produceRepo.GetAll()
                 .FirstOrDefault(p => p.ProduceId == item.ProduceId);
 
             if (product == null) return;
@@ -51,7 +54,7 @@ namespace FreshHarvestMarket.Services
             // Apply discount if user is logged in
             if (_http.HttpContext!.User.Identity!.IsAuthenticated)
             {
-                var discount = _context.Discounts
+                var discount = _discountRepo.GetAll()
                     .FirstOrDefault(d => d.ProduceId == product.ProduceId);
 
                 // If no discount, set DiscountAmount to 0, otherwise apply the discount
@@ -110,7 +113,7 @@ namespace FreshHarvestMarket.Services
             var item = cart.FirstOrDefault(x => x.ProduceId == produceId);
             if (item == null) return;
 
-            var product = _context.Produce
+            var product = _produceRepo.GetAll()
                 .FirstOrDefault(p => p.ProduceId == produceId);
 
             if (product == null)

@@ -10,5 +10,6 @@ namespace FreshHarvestMarket.Services
         void UpdateQuantity(int produceId, int quantity);
         decimal GetTotal();
         void ClearCart();
+        public void SaveCart(List<CartItem> cart);
     }
 }

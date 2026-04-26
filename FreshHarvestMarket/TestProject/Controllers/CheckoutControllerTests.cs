@@ -2,11 +2,15 @@
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
+using FreshHarvestMarket.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -129,20 +133,65 @@ namespace TestProject.Controllers
         }
 
         //Expects to retrieve the checkout view normally
+        [TestMethod]
         public void Get_Index_RetrievesViewSuccessfullyNoAuth()
         {
             //ARRANGE
             Mock<ICartService> mockCartService = new Mock<ICartService>();
-            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
             Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
             Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
+            mockContextAccessor.Setup(m => m.HttpContext.User.Identity.IsAuthenticated).Returns(false);
 
-            CheckoutController checkoutControllerTests = new CheckoutController(mockCartService.Object, mockUserManager.Object, mockUserRepo.Object, mockOrderItemRepo.Object);
+            //Mocking user manager is a pain in the butt. This post helped me and gives explanation to the weird mock/constructor
+            //https://stackoverflow.com/questions/49165810/how-to-mock-usermanager-in-net-core-testing
+            Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+
+            CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
+                mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object);
 
             //ACT
-            var result = checkoutControllerTests.Index();
+            var result = testController.Index();
 
             //ASSERT
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            
+            ViewResult viewResult = (ViewResult)result;
+            Assert.IsNotNull(viewResult.Model);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(CheckoutViewModel));
+        }
+
+        //Expects to retrieve the checkout view when authed
+        [TestMethod]
+        public void Get_Index_RetrievesViewSuccessfullyWithAuth()
+        {
+            //ARRANGE
+            Mock<ICartService> mockCartService = new Mock<ICartService>();
+            Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
+            Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
+            mockContextAccessor.Setup(m => m.HttpContext.User.Identity.IsAuthenticated).Returns(false);
+
+            //Mocking user manager is a pain in the butt. This post helped me and gives explanation to the weird mock/constructor
+            //https://stackoverflow.com/questions/49165810/how-to-mock-usermanager-in-net-core-testing
+            Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+
+            CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
+                mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object);
+
+            //ACT
+            var result = testController.Index();
+
+            //ASSERT
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            ViewResult viewResult = (ViewResult)result;
+            Assert.IsNotNull(viewResult.Model);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(CheckoutViewModel));
         }
     }
 
