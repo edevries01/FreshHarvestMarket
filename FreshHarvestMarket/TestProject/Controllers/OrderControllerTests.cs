@@ -333,7 +333,11 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+
+        //Mocking user manager is a pain in the butt. This post helped me and gives explanation to the weird mock/constructor
+        //https://stackoverflow.com/questions/49165810/how-to-mock-usermanager-in-net-core-testing
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 
