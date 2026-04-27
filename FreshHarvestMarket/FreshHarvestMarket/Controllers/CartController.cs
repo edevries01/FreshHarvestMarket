@@ -50,6 +50,7 @@ namespace FreshHarvestMarket.Controllers
             return View();
         }
 
+        
         [HttpPost]
         public IActionResult Update(int id, int quantity)
         {
@@ -68,5 +69,7 @@ namespace FreshHarvestMarket.Controllers
 
             return RedirectToAction("Index");
         }
+
+
     }
 }

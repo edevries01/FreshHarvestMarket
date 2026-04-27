@@ -1,4 +1,5 @@
 ﻿using FreshHarvestMarket.Models;
+using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

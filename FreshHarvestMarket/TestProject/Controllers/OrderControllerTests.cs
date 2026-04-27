@@ -116,7 +116,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object,mockProduceRepo.Object, mockUserManager.Object);
 
@@ -152,7 +153,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 
@@ -185,7 +187,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 
@@ -219,7 +222,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 
@@ -244,7 +248,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
         Order testOrder = testOrders.FirstOrDefault(o => o.OrderId == 1)!;
@@ -275,7 +280,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 
@@ -300,7 +306,8 @@ public class OrderControllerTests
         mockOrderRepo.Setup(r => r.GetAll()).Returns(testOrders);
         Mock<IOrderFiltersSession> mockOrderFilterSession = new Mock<IOrderFiltersSession>();
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
-        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>();
+        Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+        Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
         OrderController controller = new OrderController(mockOrderRepo.Object, mockOrderFilterSession.Object, mockProduceRepo.Object, mockUserManager.Object);
 

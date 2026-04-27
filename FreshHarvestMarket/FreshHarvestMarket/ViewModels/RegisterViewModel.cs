@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FreshHarvestMarket.Models
+namespace FreshHarvestMarket.ViewModels
 {
     public class RegisterViewModel
     {
