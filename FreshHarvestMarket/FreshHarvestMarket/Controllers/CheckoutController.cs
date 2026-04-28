@@ -20,13 +20,16 @@ namespace FreshHarvestMarket.Controllers
 
 
         public CheckoutController(ICartService cartService, UserManager<User> userManager, IRepository<User> userRepo, 
-            IRepository<OrderItem> orderItemRepo, IHttpContextAccessor contextAccessor)
+            IRepository<OrderItem> orderItemRepo, IHttpContextAccessor contextAccessor, IRepository<Discount> discountRepo,
+            IRepository<Order> orderRepo)
         {
             _cartService = cartService;
             _userManager = userManager;
             _userRepo = userRepo;
             _orderItemRepo = orderItemRepo;
             _contextAccessor = contextAccessor;
+            _discountRepo = discountRepo;
+            _orderRepo = orderRepo;
         }
 
         [HttpGet]

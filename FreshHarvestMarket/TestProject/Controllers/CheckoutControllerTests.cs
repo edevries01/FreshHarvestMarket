@@ -140,6 +140,8 @@ namespace TestProject.Controllers
             Mock<ICartService> mockCartService = new Mock<ICartService>();
             Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
             Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+            Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
             Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
             mockContextAccessor.Setup(m => m.HttpContext.User.Identity.IsAuthenticated).Returns(false);
 
@@ -149,7 +151,8 @@ namespace TestProject.Controllers
             Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
             CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
-                mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object);
+                mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object, mockDiscountRepo.Object,
+                mockOrderRepo.Object);
 
             //ACT
             var result = testController.Index();
@@ -171,6 +174,8 @@ namespace TestProject.Controllers
             Mock<ICartService> mockCartService = new Mock<ICartService>();
             Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
             Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+            Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
             Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
             mockContextAccessor.Setup(m => m.HttpContext.User.Identity.IsAuthenticated).Returns(false);
 
@@ -180,7 +185,8 @@ namespace TestProject.Controllers
             Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
 
             CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
-                mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object);
+                 mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object, mockDiscountRepo.Object,
+                 mockOrderRepo.Object);
 
             //ACT
             var result = testController.Index();

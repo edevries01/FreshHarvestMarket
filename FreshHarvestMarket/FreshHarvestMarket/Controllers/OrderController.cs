@@ -34,8 +34,7 @@ namespace FreshHarvestMarket.Controllers
         }
 
         /// <summary>
-        /// For now: Returns view with all of the orders. Applies some filters
-        /// In Future: After Identity, only return orders for signed-in user
+        /// Displays view with all orders for admins or just the user's orders for regular users
         /// </summary>
         /// <returns>View with display of existing orders</returns>
         public IActionResult Index(BrowseOrdersViewModel model)
@@ -48,7 +47,17 @@ namespace FreshHarvestMarket.Controllers
             //Cannot be null, due to [Authorize] requiring auth on this controller
             string userId = _userManager.GetUserId(User)!;
 
-            List<Order> allOrders = _orderRepo.GetAll().Where(o => o.UserId == userId).ToList();
+            //Get all orders if admin, user's orders if regular user
+            List<Order> allOrders;
+            if (User.IsInRole("Admin"))
+            {
+                allOrders = _orderRepo.GetAll().ToList();
+            }
+            else
+            {
+                allOrders = _orderRepo.GetAll().Where(o => o.UserId == userId).ToList();
+            }
+            
 
             // -------------------------
             // ACTIVE (only not finished)
@@ -246,15 +255,6 @@ namespace FreshHarvestMarket.Controllers
             _produceRepo.Save();
 
             return RedirectToAction("ManageOrders");
-        }
-
-        /// <summary>
-        /// Returns a view to filter and browse all orders including ones which can no longer be edited
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult BrowseOrders()
-        {
-            throw new NotImplementedException();
         }
     }
 }
