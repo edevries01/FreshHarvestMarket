@@ -1,4 +1,5 @@
-﻿@*
+﻿
+@*
     This view is the basic screen for viewing orders
     It allows you to view and filters orders. Orders can also be cancelled here
     Future: Users can only view THEIR orders. Admins can view all
@@ -6,8 +7,17 @@
 *@
 
 @model BrowseOrdersViewModel
+@inject SignInManager<User> signInManager
 <div class="row justify-content-center orders-page">
-    <h1 class="fw-bold">Your Orders</h1>
+    @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <h1 class="fw-bold">All Orders</h1>
+    }
+    else
+    {
+        <h1 class="fw-bold">Your Orders</h1>
+    }
+    
 </div>
 
 <div class="d-flex gap-2 justify-content-end mb-4 flex-wrap">
@@ -88,6 +98,13 @@
                     }
                     <td>
                         <a asp-controller="Order" asp-action="ViewOrder" asp-route-orderId="@order.OrderId" class="btn btn-outline-success">View Order</a>
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@order.OrderId" class="d-inline">
+                                <button type="submit" class="btn btn-primary">Fulfilled</button>
+                            </form>
+                            <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@order.OrderId" class="btn btn-danger">Reject</a>
+                        }
                     </td>
                 </tr>
             }
