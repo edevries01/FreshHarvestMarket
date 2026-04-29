@@ -251,6 +251,10 @@ footer {
     color: var(--text-dark);
 }
 
+.orders-page-bottom-space {
+    height: 80px;
+}
+
 /* Print Details on Confirmation Page*/
 @media print {
     nav, footer {
