@@ -139,16 +139,26 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult Create(Produce item)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _produceRepository.Insert(item);
-                _produceRepository.Save();
-                return RedirectToAction(nameof(ManageProduce));
+                return View(item);
             }
 
-            return View(item);
-        }
+            // Check for duplicate name (case-insensitive)
+            bool exists = _produceRepository.GetAll()
+                .Any(p => p.ProduceName.ToLower() == item.ProduceName.ToLower());
 
+            if (exists)
+            {
+                ModelState.AddModelError("ProduceName", "A product with this name already exists.");
+                return View(item);
+            }
+
+            _produceRepository.Insert(item);
+            _produceRepository.Save();
+
+            return RedirectToAction(nameof(ManageProduce));
+        }
 
         //[Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
@@ -162,13 +172,26 @@ namespace FreshHarvestMarket.Controllers
         [HttpPost]
         public IActionResult Edit(Produce item)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _produceRepository.Update(item);
-                _produceRepository.Save();
-                return RedirectToAction(nameof(ManageProduce));
+                return View(item);
             }
-            return View(item);
+
+            // Check for duplicate name (excluding the current item)
+            bool exists = _produceRepository.GetAll()
+                .Any(p => p.ProduceId != item.ProduceId &&
+                          p.ProduceName.Trim().ToLower() == item.ProduceName.Trim().ToLower());
+
+            if (exists)
+            {
+                ModelState.AddModelError("ProduceName", "A product with this name already exists.");
+                return View(item);
+            }
+
+            _produceRepository.Update(item);
+            _produceRepository.Save();
+
+            return RedirectToAction(nameof(ManageProduce));
         }
 
         //[Authorize(Roles = "Admin")]
