@@ -89,12 +89,12 @@ public class AccountControllerTests
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
         RedirectToActionResult redirectToActionResult = (RedirectToActionResult)result;
-        Assert.IsTrue(redirectToActionResult.ControllerName == "Account");
+        Assert.IsTrue(redirectToActionResult.ControllerName == "Home");
         Assert.IsTrue(redirectToActionResult.ActionName == "Index");
 
 
         //AssertCalls
-        mockUserManager.Verify(m => m.CreateAsync(It.IsAny<User>()), Times.Once);
+        mockUserManager.Verify(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]

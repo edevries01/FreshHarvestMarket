@@ -186,7 +186,7 @@ namespace FreshHarvestMarket.Controllers
             _orderRepo.Update(order);
             _orderRepo.Save();
                
-            return RedirectToAction("ManageOrders");
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace FreshHarvestMarket.Controllers
             }
 
             if (order.IsPickedUp)
-                return RedirectToAction("ManageOrders");
+                return RedirectToAction("Index");
 
             // hard stop validation when fulfilling
             foreach (var item in order.Items)
@@ -223,7 +223,7 @@ namespace FreshHarvestMarket.Controllers
                 {
                     TempData["Error"] =
                         $"Cannot fulfill order. Not enough inventory for {produce.ProduceName}.";
-                    return RedirectToAction("ManageOrders");
+                    return RedirectToAction("Index");
                 }
             }
 
@@ -254,7 +254,7 @@ namespace FreshHarvestMarket.Controllers
             // Save inventory changes
             _produceRepo.Save();
 
-            return RedirectToAction("ManageOrders");
+            return RedirectToAction("Index");
         }
     }
 }

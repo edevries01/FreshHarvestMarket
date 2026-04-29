@@ -1,5 +1,6 @@
 ﻿@*This view lets the operator view a specific order in more detail*@
 @model Order
+@inject SignInManager<User> signInManager
 
 <div class="justify-content-center">
     <div class="row">
@@ -69,9 +70,13 @@
         </tbody>
     </table>
 
-    <a asp-controller="Order" asp-action="ManageOrders" class="btn btn-primary">Manage Orders</a>
-    <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
-        <button type="submit" class="btn btn-primary">Fulfilled</button>
-    </form>
-    <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@Model.OrderId" class="btn btn-danger">Reject</a>
+    <a asp-controller="Order" asp-action="Index" class="btn btn-primary">All Orders</a>
+    
+    @if (!Model.IsPickedUp && !Model.Rejected && signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <form asp-action="UpdateFulfilled" method="post" asp-route-OrderId="@Model.OrderId" class="d-inline">
+            <button type="submit" class="btn btn-primary">Fulfilled</button>
+        </form>
+        <a asp-controller="Order" asp-action="ConfirmReject" asp-route-orderId="@Model.OrderId" class="btn btn-danger">Reject</a>
+    }
 </div>
