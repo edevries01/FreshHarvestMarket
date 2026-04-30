@@ -9,6 +9,14 @@
 @model BrowseOrdersViewModel
 @inject SignInManager<User> signInManager
 <div class="row justify-content-center orders-page">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
     {
         <h1 class="fw-bold">All Orders</h1>
