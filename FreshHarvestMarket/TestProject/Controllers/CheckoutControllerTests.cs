@@ -118,6 +118,16 @@ namespace TestProject.Controllers
             }
         }.AsQueryable();
 
+        List<CartItem> testCart = new List<CartItem>()
+        {
+            new CartItem()
+            {
+                ProduceId = 1,
+                Quantity = 10
+            },
+
+        };
+
         private void LoadTestDataProperties()
         {
             foreach (Discount discount in testDiscounts)
@@ -155,7 +165,7 @@ namespace TestProject.Controllers
                 mockOrderRepo.Object);
 
             //ACT
-            var result = testController.Index();
+            IActionResult result = testController.Index();
 
             //ASSERT
             Assert.IsNotNull(result);
@@ -189,7 +199,7 @@ namespace TestProject.Controllers
                  mockOrderRepo.Object);
 
             //ACT
-            var result = testController.Index();
+            IActionResult result = testController.Index();
 
             //ASSERT
             Assert.IsNotNull(result);
@@ -198,6 +208,165 @@ namespace TestProject.Controllers
             ViewResult viewResult = (ViewResult)result;
             Assert.IsNotNull(viewResult.Model);
             Assert.IsInstanceOfType(viewResult.Model, typeof(CheckoutViewModel));
+        }
+
+        /// <summary>
+        /// Scenario where we expect the attempt to fail due to model being invalid
+        /// </summary>
+        [TestMethod]
+        public void Post_PlaceOrder_ModelStateInvalid()
+        {
+            //ARRANGE
+            Mock<ICartService> mockCartService = new Mock<ICartService>();
+            Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
+            Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+            Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+            Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
+            Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+
+            CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
+                 mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object, mockDiscountRepo.Object,
+                 mockOrderRepo.Object);
+
+            testController.ModelState.AddModelError("Fake Key", "Fake Error Message");
+            CheckoutViewModel viewModel = new CheckoutViewModel();
+
+            //ACT
+            IActionResult result = testController.PlaceOrder(viewModel);
+
+            //ASSERT
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            ViewResult viewResult = (ViewResult)result;
+
+            Assert.IsInstanceOfType(viewResult.Model, typeof(CheckoutViewModel));
+        }
+
+        /// <summary>
+        /// Scenario where we expect the attempt to succeed where the user is signed-in
+        /// </summary>
+        [TestMethod]
+        public void Post_PlaceOrder_SuccessfulWhileSignedIn()
+        {
+            //https://stackoverflow.com/questions/38323895/how-to-add-claims-in-a-mock-claimsprincipal
+            //I had to do some research on how to get down the authenicated path... this might be useful for next person
+            //If we want to write more advanced tests will need to dig in deeper
+
+            //ARRANGE
+            Mock<ICartService> mockCartService = new Mock<ICartService>();
+            mockCartService.Setup(m => m.GetCart()).Returns(testCart);
+            Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
+            Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+            mockDiscountRepo.Setup(m => m.GetAll()).Returns(testDiscounts);
+            Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+            Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
+            Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+            mockUserManager.Setup(m => m.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns("123");
+
+
+            ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, "testuser")
+                }, "testauthtype"));
+
+            CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
+                 mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object, mockDiscountRepo.Object,
+                 mockOrderRepo.Object);
+
+
+            testController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            CheckoutViewModel viewModel = new CheckoutViewModel();
+
+
+            //ACT
+            IActionResult result = testController.PlaceOrder(viewModel);
+            
+            //ASSERT
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            ViewResult viewResult = (ViewResult)result;
+
+            Assert.IsInstanceOfType(viewResult.Model, typeof(ConfirmationViewModel));
+
+            //Assert calls
+            mockDiscountRepo.Verify(m => m.GetAll(), Times.Once);
+            mockUserManager.Verify(m => m.GetUserId(It.IsAny<ClaimsPrincipal>()), Times.Once);
+            mockOrderRepo.Verify(m => m.Insert(It.IsAny<Order>()), Times.Once);
+            mockOrderRepo.Verify(m => m.Save(), Times.Once);
+            mockCartService.Verify(m => m.GetCart(), Times.Between(2,2,Moq.Range.Inclusive));
+            mockOrderItemRepo.Verify(m => m.Insert(It.IsAny<OrderItem>()), Times.Once); //only one item in cart
+            mockOrderItemRepo.Verify(m => m.Save(), Times.Once);
+            mockCartService.Verify(m => m.ClearCart(), Times.Once);
+        }
+
+        /// <summary>
+        /// Scenario where we expect the attempt to succeed where the user is NOT sign-in
+        /// </summary>
+        [TestMethod]
+        public void Post_PlaceOrder_SuccessfulNotSignedIn()
+        {
+            //https://stackoverflow.com/questions/38323895/how-to-add-claims-in-a-mock-claimsprincipal
+            //I had to do some research on how to get down the authenicated path... this might be useful for next person
+            //If we want to write more advanced tests will need to dig in deeper
+
+            //ARRANGE
+            Mock<ICartService> mockCartService = new Mock<ICartService>();
+            mockCartService.Setup(m => m.GetCart()).Returns(testCart);
+            Mock<IRepository<User>> mockUserRepo = new Mock<IRepository<User>>();
+            Mock<IRepository<OrderItem>> mockOrderItemRepo = new Mock<IRepository<OrderItem>>();
+            Mock<IRepository<Discount>> mockDiscountRepo = new Mock<IRepository<Discount>>();
+            mockDiscountRepo.Setup(m => m.GetAll()).Returns(testDiscounts);
+            Mock<IRepository<Order>> mockOrderRepo = new Mock<IRepository<Order>>();
+            Mock<IHttpContextAccessor> mockContextAccessor = new Mock<IHttpContextAccessor>();
+            Mock<IUserStore<User>> store = new Mock<IUserStore<User>>();
+            Mock<UserManager<User>> mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
+
+            //Make it a new blank one this time should count as not signed-in
+            ClaimsPrincipal user = new ClaimsPrincipal(new ClaimsIdentity());
+
+            CheckoutController testController = new CheckoutController(mockCartService.Object, mockUserManager.Object,
+                 mockUserRepo.Object, mockOrderItemRepo.Object, mockContextAccessor.Object, mockDiscountRepo.Object,
+                 mockOrderRepo.Object);
+
+
+            testController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            CheckoutViewModel viewModel = new CheckoutViewModel();
+
+
+            //ACT
+            IActionResult result = testController.PlaceOrder(viewModel);
+
+            //ASSERT
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            ViewResult viewResult = (ViewResult)result;
+
+            Assert.IsInstanceOfType(viewResult.Model, typeof(ConfirmationViewModel));
+
+            //Assert calls
+            mockDiscountRepo.Verify(m => m.GetAll(), Times.Never);
+            mockUserManager.Verify(m => m.GetUserId(It.IsAny<ClaimsPrincipal>()), Times.Never);
+            mockOrderRepo.Verify(m => m.Insert(It.IsAny<Order>()), Times.Once);
+            mockOrderRepo.Verify(m => m.Save(), Times.Once);
+            mockCartService.Verify(m => m.GetCart(), Times.Between(2, 2, Moq.Range.Inclusive));
+            mockOrderItemRepo.Verify(m => m.Insert(It.IsAny<OrderItem>()), Times.Once); //only one item in cart
+            mockOrderItemRepo.Verify(m => m.Save(), Times.Once);
+            mockCartService.Verify(m => m.ClearCart(), Times.Once);
         }
     }
 
