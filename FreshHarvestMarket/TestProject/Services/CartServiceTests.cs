@@ -3,6 +3,8 @@ using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
@@ -243,6 +245,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
+        //I am adding it here, it should make the mock store/retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
@@ -295,6 +298,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
+        //I am adding it here, it should make the mock store/ retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
@@ -383,6 +387,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
+        //I am adding it here, it should make the mock store/retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
@@ -438,6 +443,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
+        //I am adding it here, it should make the mock store/ retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
