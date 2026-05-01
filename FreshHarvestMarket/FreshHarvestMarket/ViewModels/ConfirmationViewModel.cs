@@ -1,4 +1,18 @@
-﻿using FreshHarvestMarket.Models;
+﻿/*
+ * ConfirmationViewModel.cs
+ * FreshHarvestMarket
+ *
+ * This ViewModel is used to display order confirmation details
+ * after a customer successfully places an order.
+ *
+ * It contains customer information, order metadata, & the list
+ * of items included in the order.
+ *
+ * It also calculates the total cost of the order, applying discounts
+ * when applicable to each item.
+ */
+
+using FreshHarvestMarket.Models;
 
 namespace FreshHarvestMarket.ViewModels
 {

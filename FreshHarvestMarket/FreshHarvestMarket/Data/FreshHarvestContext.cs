@@ -1,4 +1,31 @@
-﻿using FreshHarvestMarket.Models;
+﻿/*
+ * FreshHarvestContext.cs
+ * FreshHarvestMarket
+ *
+ * This class represents the database context for the Fresh Harvest Market application.
+ *
+ * It manages the connection to the database & provides access to all entities,
+ * including:
+ * - Produce items
+ * - Orders & order items
+ * - Favorites
+ * - Discounts
+ * - Application users (via Identity)
+ *
+ * This context inherits from IdentityDbContext to integrate ASP.NET Identity
+ * for authentication & role-based authorization.
+ *
+ * It also configures relationships between entities, such as the one-to-one
+ * relationship between Produce & Discount.
+ *
+ * Seed data is provided for initial application setup, including sample produce,
+ * orders, order items, & discounts.
+ *
+ * Additionally, this class includes a helper method to create a default admin user
+ * & roles ("Admin" & "Regular") if they do not already exist in the system.
+ */
+
+using FreshHarvestMarket.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

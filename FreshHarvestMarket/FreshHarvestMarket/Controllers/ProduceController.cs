@@ -1,4 +1,27 @@
-﻿using FreshHarvestMarket.Data;
+﻿/*
+ * ProduceController.cs
+ * FreshHarvestMarket
+ *
+ * This controller manages all interactions related to produce items
+ * within the Fresh Harvest Market application.
+ *
+ * It handles:
+ * - Displaying available produce items with optional category filtering
+ * - Viewing detailed information for a specific produce item
+ * - Managing user favorites (add, view, remove)
+ * - Admin functionality for managing produce (create, edit, delete, update inventory)
+ *
+ * The controller uses repository services to interact with the database,
+ * promoting separation of concerns & easier testing.
+ *
+ * It also utilizes view models to organize & pass structured data
+ * between the controller & views.
+ *
+ * Some actions are intended for administrative use & may be secured
+ * with role-based authorization.
+ */
+
+using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;

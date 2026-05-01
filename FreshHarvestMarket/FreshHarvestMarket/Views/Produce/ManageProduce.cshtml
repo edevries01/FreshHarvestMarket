@@ -1,4 +1,20 @@
-﻿@*This view allows Admin to manage all produce*@
+﻿@*
+ * Produce/ ManageProduce.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides an administrative interface for managing
+ * all produce items in the system.
+ *
+ * Admin users can:
+ * - View all produce items in a tabular format
+ * - Add new produce items
+ * - Edit or delete existing produce items
+ * - Update inventory levels directly from the table
+ *
+ * This view uses a List<Produce> model to display & manage
+ * produce data in a CRUD-style interface.
+*@
+
 @model List<FreshHarvestMarket.Models.Produce>
 
 	<h2>Manage Produce</h2>

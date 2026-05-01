@@ -1,4 +1,20 @@
-﻿<div class="text-center">
+﻿@*
+    Default.cshtml
+    FreshHarvestMarket
+
+    This view renders the Weather ViewComponent output,
+    displaying current weather information for the marketplace.
+
+    It shows:
+    - Current temperature (in Fahrenheit)
+    - A contextual weather message based on conditions
+    - A simple, centered UI display for use in layouts or pages
+
+    This component helps inform users about weather conditions
+    that may affect their pickup experience at Fresh Harvest Market.
+*@
+
+<div class="text-center">
     <p class="mb-0">
         🌡️ @ViewBag.Temp°F — @ViewBag.Message
     </p>

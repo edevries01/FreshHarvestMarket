@@ -1,4 +1,25 @@
-﻿using FreshHarvestMarket.Models;
+﻿/*
+ * CartService.cs
+ * FreshHarvestMarket
+ *
+ * This service implements ICartService & manages all shopping cart
+ * functionality for the application.
+ *
+ * It stores cart data in the user session & provides logic for:
+ * - Adding & removing items from the cart
+ * - Updating item quantities with inventory limits
+ * - Applying discounts for authenticated users
+ * - Calculating the total cost of the cart
+ * - Persisting cart data using JSON serialization
+ *
+ * The service interacts with repositories to retrieve produce &
+ * discount data, ensuring accurate pricing & inventory control.
+ *
+ * This class follows a service layer pattern, separating business
+ * logic from controllers & views.
+ */
+
+using FreshHarvestMarket.Models;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using FreshHarvestMarket.Data;

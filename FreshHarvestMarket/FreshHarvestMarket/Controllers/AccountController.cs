@@ -1,4 +1,21 @@
-﻿using FreshHarvestMarket.Models;
+﻿/*
+ * AccountController.cs
+ * FreshHarvestMarket
+ *
+ * This controller manages user authentication & account-related actions.
+ *
+ * It is responsible for:
+ * - User registration and role assignment
+ * - User login with optional persistence (Remember Me)
+ * - User logout functionality
+ * - Redirect handling after login (ReturnUrl support)
+ * - Displaying access denied page for unauthorized users
+ *
+ * The controller integrates with ASP.NET Core Identity to manage users,
+ * roles, & authentication state throughout the application.
+ */
+
+using FreshHarvestMarket.Models;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

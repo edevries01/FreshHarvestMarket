@@ -1,3 +1,9 @@
+/// <summary>
+/// Contains unit tests for the HomeController class.
+/// Verifies that each action returns the expected ViewResult for basic navigation pages
+/// such as Index, Login, About, & Privacy.
+/// </summary>
+
 using FreshHarvestMarket.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -5,9 +11,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace TestProject;
 
-/// <summary>
-/// Contains all the tests for the HomeController class
-/// </summary>
 [TestClass]
 public class HomeControllerTests
 {

@@ -1,4 +1,21 @@
-﻿namespace FreshHarvestMarket.Models
+﻿/*
+ * CartItem.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a single item stored in the user's shopping cart.
+ *
+ * It is used to temporarily hold product information before an order is placed.
+ *
+ * It includes:
+ * - Product details (ID, name, image, price)
+ * - Quantity and maximum available stock
+ * - Calculated line total for the item
+ * - Optional discount information and discounted price calculation
+ *
+ * This model is session-based and is not persisted in the database.
+ */
+
+namespace FreshHarvestMarket.Models
 {
     public class CartItem
     {

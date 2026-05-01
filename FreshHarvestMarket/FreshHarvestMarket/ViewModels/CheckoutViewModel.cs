@@ -1,4 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+ * CheckoutViewModel
+ * FreshHarvestMarket
+ *
+ * This ViewModel is used to collect customer information during the checkout process.
+ *
+ * It captures the necessary details required to place an order, including:
+ * - First & last name
+ * - Email address
+ * - Phone number
+ * - Preferred pickup date
+ *
+ * Data annotations are used to validate user input, ensuring:
+ * - Required fields are completed
+ * - Proper formatting for names, email, & phone number
+ * - Pickup date is provided
+ */
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FreshHarvestMarket.ViewModels
 {

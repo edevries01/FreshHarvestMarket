@@ -1,4 +1,22 @@
-﻿@*This view lets the operator view a specific order in more detail*@
+﻿@*
+ * Order/ Details.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view displays detailed information for a specific order.
+ *
+ * It includes:
+ * - Order summary information (dates, total cost, status, & item count)
+ * - A breakdown of all items within the order, including product images
+ *   & quantities
+ *
+ * For authenticated admin users, the view also provides management actions:
+ * - Mark order as fulfilled
+ * - Reject order
+ *
+ * Access to administrative actions is restricted based on user role
+ * & order status.
+ *@
+
 @model Order
 @inject SignInManager<User> signInManager
 

@@ -18,7 +18,7 @@ public class CartItemTests
         {
             ProduceId = 1,
             Quantity = quantity,
-            ProduceName = "Zuccihini",
+            ProduceName = "Zucchini",
             Price = priceDecimal,
             DiscountAmount = discountAmount
         };

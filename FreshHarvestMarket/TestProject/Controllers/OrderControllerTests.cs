@@ -1,3 +1,10 @@
+/// <summary>
+/// Tests for the OrderController
+/// 
+/// Includes scenarios for viewing orders, rejecting orders,
+/// & fulfilling orders using mocked data.
+/// </summary>
+
 namespace TestProject;
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Data;

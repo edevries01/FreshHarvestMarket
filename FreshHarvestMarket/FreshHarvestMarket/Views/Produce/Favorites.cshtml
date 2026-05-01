@@ -1,7 +1,18 @@
-﻿@model FavoritesViewModel
-@*
-    This view is used to view/edit all favorites.
-*@
+﻿@*
+ * Produce/ Favorites.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view displays a user's favorite produce items.
+ * Users can view their saved favorites, navigate to item details,
+ * or remove items from their favorites list.
+ *
+ * This page uses the FavoritesViewModel to render a list of
+ * favorite produce items & handles conditional rendering when
+ * no favorites exist.
+ *@
+
+@model FavoritesViewModel
+
 @{
     ViewData["Title"] = "Your Favorites";
 

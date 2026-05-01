@@ -1,4 +1,24 @@
-﻿@model LoginViewModel
+﻿@*
+ * Account/Login.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides the user login form for the application.
+ *
+ * It allows existing users to authenticate by entering:
+ * - Username
+ * - Password
+ * - Optional "Remember Me" selection for persistent login
+ *
+ * The form uses the LoginViewModel for model binding & validation,
+ * & integrates with ASP.NET Core Identity authentication system.
+ *
+ * A return URL is supported to redirect users back to their original
+ * destination after successful login.
+ *
+ * Client-side validation is enabled to ensure valid input before submission.
+ *@
+
+@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
 }

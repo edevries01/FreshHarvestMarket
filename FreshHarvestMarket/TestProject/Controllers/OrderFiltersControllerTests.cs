@@ -1,3 +1,11 @@
+/// <summary>
+/// Unit tests for the OrderFiltersController.
+/// 
+/// Verifies that order filter selections are correctly stored in session
+/// & that the controller properly redirects back to the Order index view.
+/// Uses a mocked session service to isolate controller behavior.
+/// </summary>
+
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.ViewModels;

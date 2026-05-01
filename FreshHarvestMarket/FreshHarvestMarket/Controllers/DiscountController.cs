@@ -1,4 +1,24 @@
-﻿using FreshHarvestMarket.Data;
+﻿/*
+ * DiscountController.cs
+ * FreshHarvestMarket
+ *
+ * This controller manages discount functionality for produce items
+ * in the marketplace.
+ *
+ * It is responsible for:
+ * - Displaying all active discounts
+ * - Creating new discounts for eligible produce items
+ * - Editing existing discounts
+ * - Deleting discounts
+ *
+ * The controller ensures that each produce item can only have
+ * one associated discount at a time.
+ *
+ * This controller is intended to be restricted to admin/operator
+ * users, as it directly impacts pricing within the system.
+ */
+
+using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using Microsoft.AspNetCore.Mvc;

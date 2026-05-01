@@ -1,3 +1,12 @@
+/// <summary>
+/// Unit tests for the ProduceController.
+/// 
+/// Verifies behavior for retrieving, filtering, creating, editing,
+/// & deleting produce items, as well as managing favorites.
+/// Uses mocked repositories to isolate controller logic & ensure
+/// correct interactions with the data layer.
+/// </summary>
+
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;

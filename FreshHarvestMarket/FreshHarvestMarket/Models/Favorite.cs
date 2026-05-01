@@ -1,4 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+ * Favorite.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a favorited produce item in the system.
+ *
+ * It is used to track products that users mark as favorites for quick access.
+ *
+ * It includes:
+ * - A primary key for the Favorite record
+ * - A foreign key linking to a Produce item
+ * - A navigation property to the associated Produce
+ *
+ * ******** FIX WHEN UPDATED:****** User-based favorites are not implemented yet. Currently, favorites are
+ * treated as universal (not tied to a specific user). Future updates may
+ * include linking favorites to user accounts using Identity.
+ */
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FreshHarvestMarket.Models

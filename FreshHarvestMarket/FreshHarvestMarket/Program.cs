@@ -1,3 +1,17 @@
+/*
+ * Program.cs
+ * FreshHarvestMarket
+ * 
+ * Configures & runs the ASP.NET Core MVC application.
+ * - Registers MVC services and dependency injection
+ * - Configures Entity Framework Core with SQL Server
+ * - Sets up middleware pipeline and routing
+ * - Starts the web application
+ *
+ * Author: Fresh Harvest Market Team
+ * Course: CIS 174 - Advanced C#
+ */
+
 using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.OtherServices;

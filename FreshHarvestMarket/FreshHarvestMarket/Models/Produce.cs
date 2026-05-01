@@ -1,4 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+ * Produce.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a produce item available in the marketplace.
+ *
+ * It includes details such as:
+ * - Name & description of the item
+ * - Price per unit
+ * - Category (fruit, vegetable, other)
+ * - Inventory quantity available
+ * - Optional image reference
+ *
+ * Data annotations are used to enforce validation rules for required
+ * fields, value ranges, & input constraints.
+ *
+ * This model also includes a navigation property to an optional
+ * Discount, allowing discounted pricing to be applied when available.
+ */
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FreshHarvestMarket.Models
 {

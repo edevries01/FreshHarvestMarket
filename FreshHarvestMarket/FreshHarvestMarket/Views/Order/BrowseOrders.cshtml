@@ -1,10 +1,23 @@
-﻿
-@*
-    This view is the basic screen for viewing orders
-    It allows you to view and filters orders. Orders can also be cancelled here
-    Future: Users can only view THEIR orders. Admins can view all
-    Future: Add link to browse all orders, even fulfilled ones
-*@
+﻿@*
+ * Order/Index.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view serves as the main order management dashboard.
+ *
+ * It allows users & administrators to view & filter orders based on status:
+ * - Active orders
+ * - Past (fulfilled) orders
+ * - Cancelled orders
+ *
+ * Features include:
+ * - Role-based content (users see their orders, admins see all orders)
+ * - Order filtering system
+ * - Status indicators such as overdue, upcoming, & pickup today
+ * - Administrative actions to mark orders as fulfilled or reject orders
+ * - Navigation to detailed order views
+ *
+ * The view uses BrowseOrdersViewModel to organize orders & filter state.
+ *@
 
 @model BrowseOrdersViewModel
 @inject SignInManager<User> signInManager

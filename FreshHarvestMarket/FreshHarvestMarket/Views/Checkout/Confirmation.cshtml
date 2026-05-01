@@ -1,4 +1,24 @@
-﻿@model FreshHarvestMarket.ViewModels.ConfirmationViewModel
+﻿@*
+ * Order/Confirmation.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view displays the order confirmation & receipt page
+ * after a successful checkout.
+ *
+ * It provides a detailed summary of the completed order including:
+ * - Customer information & order number
+ * - Pickup details (location, date, & hours)
+ * - Full itemized order summary with pricing & quantities
+ * - Discounted pricing display for authenticated users
+ * - Total cost calculation & savings summary
+ *
+ * The view also provides a printable receipt option for user convenience.
+ *
+ * This page uses the ConfirmationViewModel to display finalized order data
+ * & does not allow further modifications.
+ *@
+
+@model FreshHarvestMarket.ViewModels.ConfirmationViewModel
 
 <h2>🎉 Order Confirmed!</h2>
 
