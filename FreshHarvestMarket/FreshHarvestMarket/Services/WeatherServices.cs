@@ -1,4 +1,20 @@
-﻿using System.Net.Http;
+﻿/*
+ * WeatherService.cs
+ * FreshHarvestMarket
+ *
+ * This service is responsible for retrieving current weather data
+ * from an external API (Open-Meteo).
+ *
+ * It uses HttpClient to send a request to the weather API &
+ * parses the JSON response to extract:
+ * - Current temperature (in Fahrenheit)
+ * - Weather condition code
+ *
+ * The data is returned as a tuple & used by the WeatherViewComponent
+ * to display weather information & user-friendly messages in the UI.
+ */
+
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 

@@ -1,4 +1,20 @@
-﻿namespace FreshHarvestMarket.ViewModels
+﻿/*
+ * OrderFilters.cs
+ * FreshHarvestMarket
+ *
+ * This class defines filter options used by BrowseOrdersViewModel
+ * to control which orders are displayed in the orders dashboard.
+ *
+ * It allows users & administrators to filter orders by status:
+ * - Active orders
+ * - Past (fulfilled) orders
+ * - Cancelled orders
+ *
+ * Each property determines whether a specific order type is included
+ * in the results displayed on the Orders page.
+ */
+
+namespace FreshHarvestMarket.ViewModels
 {
     /// <summary>
     /// Contains the filters of a BrowseOrdersViewModel

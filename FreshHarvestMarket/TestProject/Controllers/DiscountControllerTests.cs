@@ -1,3 +1,8 @@
+/// <summary>
+/// Unit tests for the OrderItem model.
+/// Verifies correct calculation of total price based on quantity & produce unit price.
+/// </summary>
+
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;

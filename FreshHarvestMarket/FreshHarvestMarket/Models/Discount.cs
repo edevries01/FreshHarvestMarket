@@ -1,4 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿/*
+ * Discount.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a discount applied to a specific produce item.
+ *
+ * It is used to support promotional pricing in the marketplace.
+ *
+ * It includes:
+ * - A percentage-based discount amount (1%–99%)
+ * - A required link to a Produce item via foreign key
+ * - A navigation property to access the related Produce entity
+ *
+ * Data annotations are used to enforce validation rules such as required fields
+ * & valid discount percentage ranges.
+ */
+
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 

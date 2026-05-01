@@ -1,4 +1,23 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@*
+ * _Layout.cshtml
+ * FreshHarvestMarket
+ *
+ * This is the main shared layout for the application.
+ * It defines the overall structure of all pages, including:
+ * - Navigation bar with role-based menu options (User/Admin)
+ * - Authentication-aware UI (Login, Logout, Register)
+ * - Shopping cart and favorites navigation
+ * - Admin management dropdown (Produce, Discounts)
+ *
+ * It also includes:
+ * - Bootstrap & styling references
+ * - Footer with contact information & weather component
+ * - Script & section rendering for child views
+ *
+ * This layout is applied to all Razor views in the application.
+ *@
+
+@using Microsoft.AspNetCore.Identity
 @using FreshHarvestMarket.Models;
 @inject SignInManager<User> signInManager
 

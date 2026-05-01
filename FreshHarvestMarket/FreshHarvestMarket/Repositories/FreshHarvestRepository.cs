@@ -1,4 +1,21 @@
-﻿using FreshHarvestMarket.Data;
+﻿/*
+ * FreshHarvestRepository.cs
+ * FreshHarvestMarket
+ *
+ * This class provides a generic implementation of the IRepository interface
+ * using Entity Framework Core for data access.
+ *
+ * It supports basic CRUD operations (Create, Read, Update, Delete) for
+ * any entity type in the FreshHarvest database.
+ *
+ * This repository can be used as a general-purpose data access layer
+ * when a more specialized repository is not required.
+ *
+ * It interacts with the FreshHarvestContext & DbSet<T> to perform
+ * database operations and persist changes.
+ */
+
+using FreshHarvestMarket.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace FreshHarvestMarket.Repositories

@@ -1,4 +1,20 @@
-﻿@*Screen for adding/editing a discount*@
+﻿@*
+ * Discount/Add/Edit.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides a form for creating or editing discounts.
+ *
+ * It is used by administrators to:
+ * - Assign a discount percentage to a produce item
+ * - Edit existing discount values
+ *
+ * The form is populated with a list of available Produce items
+ * & binds a Discount model using ASP.NET Core model binding.
+ *
+ * Client-side validation is enabled to ensure valid discount input.
+ *@
+
+@*Screen for adding/editing a discount*@
 @model Discount
 
 <h2 class="mb-3">

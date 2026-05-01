@@ -1,5 +1,20 @@
+/*
+ * OrderItem.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a single item within an order.
+ *
+ * It links a purchased produce item to an order & stores:
+ * - The selected produce item (via ProduceId & navigation property)
+ * - Quantity purchased
+ * - Calculated total price for the line item
+ * - Relationship back to the parent Order
+ *
+ * This model supports both order history & shopping cart functionality,
+ * where Order may be null until the item is finalized into an order.
+ */
 
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FreshHarvestMarket.Models

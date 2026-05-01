@@ -1,4 +1,23 @@
-﻿using FreshHarvestMarket.Data;
+﻿/*
+ * CheckoutController.cs
+ * FreshHarvestMarket
+ *
+ * This controller handles the checkout process for customer orders.
+ *
+ * It is responsible for:
+ * - Displaying the checkout form
+ * - Pre-filling user information when logged in
+ * - Validating submitted checkout data
+ * - Applying discounts for authenticated users
+ * - Creating & saving orders & associated order items
+ * - Clearing the shopping cart after order placement
+ * - Returning an order confirmation view with summary details
+ *
+ * The controller integrates with the cart service, user management,
+ * & repository services to complete the order workflow.
+ */
+
+using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;

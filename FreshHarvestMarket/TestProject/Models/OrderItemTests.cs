@@ -1,3 +1,11 @@
+/// <summary>
+/// Unit tests for the OrderItem model.
+/// 
+/// Verifies calculations related to individual order items,
+/// such as computing the total price based on produce price
+/// & quantity.
+/// </summary>
+
 using FreshHarvestMarket.Models;
 
 namespace TestProject;
@@ -26,7 +34,7 @@ public class OrderItemTests
             Produce = new Produce()
             {
                 ProduceId = 1,
-                ProduceName = "Zuccihini",
+                ProduceName = "Zucchini",
                 ProduceDescription = "Fresh green zucchinis",
                 UnitPrice = 1.20m,
                 ProduceCategory = "Vegetable",

@@ -1,9 +1,23 @@
-﻿using System.Text.Json;
+﻿/*
+ * SessionExtensions.cs
+ * FreshHarvestMarket
+ *
+ * This static class provides extension methods for ISession to simplify
+ * storing and retrieving complex objects in session state.
+ *
+ * It allows objects to be serialized into JSON strings when stored,
+ * and deserialized back into their original types when retrieved.
+ *
+ * This makes session storage more flexible by supporting complex data
+ * types beyond simple strings.
+ */
+
+using System.Text.Json;
 
 namespace FreshHarvestMarket.Extensions
 {
     /// <summary>
-    /// Extension for ISession reccomended by our textbook. It allows us to more easily store and retrieve session data.
+    /// Extension for ISession recommended by our textbook. It allows us to more easily store and retrieve session data.
     /// It basically just wraps up serialization/deserialization for generic objects
     /// This lets us store more complex objects as strings in the session data
     /// </summary>

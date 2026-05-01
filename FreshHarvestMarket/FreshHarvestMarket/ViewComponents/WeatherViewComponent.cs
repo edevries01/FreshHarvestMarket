@@ -1,4 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * WeatherViewComponent.cs
+ * FreshHarvestMarket
+ *
+ * This ViewComponent is responsible for retrieving & displaying
+ * current weather information on the application UI.
+ *
+ * It uses the WeatherService to fetch temperature and weather condition
+ * data, then generates a user-friendly message based on the results.
+ *
+ * The output is displayed in the shared layout (footer) to inform users
+ * about weather conditions that may affect pickup plans.
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using FreshHarvestMarket.Services;
 
 namespace FreshHarvestMarket.ViewComponents

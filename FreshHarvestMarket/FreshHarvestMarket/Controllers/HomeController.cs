@@ -1,3 +1,20 @@
+/*
+ * HomeController.cs
+ * FreshHarvestMarket
+ *
+ * This controller handles general navigation & static pages
+ * for the application.
+ *
+ * It is responsible for:
+ * - Displaying the home (landing) page
+ * - Providing access to informational pages such as About & Privacy
+ * - Serving the login page entry point
+ * - Handling application-level error display
+ *
+ * This controller does not directly manage business logic or data,
+ * but instead routes users to the appropriate views.
+ */
+
 using System.Diagnostics;
 using FreshHarvestMarket.Models;
 using Microsoft.AspNetCore.Mvc;

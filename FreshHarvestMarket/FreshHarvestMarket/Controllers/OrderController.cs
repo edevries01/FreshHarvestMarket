@@ -1,4 +1,26 @@
-﻿using FreshHarvestMarket.Data;
+﻿/*
+ * OrderController.cs
+ * FreshHarvestMarket
+ *
+ * This controller manages all functionality related to customer orders.
+ *
+ * It handles:
+ * - Displaying orders for users & administrators
+ * - Filtering orders (active, past, cancelled) using session-based filters
+ * - Viewing detailed information for a specific order
+ * - Admin actions such as fulfilling & rejecting orders
+ *
+ * The controller enforces authorization, ensuring that only authenticated
+ * users can access order data, & restricts certain actions to Admin users.
+ *
+ * It utilizes repository services for database interaction & integrates
+ * with ASP.NET Identity to associate orders with specific users.
+ *
+ * Business logic includes inventory validation when fulfilling orders,
+ * preventing orders from being completed if stock is insufficient.
+ */
+
+using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.Repositories;
@@ -44,10 +66,10 @@ namespace FreshHarvestMarket.Controllers
                 model.Filters = _orderFiltersSession.GetFilters()!;
             }
 
-            //Cannot be null, due to [Authorize] requiring auth on this controller
+            // Cannot be null, due to [Authorize] requiring auth on this controller
             string userId = _userManager.GetUserId(User)!;
 
-            //Get all orders if admin, user's orders if regular user
+            // Get all orders if admin, user's orders if regular user
             List<Order> allOrders;
             if (User.IsInRole("Admin"))
             {
@@ -104,12 +126,12 @@ namespace FreshHarvestMarket.Controllers
             return View("BrowseOrders", model);
         }
 
-        //Add one for admins to view all orders
+        // Add one for admins to view all orders
         /// <summary>
         /// Returns a view for managing orders. Displays all orders, with overdue ones at the top, upcoming ones below.
-        /// Has a button for marking an order as fufilled, and another for rejecting an order
+        /// Has a button for marking an order as fulfilled, and another for rejecting an order
         /// </summary>
-        /// <returns>View with all unfufilled orders</returns>
+        /// <returns>View with all unfulfilled orders</returns>
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult ManageOrders()
@@ -140,7 +162,7 @@ namespace FreshHarvestMarket.Controllers
 
             if (order == null)
             {
-                RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(order);
@@ -180,7 +202,7 @@ namespace FreshHarvestMarket.Controllers
                 return NotFound();
             }
 
-            //Set rejected to true
+            // Set rejected to true
             order.Rejected = true;
 
             _orderRepo.Update(order);
@@ -237,7 +259,7 @@ namespace FreshHarvestMarket.Controllers
                 {
                     produce.InventoryTotal -= item.Quantity;
 
-                    // prevents negative inventory
+                    // Prevents negative inventory
                     if (produce.InventoryTotal < 0)
                     {
                         produce.InventoryTotal = 0;

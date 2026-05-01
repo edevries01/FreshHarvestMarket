@@ -1,3 +1,16 @@
+/// <summary>
+/// Contains unit tests for the AccountController class.
+/// 
+/// These tests validate:
+/// - User registration (valid & invalid model states)
+/// - Login functionality (successful, failed, & redirect scenarios)
+/// - Logout behavior
+/// - Access denied view rendering
+/// 
+/// Dependencies such as UserManager & SignInManager are mocked using Moq
+/// to ensure tests focus only on controller logic.
+/// </summary
+
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Services;

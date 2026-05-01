@@ -1,4 +1,19 @@
-﻿using FreshHarvestMarket.Extensions;
+﻿/*
+ * OrderFiltersSession.cs
+ * FreshHarvestMarket
+ *
+ * This service manages the persistence of order filter settings
+ * for the Browse Orders page using session storage.
+ *
+ * It allows filter selections (active, past, cancelled) to be saved
+ * & restored across requests, providing a consistent user experience.
+ *
+ * The service uses session extension methods to serialize &
+ * deserialize the OrderFilters object.
+ */
+
+
+using FreshHarvestMarket.Extensions;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Http;
 

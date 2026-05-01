@@ -1,4 +1,19 @@
-﻿using FreshHarvestMarket.OtherServices;
+﻿/*
+ * OrderFiltersController.cs
+ * FreshHarvestMarket
+ *
+ * This controller is responsible for managing filter settings
+ * on the Browse Orders screen.
+ *
+ * It updates filter preferences (such as active, past, & cancelled orders)
+ * & stores them in session using the IOrderFiltersSession service.
+ *
+ * The controller follows the Post-Redirect-Get (PRG) pattern by saving
+ * the updated filters & then redirecting back to the main Order view,
+ * ensuring a clean URL & preventing duplicate submissions.
+ */
+
+using FreshHarvestMarket.OtherServices;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 

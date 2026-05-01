@@ -1,4 +1,20 @@
-﻿// Cart Controller.cs
+﻿/*
+ * CartController.cs
+ * FreshHarvestMarket
+ *
+ * This controller manages the shopping cart functionality for the application.
+ *
+ * It is responsible for:
+ * - Displaying the current cart contents
+ * - Adding items to the cart from the product catalog
+ * - Removing items from the cart
+ * - Updating item quantities with inventory validation
+ * - Calculating & displaying the cart total
+ * - Redirecting users to checkout
+ *
+ * The controller interacts with the CartService to maintain session-based
+ * cart state & ensure inventory limits are respected.
+ */
 
 using FreshHarvestMarket.Services;
 using Microsoft.AspNetCore.Mvc;

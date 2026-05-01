@@ -1,4 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+ * RegisterViewModel.cs
+ * FreshHarvestMarket
+ *
+ * This ViewModel is used for user registration input in the application.
+ *
+ * It collects & validates user-provided data required to create
+ * a new account, including:
+ * - Username, first name, & last name
+ * - Email address
+ * - Password & password confirmation
+ *
+ * Data annotations are used to enforce validation rules such as:
+ * - Required fields
+ * - String length constraints
+ * - Email format validation
+ * - Password confirmation matching
+ *
+ * This class is used in the Account/Register view & is part of the
+ * ASP.NET Core Identity registration workflow.
+ */
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FreshHarvestMarket.ViewModels
 {

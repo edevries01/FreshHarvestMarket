@@ -1,4 +1,20 @@
-﻿﻿
+﻿@*
+ * Account/Register.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides the user registration form for the application.
+ *
+ * It allows new users to create an account by entering:
+ * - Username, first name, & last name
+ * - Email address
+ * - Password & password confirmation
+ *
+ * The form uses the RegisterViewModel for model binding & validation,
+ * & integrates with ASP.NET Core Identity for user account creation.
+ *
+ * Client-side validation is enabled to ensure correct input before submission.
+ *@
+﻿
 @model RegisterViewModel
 @{
     ViewBag.Title = "Register";

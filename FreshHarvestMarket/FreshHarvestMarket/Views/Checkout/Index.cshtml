@@ -1,4 +1,22 @@
-﻿@model FreshHarvestMarket.ViewModels.CheckoutViewModel
+﻿@*
+ * Order/Checkout.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides the checkout form for placing an order.
+ *
+ * It collects customer & order information including:
+ * - First & last name
+ * - Email & phone number
+ * - Desired pickup date
+ *
+ * The form uses the CheckoutViewModel for model binding & validation,
+ * & submits the completed order to the PlaceOrder action.
+ *
+ * Client-side validation is enabled to ensure valid user input
+ * before submitting the order.
+ *@
+
+@model FreshHarvestMarket.ViewModels.CheckoutViewModel
 
 <h2>Checkout</h2>
 

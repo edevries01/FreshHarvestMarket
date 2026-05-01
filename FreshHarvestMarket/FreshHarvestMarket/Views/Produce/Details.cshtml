@@ -1,4 +1,22 @@
-﻿@model Produce
+﻿@*
+ * Produce/Details.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view displays detailed information for a single produce item.
+ *
+ * It shows product information including:
+ * - Name, category, description, & image
+ * - Price with optional discount logic
+ * - Inventory availability
+ * - Conditional discount messaging based on user authentication
+ *
+ * Authenticated users may see & receive discounted pricing,
+ * while unauthenticated users are prompted to sign in to access discounts.
+ *
+ * Users can also add the item to their favorites list.
+ *@
+
+@model Produce
 @{
 	ViewData["Title"] = "Details - " + Model.ProduceName;
 }

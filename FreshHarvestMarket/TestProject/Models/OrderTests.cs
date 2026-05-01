@@ -1,3 +1,12 @@
+/// <summary>
+/// Unit tests for the Order model.
+/// 
+/// Verifies order-related logic such as calculating order totals using
+/// in-memory database data. This allows testing of Order behavior,
+/// including relationships with OrderItems & Produce, without
+/// requiring a real database connection.
+/// </summary>
+
 using FreshHarvestMarket.Data;
 using FreshHarvestMarket.Models;
 using Microsoft.EntityFrameworkCore;

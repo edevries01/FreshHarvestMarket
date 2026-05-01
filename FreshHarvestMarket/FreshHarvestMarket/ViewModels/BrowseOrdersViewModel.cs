@@ -1,4 +1,20 @@
-﻿using FreshHarvestMarket.Models;
+﻿/*
+ * BrowseOrdersViewModel.cs
+ * FreshHarvestMarket
+ *
+ * This ViewModel is used to supply data for the Browse Orders page.
+ *
+ * It organizes orders into three categories:
+ * - Active orders (upcoming or overdue orders)
+ * - Past orders (completed/fulfilled orders)
+ * - Cancelled orders (rejected orders)
+ *
+ * It also includes filter settings that allow users & administrators
+ * to control which order types are displayed on the page.
+ */
+
+
+using FreshHarvestMarket.Models;
 
 namespace FreshHarvestMarket.ViewModels
 {

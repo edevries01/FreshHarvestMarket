@@ -1,4 +1,11 @@
-﻿using FreshHarvestMarket.Controllers;
+﻿/// <summary>
+/// Tests for the CheckoutController
+/// 
+/// Includes scenarios for viewing checkout & placing orders
+/// with & without authentication, as well as validation failures.
+/// </summary>
+
+using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.Services;

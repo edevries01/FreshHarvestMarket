@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * Order.cs
+ * FreshHarvestMarket
+ *
+ * This class represents a customer order in the Fresh Harvest Market system.
+ *
+ * It includes:
+ * - A collection of order items (products purchased & their quantities)
+ * - Order totals and pricing information
+ * - Order lifecycle tracking (date placed, pickup date, status flags)
+ * - Optional association to a user account
+ *
+ * The class also contains logic to calculate and update the total order cost,
+ * ensuring the final price is locked in before fulfillment or rejection.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -60,7 +76,7 @@ namespace FreshHarvestMarket.Models
         public bool Rejected { get; set; }
 
         /// <summary>
-        /// Navagation property
+        /// Navigation property
         /// </summary>
         [ForeignKey("UserId")]
         public User? User { get; set; }

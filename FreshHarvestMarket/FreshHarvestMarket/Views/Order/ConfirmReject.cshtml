@@ -1,4 +1,16 @@
-﻿@*This screen has the operator hit confirm before rejecting an order*@
+﻿@*
+ * Order/ConfirmReject.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view provides a confirmation step before an order is rejected.
+ *
+ * It is used by administrators to prevent accidental rejection of an order
+ * by requiring explicit confirmation before executing the action.
+ *
+ * The view posts the rejection request to the UpdateRejected action if confirmed,
+ * or allows the user to cancel & return to the order list.
+ *@
+
 @model Order
 
 

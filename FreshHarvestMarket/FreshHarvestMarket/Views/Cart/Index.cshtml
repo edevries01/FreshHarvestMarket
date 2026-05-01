@@ -1,4 +1,24 @@
-﻿@model List<FreshHarvestMarket.Models.CartItem>
+﻿@*
+ * Cart/Index.cshtml
+ * FreshHarvestMarket
+ *
+ * This Razor view displays the user's shopping cart & allows
+ * management of selected produce items prior to checkout.
+ *
+ * Users can:
+ * - View items currently in their cart
+ * - Update item quantities
+ * - Remove items from the cart
+ * - View itemized pricing with optional discounts
+ * - Proceed to checkout or continue shopping
+ *
+ * The view dynamically calculates totals & displays discounted pricing
+ * for authenticated users when applicable.
+ *
+ * If the cart is empty, the user is prompted to begin shopping.
+ *@
+
+@model List<FreshHarvestMarket.Models.CartItem>
 
 <h2>Your Cart</h2>
 

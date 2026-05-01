@@ -1,3 +1,10 @@
+/// <summary>
+/// Tests for the CartController
+/// 
+/// Includes scenarios for adding, removing, & updating cart items,
+/// as well as viewing the cart & checkout page.
+/// </summary>
+
 using FreshHarvestMarket.Controllers;
 using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Services;
