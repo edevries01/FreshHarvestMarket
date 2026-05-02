@@ -26,6 +26,7 @@ using FreshHarvestMarket.Models;
 using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,11 +36,16 @@ namespace FreshHarvestMarket.Controllers
     {
         private IRepository<Produce> _produceRepository;
         private IRepository<Favorite> _favoriteRepository;
+        private readonly UserManager<User> _userManager;
 
-        public ProduceController(IRepository<Produce> produceRepository, IRepository<Favorite> favoriteRepository)
+        public ProduceController(
+            IRepository<Produce> produceRepository, 
+            IRepository<Favorite> favoriteRepository,
+            UserManager<User> userManager)
         {
             _produceRepository = produceRepository;
             _favoriteRepository = favoriteRepository;
+            _userManager = userManager;
         }
 
         //Retrieves a list of produce from the database, filtered by catgetory (optional)
@@ -54,6 +60,8 @@ namespace FreshHarvestMarket.Controllers
                 produceQuery = produceQuery.Where(p => p.ProduceCategory == category);
             }
 
+            var userId = _userManager.GetUserId(User);
+
             var viewModel = new BrowseProduceViewModel
             {
                 ProduceItems = produceQuery.ToList(),
@@ -64,6 +72,7 @@ namespace FreshHarvestMarket.Controllers
                     .ToList(),
 
                  FavoriteIds = _favoriteRepository.GetAll()
+                    .Where(f => f.UserId == userId)
                     .Select(f => f.ProduceId)
                     .ToList()
             };
@@ -87,14 +96,22 @@ namespace FreshHarvestMarket.Controllers
         }
 
         //Add Favorites
+        [Authorize]
         [HttpPost]
         public IActionResult AddFavorite(int produceId)
         {
-            var existing = _favoriteRepository.GetAll().FirstOrDefault(f => f.ProduceId == produceId);
+            var userId = _userManager.GetUserId(User);
+
+            var existing = _favoriteRepository.GetAll()
+                .FirstOrDefault(f => f.ProduceId == produceId && f.UserId == userId);
 
             if (existing == null)
             {
-                var favorite = new Favorite { ProduceId = produceId };
+                var favorite = new Favorite 
+                { 
+                    ProduceId = produceId,
+                    UserId = userId
+                };
 
                 _favoriteRepository.Insert(favorite);
                 _favoriteRepository.Save();
@@ -105,10 +122,15 @@ namespace FreshHarvestMarket.Controllers
         }
 
         //Get Produce/Favorites
+        [Authorize]
         public IActionResult Favorites()
         {
+            var userId = _userManager.GetUserId(User);
+
             // Join Favorites table with Produce table to get full details
-            var favorites = _favoriteRepository.GetAll().ToList();
+            var favorites = _favoriteRepository.GetAll()
+                .Where(f => f.UserId == userId)
+                .ToList();
 
                 var favoriteItems = _produceRepository.GetAll()
                     .ToList()
@@ -127,11 +149,15 @@ namespace FreshHarvestMarket.Controllers
         }
 
         //Post Produce/DeleteFavorite
+        [Authorize]
         [HttpPost]
         public IActionResult DeleteFavorite(int produceId)
         {
+            var userId = _userManager.GetUserId(User);
+
             //Find record in Favorites table
-            var favorite = _favoriteRepository.GetAll().FirstOrDefault(f => f.ProduceId == produceId);
+            var favorite = _favoriteRepository.GetAll()
+                .FirstOrDefault(f => f.ProduceId == produceId && f.UserId == userId);
 
             if (favorite != null)
             {

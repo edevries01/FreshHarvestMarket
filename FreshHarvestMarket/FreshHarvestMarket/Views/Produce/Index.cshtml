@@ -21,6 +21,20 @@
 
 }
 
+@if (!User.Identity.IsAuthenticated)
+{
+	<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+		<strong>Want to save favorites?</strong> Log in to add items to your favorites list.
+
+		<button type="button"
+				class="btn-close"
+				data-bs-dismiss="alert"
+				aria-label="Close">
+		</button>
+	</div>
+}
+
+
 <div class="row">
 	<div class="col-md-3">
 		<h4 class="fw-bold mb-3 text-success">Categories</h4>
@@ -138,14 +152,23 @@
 								</button>
 							}
 
-							<form asp-action="AddFavorite" method="post" class="mt-2 text-end">
-								<input type="hidden" name="produceId" value="@item.ProduceId" />
-								<button type="submit" class="btn border-0 bg-transparent p-0 shadow-none heart-btn">
-									<i class="bi @(isFavorite ? "bi-heart-fill" : "bi-heart") fs-4 text-danger heart-icon"></i>
-								</button>
+							@if (User.Identity.IsAuthenticated)
+							{
+								<form asp-controller="Produce" asp-action="AddFavorite" method="post" class="mt-2 text-end">
+									<input type="hidden" name="produceId" value="@item.ProduceId" />
+									<button type="submit" class="btn border-0 bg-transparent p-0 shadow-none heart-btn">
+										<i class="bi @(isFavorite ? "bi-heart-fill" : "bi-heart") fs-4 text-danger heart-icon"></i>
+									</button>
 
-							</form>
-						
+								</form>
+							}
+							else
+							{
+								<a asp-area="Identity" asp-page="/Account/Login" class="text-danger" title="Log in to add favorites">
+									<i class="bi bi-heart fs-4"></i>
+								</a>
+							}
+
 						</div>
 
 					</div>

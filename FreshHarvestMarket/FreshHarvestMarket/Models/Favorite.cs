@@ -38,6 +38,11 @@ namespace FreshHarvestMarket.Models
         public int ProduceId { get; set; }
 
         /// <summary>
+        /// The ID of the user who favorited item
+        /// </summary>
+        public string? UserId { get; set; }
+
+        /// <summary>
         /// The favorited produce item
         /// </summary>
         [Required]

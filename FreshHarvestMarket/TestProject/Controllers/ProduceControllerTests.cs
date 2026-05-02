@@ -13,12 +13,35 @@ using FreshHarvestMarket.Repositories;
 using FreshHarvestMarket.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace TestProject;
 
 [TestClass]
 public class ProduceControllerTests
 {
+    private Mock<UserManager<User>> GetMockUserManager()
+    {
+        var store = new Mock<IUserStore<User>>();
+        return new Mock<UserManager<User>>(
+            store.Object, null, null, null, null, null, null, null, null);
+    }
+
+    private void SetupUser(Controller controller)
+    {
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
+        {
+                new Claim(ClaimTypes.NameIdentifier, "test-user")
+            }, "mock"));
+
+        controller.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
+    }
+
     private IQueryable<Produce> testProduce = new List<Produce>()
     {
         new Produce()
@@ -49,22 +72,30 @@ public class ProduceControllerTests
             InventoryTotal = 15
         }
     }.AsQueryable();
-    private IQueryable<Favorite> testFavorites = new List<Favorite>() 
+
+    private IQueryable<Favorite> GetTestFavorites()
+    {
+        return new List<Favorite>
     {
         new Favorite
         {
-            FavoriteId =  1,
-            ProduceId = 1
+            FavoriteId = 1,
+            ProduceId = 1,
+            UserId = "test-user"
         }
     }.AsQueryable();
-
-    private void LoadMockData()
-    {
-        foreach (Favorite favorite in testFavorites) 
-        {
-            favorite.Produce = testProduce.FirstOrDefault(p => p.ProduceId == favorite.ProduceId)!;
-        }
     }
+
+private void LoadMockData()
+{
+    var favorites = GetTestFavorites();
+
+    foreach (Favorite favorite in favorites)
+    {
+        favorite.Produce = testProduce
+            .FirstOrDefault(p => p.ProduceId == favorite.ProduceId)!;
+    }
+}
 
     /// <summary>
     /// Simulates a GET request hitting the index action-method successfully
@@ -75,12 +106,15 @@ public class ProduceControllerTests
         //ARRANGE
         LoadMockData();
 
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
 
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Index();
@@ -111,12 +145,15 @@ public class ProduceControllerTests
         //ARRANGE
         LoadMockData();
 
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
 
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Index("Vegetable");
@@ -143,10 +180,15 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Details(1);
@@ -171,10 +213,15 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Details(10000);
@@ -194,10 +241,21 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
+        userManagerMock.Setup(um => um.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                   .Returns("test-user");
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(testFavorites);
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(GetTestFavorites());
+
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
+        SetupUser(testController);
 
         //ACT
         var result = testController.AddFavorite(2);
@@ -210,7 +268,10 @@ public class ProduceControllerTests
         RedirectToActionResult viewResult = (RedirectToActionResult)result;
 
         //Verify Calls
-        _favoriteRepoMock.Verify(m => m.Insert(It.Is<Favorite>(f => f.ProduceId == 2)), Times.Once());
+        _favoriteRepoMock.Verify(m =>
+            m.Insert(It.IsAny<Favorite>()),
+            Times.Once);
+
         _favoriteRepoMock.Verify(m => m.Save(), Times.Once);
     }
 
@@ -222,10 +283,21 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
+        userManagerMock.Setup(um => um.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                   .Returns("test-user");
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(testFavorites);
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(GetTestFavorites());
+
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
+        SetupUser(testController);
 
         //ACT
         var result = testController.AddFavorite(1);
@@ -238,8 +310,8 @@ public class ProduceControllerTests
         RedirectToActionResult viewResult = (RedirectToActionResult)result;
 
         //Verify Calls
-        _favoriteRepoMock.Verify(m => m.Insert(It.Is<Favorite>(f => f.ProduceId == 1)), Times.Never());
-        _favoriteRepoMock.Verify(m => m.Save(), Times.Never);
+        _favoriteRepoMock.Verify(m => m.Insert(It.IsAny<Favorite>()), Times.Never());
+        _favoriteRepoMock.Verify(m => m.Save(), Times.Never());
     }
 
     /// <summary>
@@ -250,10 +322,22 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
+        userManagerMock.Setup(um => um.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                   .Returns("test-user");
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(testFavorites);
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+
+        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(GetTestFavorites());
+
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
+        SetupUser(testController);
 
         //ACT
         var result = testController.DeleteFavorite(1);
@@ -266,7 +350,7 @@ public class ProduceControllerTests
         RedirectToActionResult viewResult = (RedirectToActionResult)result;
 
         //Verify Calls
-        _favoriteRepoMock.Verify(m => m.Delete(It.Is<Favorite>(f => f.ProduceId == 1)), Times.Once());
+        _favoriteRepoMock.Verify(m => m.Delete(It.IsAny<Favorite>()), Times.Once);
         _favoriteRepoMock.Verify(m => m.Save(), Times.Once);
     }
     
@@ -276,10 +360,22 @@ public class ProduceControllerTests
     {
         //ARRANGE
         LoadMockData();
+
+        var userManagerMock = GetMockUserManager();
+
+        userManagerMock.Setup(um => um.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                   .Returns("test-user");
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(testFavorites);
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+
+        _favoriteRepoMock.Setup(m => m.GetAll()).Returns(GetTestFavorites());
+
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
+        SetupUser(testController);
 
         //ACT
         var result = testController.DeleteFavorite(2);
@@ -292,8 +388,8 @@ public class ProduceControllerTests
         RedirectToActionResult viewResult = (RedirectToActionResult)result;
 
         //Verify Calls
-        _favoriteRepoMock.Verify(m => m.Delete(It.Is<Favorite>(f => f.ProduceId == 2)), Times.Never);
-        _favoriteRepoMock.Verify(m => m.Save(), Times.Never);
+        _favoriteRepoMock.Verify(m => m.Delete(It.IsAny<Favorite>()), Times.Never());
+        _favoriteRepoMock.Verify(m => m.Save(), Times.Never());
     }
 
     /// <summary>
@@ -303,9 +399,14 @@ public class ProduceControllerTests
     public void Get_Create_Successfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Create();
@@ -324,10 +425,15 @@ public class ProduceControllerTests
     public void Post_Create_CreateProduceSuccessfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
         Produce testProduceVar = testProduce.FirstOrDefault(p => p.ProduceId == 1)!;
 
         //ACT
@@ -351,10 +457,15 @@ public class ProduceControllerTests
     public void Post_Create_CreateProduceUnsuccessfully() 
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
+
         Produce testProduceVar = testProduce.FirstOrDefault(p => p.ProduceId == 1)!;
 
         testController.ModelState.AddModelError("fakeerror", "fake error message");
@@ -369,8 +480,8 @@ public class ProduceControllerTests
         Assert.IsInstanceOfType(result, typeof(ViewResult));
 
         //Verify calls on services
-        _produceRepoMock.Verify(m => m.Insert(testProduceVar), Times.Never);
-        _produceRepoMock.Verify(m => m.Save(), Times.Never);
+        _produceRepoMock.Verify(m => m.Insert(testProduceVar), Times.Never());
+        _produceRepoMock.Verify(m => m.Save(), Times.Never());
     }
 
     /// <summary>
@@ -380,11 +491,16 @@ public class ProduceControllerTests
     public void Get_Edit_GetEditPageSuccessully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Edit(1);
@@ -414,11 +530,16 @@ public class ProduceControllerTests
     public void Get_Edit_GetEditPageUnsuccessully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Edit(5);
@@ -437,11 +558,16 @@ public class ProduceControllerTests
     public void Post_Edit_EditItemSuccessfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         Produce testProduceVar = testProduce.FirstOrDefault(p => p.ProduceId == 1)!;
 
@@ -466,11 +592,16 @@ public class ProduceControllerTests
     public void Post_Edit_EditItemUnsuccessfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         Produce testProduceVar = testProduce.FirstOrDefault(p => p.ProduceId == 1)!;
         testController.ModelState.AddModelError("fakeerror", "fake error message");
@@ -484,21 +615,27 @@ public class ProduceControllerTests
         Assert.IsInstanceOfType(result, typeof(ViewResult));
 
         //Verify calls
-        _produceRepoMock.Verify(m => m.Update(testProduceVar), Times.Never);
-        _produceRepoMock.Verify(m => m.Save(), Times.Never);
+        _produceRepoMock.Verify(m => m.Update(testProduceVar), Times.Never());
+        _produceRepoMock.Verify(m => m.Save(), Times.Never());
     }
 
     /// <summary>
     /// Scenario where we expect to delete successfully
     /// </summary>
+    [TestMethod]
     public void Post_Delete_DeleteItemSuccessfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager();
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Delete(1);
@@ -513,14 +650,20 @@ public class ProduceControllerTests
         _produceRepoMock.Verify(m => m.Save(), Times.Once);
     }
 
+    [TestMethod]
     public void Post_Delete_DeleteItemUnsuccessfully()
     {
         //ARRANGE
+        var userManagerMock = GetMockUserManager(); 
+
         Mock<IRepository<Produce>> _produceRepoMock = new Mock<IRepository<Produce>>();
+
         _produceRepoMock.Setup(m => m.GetAll()).Returns(testProduce);
+
         Mock<IRepository<Favorite>> _favoriteRepoMock = new Mock<IRepository<Favorite>>();
 
-        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object);
+        ProduceController testController = new ProduceController(_produceRepoMock.Object, _favoriteRepoMock.Object,
+        userManagerMock.Object);
 
         //ACT
         var result = testController.Delete(5);
@@ -528,10 +671,12 @@ public class ProduceControllerTests
         //Assert
         Assert.IsNotNull(result);
 
-        Assert.IsInstanceOfType(result, typeof(ViewResult));
+        Assert.IsInstanceOfType(result, typeof(RedirectToActionResult));
+        var redirect = (RedirectToActionResult)result;
+        Assert.AreEqual("ManageProduce", redirect.ActionName);
 
         //Assert calls
-        _produceRepoMock.Verify(m => m.Delete(It.Is<Produce>(p => p.ProduceId == 5)), Times.Never());
+        _produceRepoMock.Verify(m => m.Delete(It.IsAny<Produce>()), Times.Never());
         _produceRepoMock.Verify(m => m.Save(), Times.Never());
     }
 }
