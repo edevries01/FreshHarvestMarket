@@ -31,18 +31,26 @@ namespace FreshHarvestMarket.Services
 
         public async Task<(double temp, int weatherCode)> GetWeatherAsync()
         {
-            string url =
-                "https://api.open-meteo.com/v1/forecast?latitude=41.6611&longitude=-92.0096&current_weather=true&temperature_unit=fahrenheit";
+            try
+            {
+                string url =
+                    "https://api.open-meteo.com/v1/forecast?latitude=41.6611&longitude=-92.0096&current_weather=true&temperature_unit=fahrenheit";
 
-            var response = await _httpClient.GetStringAsync(url);
-            var data = JsonDocument.Parse(response);
+                var response = await _httpClient.GetStringAsync(url);
+                var data = JsonDocument.Parse(response);
 
-            var current = data.RootElement.GetProperty("current_weather");
+                var current = data.RootElement.GetProperty("current_weather");
 
-            double temp = current.GetProperty("temperature").GetDouble();
-            int weatherCode = current.GetProperty("weathercode").GetInt32();
+                double temp = current.GetProperty("temperature").GetDouble();
+                int weatherCode = current.GetProperty("weathercode").GetInt32();
 
-            return (temp, weatherCode);
+                return (temp, weatherCode);
+            }
+            catch
+            {
+                // fallback so app doesn't crash
+                return (0, -1);
+            }
         }
     }
 }
