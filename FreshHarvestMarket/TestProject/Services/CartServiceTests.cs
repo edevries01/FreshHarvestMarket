@@ -245,7 +245,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
-        //I am adding it here, it should make the mock store/retrieve like a dictionary
+        //I am implementing it here, it should make the mock store/retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
@@ -297,11 +297,10 @@ public class CartServiceTests
 
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
-        //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
-        //I am adding it here, it should make the mock store/ retrieve like a dictionary
+        //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code similar to this
+        //I am implementing it here, it should make the mock store/ retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
-        mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
-        .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
+        mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>())).Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
 
         mockSession.Setup(s => s.TryGetValue(It.IsAny<string>(), out It.Ref<byte[]>.IsAny))
             .Returns((string key, out byte[] value) =>
@@ -311,6 +310,7 @@ public class CartServiceTests
             });
         mockContextAccessor.Setup(m => m.HttpContext!.Session)
                 .Returns(mockSession.Object);
+
 
         Mock<IRepository<Produce>> mockProduceRepo = new Mock<IRepository<Produce>>();
         mockProduceRepo.Setup(m => m.GetAll()).Returns(testProduce);
@@ -387,7 +387,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
-        //I am adding it here, it should make the mock store/retrieve like a dictionary
+        //I am implementing it here, it should make the mock store/retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
@@ -443,7 +443,7 @@ public class CartServiceTests
         //I was having trouble figuring out how to handle testing around ISession
         //The Murach textbook talks about this time, but in a limited capacity
         //I asked Claude how people can handle mimicing Get/Set with byte data, and it showed me code simialar to this
-        //I am adding it here, it should make the mock store/ retrieve like a dictionary
+        //I am implementing it here, it should make the mock store/ retrieve like a dictionary
         Dictionary<string, byte[]> sessionStorage = new Dictionary<string, byte[]>();
         mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
         .Callback<string, byte[]>((key, value) => sessionStorage[key] = value);
