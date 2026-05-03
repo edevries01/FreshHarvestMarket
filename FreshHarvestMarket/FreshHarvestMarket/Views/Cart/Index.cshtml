@@ -20,6 +20,10 @@
 
 @model List<FreshHarvestMarket.Models.CartItem>
 
+@{
+    ViewData["Title"] = "Cart";
+}
+
 <h2>Your Cart</h2>
 
 @if (!Model.Any())

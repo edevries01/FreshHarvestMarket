@@ -21,6 +21,12 @@
 
 @model BrowseOrdersViewModel
 @inject SignInManager<User> signInManager
+
+@{
+    ViewData["Title"] = "Browse Orders";
+
+}
+
 <div class="row justify-content-center orders-page">
     @if (TempData["Error"] != null)
     {
