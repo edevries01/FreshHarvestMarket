@@ -17,6 +17,12 @@
 @*Screen for adding/editing a discount*@
 @model Discount
 
+@{
+    ViewData["Title"] = ViewBag.Action == "Add"
+        ? "Add Discount"
+        : "Edit Discount";
+}
+
 <h2 class="mb-3">
     @(ViewBag.Action == "Add" ? "Add a New Discount" : "Edit Discount")
 </h2>
